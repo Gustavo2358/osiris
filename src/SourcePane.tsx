@@ -8,11 +8,17 @@ export function SourcePane({
   location,
   onClose,
   requestSerial,
+  selectionSerial,
+  expanded,
+  onToggleExpand,
 }: {
   sources: Record<string, string>;
   location?: Location;
-  onClose: () => void;
+  onClose?: () => void;
   requestSerial: number;
+  selectionSerial: number;
+  expanded: boolean;
+  onToggleExpand: () => void;
 }) {
   const names = useMemo(
     () =>
@@ -23,8 +29,7 @@ export function SourcePane({
     [sources],
   );
   const [file, setFile] = useState(location?.file ?? names[0] ?? '');
-  const [follow, setFollow] = useState(true),
-    [expanded, setExpanded] = useState(false);
+  const [follow, setFollow] = useState(true);
   const scroll = useRef<HTMLDivElement>(null),
     active = useRef<HTMLDivElement>(null);
   const source = sources[file];
@@ -44,13 +49,24 @@ export function SourcePane({
     if (follow && location) setFile(location.file);
   }, [location, follow]);
   useEffect(() => {
-    if (!follow) return;
+    if (!follow || file !== location?.file) return;
     const root = scroll.current,
       line = active.current;
     if (root && line) root.scrollTop = line.offsetTop - root.clientHeight / 2 + 22;
-  }, [file, location, follow, expanded]);
+  }, [file, location, follow, expanded, requestSerial, selectionSerial]);
+  useEffect(() => {
+    const root = scroll.current;
+    if (!root || !follow || file !== location?.file) return;
+    const observer = new ResizeObserver(() => {
+      const line = active.current;
+      if (line) root.scrollTop = line.offsetTop - root.clientHeight / 2 + 22;
+    });
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, [file, location, follow]);
   return (
     <section
+      id="source-pane"
       className={`source-pane ${expanded ? 'expanded' : ''}`}
       aria-label="Código fonte original"
     >
@@ -87,13 +103,15 @@ export function SourcePane({
         <button
           className="icon-button"
           aria-label={expanded ? 'Reduzir painel de código' : 'Ampliar painel de código'}
-          onClick={() => setExpanded(!expanded)}
+          onClick={onToggleExpand}
         >
           {expanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
         </button>
-        <button className="icon-button" aria-label="Fechar código fonte" onClick={onClose}>
-          <X size={16} />
-        </button>
+        {onClose && (
+          <button className="icon-button" aria-label="Fechar código fonte" onClick={onClose}>
+            <X size={16} />
+          </button>
+        )}
       </header>
       <div className="source-pane-caption">
         <span>

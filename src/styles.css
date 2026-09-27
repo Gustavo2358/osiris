@@ -469,11 +469,12 @@ input[type='checkbox'] {
   min-height: 0;
 }
 .react-flow {
-  --xy-background-color: #f5f7fc;
+  --xy-background-color: #111c2c;
   --xy-node-boxshadow-hover-default: 0 4px 16px #29386515;
   --xy-controls-button-background-color-default: #fff;
   --xy-controls-button-color-default: #65758e;
-  --xy-attribution-background-color-default: transparent;
+  --xy-attribution-background-color-default: #1b2a40;
+  --xy-attribution-color-default: #c5d3e7;
 }
 .react-flow__attribution {
   font-size: 8px !important;
@@ -495,10 +496,9 @@ input[type='checkbox'] {
   transition: opacity 0.15s;
 }
 .graph-card.is-selected {
-  border: 2px solid #6673d6;
-  box-shadow:
-    0 0 0 4px #7f8ad322,
-    0 5px 15px #5262b920;
+  outline: 3px solid #a5b4fc;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 7px #111c2c;
 }
 .graph-card.call-card {
   border-color: #a9b0df;
@@ -507,12 +507,12 @@ input[type='checkbox'] {
   border-color: #d6c7a9;
 }
 .graph-card.entry-card {
-  background: #21334e;
-  color: #fff;
-  border-color: #21334e;
+  background: #dbeafe;
+  color: #183657;
+  border-color: #93c5fd;
 }
 .graph-card.dim {
-  opacity: 0.28;
+  opacity: 0.45;
 }
 .graph-card .react-flow__handle {
   width: 5px;
@@ -590,8 +590,8 @@ input[type='checkbox'] {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #f8fafdde;
-  border-top: 1px solid #e2e8f0;
+  background: #172438;
+  border-top: 1px solid #34465e;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -599,6 +599,9 @@ input[type='checkbox'] {
   pointer-events: none;
   font-size: 11px;
   color: var(--muted);
+}
+.graph-legend {
+  color: #c5d3e7;
 }
 .graph-legend > span {
   display: flex;
@@ -645,7 +648,7 @@ input[type='checkbox'] {
   border: 1px solid #dce3ee;
   border-radius: 7px;
   overflow: hidden;
-  background: #fff !important;
+  background: #23334a !important;
   width: 130px;
   height: 88px;
   box-shadow: 0 3px 12px #1a2f4910;
@@ -657,7 +660,7 @@ input[type='checkbox'] {
 .edge-label {
   position: absolute;
   font-size: 11px;
-  background: #f5f7fced;
+  background: #111c2cf2;
   padding: 2px 4px;
   border-radius: 3px;
   pointer-events: none;
@@ -1154,6 +1157,11 @@ input[type='checkbox'] {
   color: var(--muted);
   gap: 14px;
 }
+.graph-empty,
+.graph-empty h3,
+.graph-empty p {
+  color: #d1deef;
+}
 .graph-empty h3,
 .start-state h2 {
   font-weight: 500;
@@ -1455,26 +1463,23 @@ input[type='checkbox'] {
 }
 .graph-source-workspace {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: minmax(180px, 1fr);
   min-height: 0;
   overflow: auto;
 }
 .graph-source-workspace > .graph-surface {
-  flex: 1;
+  min-width: 0;
   min-height: 180px;
 }
 .source-pane {
-  height: 42%;
-  min-height: 120px;
-  flex-shrink: 0;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-top: 2px solid #cdd5ec;
+  border-top: 0;
   background: #fbfcfe;
-}
-.source-pane.expanded {
-  height: calc(100% - 180px);
 }
 .source-pane-toolbar {
   display: flex;
@@ -1571,17 +1576,8 @@ input[type='checkbox'] {
   .graph-source-workspace {
     min-height: 420px;
   }
-  .source-pane {
-    height: 250px;
-  }
-  .source-pane.expanded {
-    height: 370px;
-  }
   .source-pane-toolbar strong {
     display: none;
-  }
-  .graph-source-workspace > .graph-surface {
-    min-height: 250px;
   }
 }
 
@@ -1645,7 +1641,7 @@ input[type='checkbox'] {
 }
 .entry-card .card-meta,
 .entry-card .card-footer {
-  color: #c0cde2;
+  color: #335477;
 }
 .graph-context {
   height: auto;
@@ -1703,4 +1699,141 @@ input[type='checkbox'] {
   top: 10px;
   bottom: auto !important;
   margin: 0 !important;
+}
+
+/* The drawing surface stays dark; source and evidence keep their reading palette. */
+.graph-surface {
+  background: #111c2c;
+}
+.graph-empty h3 {
+  color: #d1deef;
+}
+.graph-panel {
+  min-width: 0;
+}
+.source-document {
+  min-height: 0;
+}
+.source-pane-toolbar,
+.source-pane-caption {
+  flex-shrink: 0;
+}
+.pane-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #263750;
+  border-block: 1px solid #526781;
+  cursor: row-resize;
+  touch-action: none;
+  user-select: none;
+  z-index: 5;
+}
+.pane-divider span {
+  width: 48px;
+  height: 3px;
+  border-radius: 3px;
+  background: #b2c4dd;
+}
+.pane-divider:hover,
+.pane-divider:focus-visible,
+.resizing .pane-divider {
+  background: #425898;
+  outline: 0;
+  box-shadow: inset 0 0 0 2px #a5b4fc;
+}
+.resizing {
+  cursor: row-resize;
+  user-select: none;
+}
+.resizing .graph-surface,
+.resizing .source-pane {
+  pointer-events: none;
+}
+.viewing-context,
+.viewing-back {
+  display: none;
+}
+.viewing-mode.app {
+  height: 100dvh;
+  min-height: 360px;
+  overflow: hidden;
+}
+.viewing-mode .app-header {
+  height: 48px;
+  padding: 0 16px;
+  gap: 18px;
+}
+.viewing-mode .brand strong {
+  font-size: 21px;
+}
+.viewing-mode .brand-mark {
+  width: 28px;
+  height: 28px;
+}
+.viewing-mode .brand-mark svg {
+  width: 19px;
+}
+.viewing-mode .brand-divider,
+.viewing-mode .brand-sub,
+.viewing-mode .header-actions > :not(.viewing-toggle):not(.viewing-back),
+.viewing-mode .workspace-heading,
+.viewing-mode .navigator,
+.viewing-mode .inspector,
+.viewing-mode .graph-toolbar,
+.viewing-mode .graph-context,
+.viewing-mode .path-banner,
+.viewing-mode .coverage-bar,
+.viewing-mode .coverage-details {
+  display: none;
+}
+.viewing-mode .workspace {
+  display: flex;
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  margin-bottom: 0;
+  border-top: 0;
+}
+.viewing-mode .graph-panel {
+  flex: 1;
+}
+.viewing-mode .graph-source-workspace {
+  min-height: 0;
+}
+.viewing-mode .viewing-context {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+.viewing-context strong,
+.viewing-context span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.viewing-context span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.viewing-mode .viewing-back {
+  display: inline-flex;
+}
+.viewing-mode .graph-legend {
+  padding-block: 7px;
+}
+.viewing-mode .loading-overlay {
+  top: 48px;
+}
+@media (max-width: 700px) {
+  .viewing-mode .brand,
+  .viewing-context span {
+    display: none;
+  }
+  .viewing-mode .app-header {
+    gap: 8px;
+    padding: 0 8px;
+  }
 }

@@ -27,7 +27,9 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 ## Explorar
 
 - **Voltar** (ou **Esc**) restaura o recorte, seleção, busca, destaques e zoom anteriores. No modo de caminhos, a ação também aparece como **Voltar à visão anterior**.
-- **Código fonte** abre um painel com o arquivo completo, números de linha e destaque da seleção. É possível trocar entre fonte original, copybooks e texto expandido, ampliar o painel ou desativar **Acompanhar seleção**. Clicar na localização do inspetor abre o trecho nesse painel.
+- **Código fonte** abre um painel com o arquivo completo, números de linha e destaque da seleção. É possível trocar entre fonte original, copybooks e texto expandido, ampliar o painel ou desativar **Acompanhar seleção**. Clicar na localização do inspetor abre o trecho nesse painel. Chamadas, arquivos, paragraphs e trechos na barra lateral também acompanham a seleção, inclusive ao clicar novamente na mesma referência.
+- **Modo de visualização** mostra apenas o grafo e o código, com cabeçalho compacto. **Sair da visualização** ou **Esc** restaura as ferramentas, mantendo seleção, recorte e zoom.
+- **Divisória ajustável:** arraste a barra entre grafo e código para redistribuir o espaço. Duplo clique ou Enter restaura a proporção inicial. Com a barra focada, ↑/↓ ajustam o tamanho e Home/End levam aos limites. A proporção é mantida durante a sessão. O grafo usa fundo escuro para destacar os nós e as arestas.
 - **Arquivos** lista acessos FILE com busca por statement, nome lógico ou valor possível. Cada acesso oferece valores, suportes, contexto CICS/SYSID, declaração associada e caminhos de controle, como nas chamadas. **Destacar arquivos** realça esses nós.
 - Use a lista de **Chamadas** para buscar pelo statement ou por um candidato executável. Cada categoria conserva sua própria busca; a contagem mostra resultados e total, e **Mostrar todos** limpa uma busca sem resultados. As listas exibem localização, contexto e prévia dos valores.
 - Selecione uma chamada para ver candidatos, valores brutos, produtores, provenance, premissas, reachability e remainders.

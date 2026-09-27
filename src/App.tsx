@@ -17,12 +17,23 @@ import {
   ScanSearch,
   Network,
   FolderOpen,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 import { admitFiles, decodeBytes, MAX_BYTES } from './artifacts';
-import { buildModel, entryGraph, pathsTo, type Model, type Site, type GraphNode } from './model';
+import {
+  buildModel,
+  entryGraph,
+  pathsTo,
+  type Model,
+  type Site,
+  type GraphNode,
+  type Location,
+} from './model';
 import { Graph } from './Graph';
 import { Inspector } from './Inspector';
 import { SourcePane } from './SourcePane';
+import { SplitWorkspace } from './SplitWorkspace';
 import { Tabs } from './Tabs';
 import { Modal } from './Modal';
 interface Example {
@@ -35,6 +46,7 @@ interface Example {
   format: string;
 }
 interface ViewState {
+  sourceTarget?: Location;
   entry: string;
   selected?: string;
   selectedSite?: string;
@@ -74,6 +86,9 @@ function App() {
     [help, setHelp] = useState(false),
     [warnings, setWarnings] = useState(false);
   const [sourceOpen, setSourceOpen] = useState(false);
+  const [viewing, setViewing] = useState(false);
+  const [sourceTarget, setSourceTarget] = useState<Location>();
+  const [selectionSerial, setSelectionSerial] = useState(0);
   const [sourceRequest, setSourceRequest] = useState(0);
   const [history, setHistory] = useState<ViewState[]>([]);
   const graphViewport = useRef<Viewport | undefined>(undefined),
@@ -84,6 +99,7 @@ function App() {
       ...h.slice(-29),
       {
         entry,
+        sourceTarget,
         selected,
         selectedSite,
         queries,
@@ -105,6 +121,8 @@ function App() {
     setHistory((h) => h.slice(0, -1));
     setEntry(previous.entry);
     setSelected(previous.selected);
+    setSourceTarget(previous.sourceTarget);
+    setSelectionSerial((n) => n + 1);
     setSelectedSite(previous.selectedSite);
     setQueries(previous.queries);
     setSidebar(previous.sidebar);
@@ -123,16 +141,20 @@ function App() {
       if (
         event.key !== 'Escape' ||
         help ||
-        !history.length ||
         (event.target as HTMLElement)?.matches('input, textarea, select, [contenteditable="true"]')
       )
         return;
-      event.preventDefault();
-      goBack();
+      if (viewing) {
+        event.preventDefault();
+        setViewing(false);
+      } else if (history.length) {
+        event.preventDefault();
+        goBack();
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [goBack, history.length, help]);
+  }, [goBack, history.length, help, viewing]);
   const input = useRef<HTMLInputElement>(null),
     loadId = useRef(0);
   const install = useCallback(async (files: Record<string, string>, id: string, serial: number) => {
@@ -154,6 +176,8 @@ function App() {
     setEntry(m.entries[0]?.id ?? '');
     setSelected(firstSite?.nodeIds[0]);
     setSelectedSite(firstSite?.id);
+    setSourceTarget(firstSite?.statement?.location ?? firstSite?.location);
+    setSelectionSerial((n) => n + 1);
     setMode('all');
     setParagraph('');
     setQueries({});
@@ -216,6 +240,8 @@ function App() {
     }
   }
   function selectNode(id: string) {
+    setSourceTarget(model?.nodeById.get(id)?.location);
+    setSelectionSerial((n) => n + 1);
     if (id === selected && !selectedSite) return;
     rememberView();
     if (!scope.nodes.some((n) => n.id === id)) {
@@ -226,6 +252,10 @@ function App() {
     setSelectedSite(undefined);
   }
   function selectSite(site: Site) {
+    setSourceTarget(
+      site.statement?.location ?? site.location ?? model?.nodeById.get(site.nodeIds[0])?.location,
+    );
+    setSelectionSerial((n) => n + 1);
     if (site.id === selectedSite && selected === site.nodeIds[0]) return;
     rememberView();
     if (site.entry) setEntry(site.entry);
@@ -350,7 +380,7 @@ function App() {
   }
   return (
     <div
-      className="app"
+      className={`app ${viewing ? 'viewing-mode' : ''}`}
       onDragOver={(e) => {
         e.preventDefault();
       }}
@@ -368,12 +398,38 @@ function App() {
           <span className="brand-divider" />
           <span className="brand-sub">COBOL GRAPH EXPLORER</span>
         </div>
+        <div className="viewing-context">
+          <strong>{model ? [...new Set(model.units.values())].join(' / ') : ''}</strong>
+          <span title={mode === 'paths' ? routeCaption : undefined}>
+            {mode === 'paths'
+              ? 'Caminhos'
+              : mode === 'paragraph'
+                ? 'Paragraph'
+                : mode === 'local'
+                  ? 'Vizinhança'
+                  : 'Programa inteiro'}{' '}
+            · {scope.nodes.length} trechos
+          </span>
+        </div>
         <div className="header-actions">
+          <button className="back-button viewing-back" disabled={!history.length} onClick={goBack}>
+            <ArrowLeft size={15} /> Voltar
+          </button>
+          <button
+            className="viewing-toggle source-toggle"
+            aria-pressed={viewing}
+            disabled={!model}
+            title={viewing ? 'Sair da visualização (Esc)' : 'Mostrar somente grafo e código'}
+            onClick={() => setViewing(!viewing)}
+          >
+            {viewing ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            {viewing ? 'Sair da visualização' : 'Modo de visualização'}
+          </button>
           <span className="local-badge">
             <ShieldCheck size={14} /> Local no browser
           </span>
           <button
-            className={`source-toggle ${sourceOpen ? 'active' : ''}`}
+            className={`source-toggle code-toggle ${sourceOpen ? 'active' : ''}`}
             aria-expanded={sourceOpen}
             disabled={!model}
             onClick={() => setSourceOpen(!sourceOpen)}
@@ -455,6 +511,7 @@ function App() {
                 setMode('all');
                 setSelected(undefined);
                 setSelectedSite(undefined);
+                setSourceTarget(undefined);
               }}
             >
               {model?.entries.map((e) => (
@@ -580,6 +637,8 @@ function App() {
                     setParagraph(p.id);
                     setMode('paragraph');
                     setSelected(p.nodeIds[0]);
+                    setSourceTarget(p.location ?? model?.nodeById.get(p.nodeIds[0])?.location);
+                    setSelectionSerial((n) => n + 1);
                     setSelectedSite(undefined);
                   }}
                 >
@@ -737,7 +796,28 @@ function App() {
               </button>
             </div>
           )}
-          <div className="graph-source-workspace">
+          <SplitWorkspace
+            source={
+              model && (sourceOpen || viewing)
+                ? (controls) => (
+                    <SourcePane
+                      key={model.documents.cfg.publication.localId}
+                      sources={model.documents.sources}
+                      requestSerial={sourceRequest}
+                      selectionSerial={selectionSerial}
+                      location={
+                        sourceTarget ??
+                        site?.statement?.location ??
+                        site?.location ??
+                        node?.location
+                      }
+                      onClose={viewing ? undefined : () => setSourceOpen(false)}
+                      {...controls}
+                    />
+                  )
+                : undefined
+            }
+          >
             {model ? (
               <ReactFlowProvider>
                 <Graph
@@ -763,16 +843,7 @@ function App() {
                 </button>
               </div>
             )}
-            {model && sourceOpen && (
-              <SourcePane
-                key={model.documents.cfg.publication.localId}
-                sources={model.documents.sources}
-                requestSerial={sourceRequest}
-                location={site?.statement?.location ?? site?.location ?? node?.location}
-                onClose={() => setSourceOpen(false)}
-              />
-            )}
-          </div>
+          </SplitWorkspace>
           <button className="coverage-bar" onClick={() => setWarnings(!warnings)}>
             <span className="coverage-tag">
               {model?.documents.cfg.sourceKnowledge?.publicationInventory ?? '—'}
@@ -808,6 +879,7 @@ function App() {
             onPaths={pathAction}
             onSource={() => {
               setSourceOpen(true);
+              setSourceTarget(site?.statement?.location ?? site?.location ?? node?.location);
               setSourceRequest((n) => n + 1);
             }}
             onOperation={(key) => {
@@ -872,6 +944,11 @@ function App() {
             Centralizar seleção reencontra o trecho sem alterar o zoom; Enquadrar recorte mostra o
             grafo visível. Nas abas, use as setas, Home e End; Enter ou Espaço selecionam um trecho.
             Esc fecha esta ajuda.
+          </p>
+          <p>
+            Modo de visualização mostra apenas grafo e código; Esc retorna à exploração. Arraste a
+            divisória entre os painéis para ajustar seus tamanhos. Com foco na divisória, use ↑/↓
+            para ajustar, Home/End para os limites e Enter para restaurar a proporção inicial.
           </p>
           <div className="privacy-note">
             <ShieldCheck size={18} />

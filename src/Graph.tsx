@@ -246,18 +246,18 @@ export function Graph({
             type: MarkerType.ArrowClosed,
             color:
               e.kind === 'BRANCH_TRUE'
-                ? '#278778'
+                ? '#65d9b4'
                 : e.kind === 'BRANCH_FALSE'
-                  ? '#b57d37'
-                  : '#91a0b7',
+                  ? '#ffc578'
+                  : '#a6b8d1',
           },
           style: {
             stroke:
               e.kind === 'BRANCH_TRUE'
-                ? '#278778'
+                ? '#65d9b4'
                 : e.kind === 'BRANCH_FALSE'
-                  ? '#b57d37'
-                  : '#91a0b7',
+                  ? '#ffc578'
+                  : '#a6b8d1',
             strokeWidth: 1.5,
             strokeDasharray: e.kind === 'OPAQUE_JUMP' ? '5 4' : undefined,
           },
@@ -340,7 +340,7 @@ export function Graph({
     style: {
       ...e.style,
       strokeWidth: witnessIds?.has(e.id) ? 3 : e.style?.strokeWidth,
-      stroke: witnessIds?.has(e.id) ? '#5869d7' : e.style?.stroke,
+      stroke: witnessIds?.has(e.id) ? '#b6acff' : e.style?.stroke,
       opacity: witnessIds?.size && !witnessIds.has(e.id) ? 0.25 : 1,
     },
   }));
@@ -381,7 +381,7 @@ export function Graph({
           'minimap.ariaLabel': 'Minimapa do programa',
         }}
       >
-        <Background color="#cbd3df" gap={22} size={1} />
+        <Background color="#344255" gap={24} size={1} />
         <MiniMap
           pannable
           zoomable
@@ -392,7 +392,7 @@ export function Graph({
                 ? '#6373d5'
                 : '#b6c2d3'
           }
-          maskColor="rgba(235,240,247,.72)"
+          maskColor="rgba(12,22,37,.7)"
         />
         <Controls showInteractive={false}>
           <ControlButton
