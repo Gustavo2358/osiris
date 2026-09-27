@@ -1,0 +1,554 @@
+{
+  "run": ".cache/runs/20260927T013335Z",
+  "build": {
+    "repos": {
+      "proleap-poc": {
+        "sha": "f33fae3b13edc8e2ba044e948836875fe55cb7de",
+        "status": ""
+      },
+      "cobol-lower": {
+        "sha": "6486b36e701b7e280a5ca4e05df67f0882874ee5",
+        "status": ""
+      },
+      "air-java": {
+        "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+        "status": ""
+      },
+      "analysis-cfg": {
+        "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+        "status": ""
+      },
+      "analysis-ir": {
+        "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+        "status": ""
+      }
+    },
+    "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+    "sourceCount": 461,
+    "sourcesSha256": "6c7f7682f210b5c3e4b5f8b95167f93c7ec295a6da24327b15cc0d629152bc53",
+    "libraries": {
+      "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+      "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+      "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+      "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+      "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+      "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+      "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+      "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+    }
+  },
+  "executions": [
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/ORDER-ROUTER.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/cfg.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/order-router/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/IF-GOTO.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/cfg.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/goto/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/src/test/resources/partial-program/perform-repeated.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/src/test/resources/partial-program",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/cfg.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/perform/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/CICS-ROUTER.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/cfg.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/cics/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/LARGE-ROUTER.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/cfg.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/large/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/src/test/resources/multi-call/fixture-1.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/src/test/resources/multi-call",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/cfg.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/multi-call/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 0
+    },
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/src/test/resources/cobol/resolution/nested-data-visibility.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/nested/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/src/test/resources/cobol/resolution",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/proleap-poc",
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/nested/sp/cobol-semantic-compilation.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/nested/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/nested/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runs/20260927T013335Z/nested/source-evidence.json"
+      ],
+      "cwd": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer",
+      "exitCode": 1
+    },
+    {
+      "case": "nested",
+      "error": "lower: Exception in thread \"main\" java.lang.IllegalStateException: admitted source declaration lacks nominal object\n\tat io.github.gustavo2358.lower.application.CompilationContext.captures(CompilationContext.java:42)\n\tat io.github.gustavo2358.lower.application.PartialProgramLowerer.fragment(PartialProgramLowerer.java:44)\n\tat io.github.gustavo2358.lower.application.CompilationLowerer.lower(CompilationLowerer.java:29)\n\tat io.github.gustavo2358.lower.adapters.sp.FileLowering.lower(FileLowering.java:29)\n\tat ExportLinks.main(ExportLinks.java:30)\n"
+    }
+  ],
+  "examples": [
+    {
+      "id": "order-router",
+      "title": "Roteamento de pedidos",
+      "description": "Branches, PERFORM e chamadas",
+      "format": "fixed",
+      "url": "examples/order-router.json.gz",
+      "nodes": 16,
+      "edges": 17,
+      "sites": 3,
+      "bytes": 714766,
+      "sha256": "1dae43974781f7d77e71947effb26dd7a6c00261827ab720daee3d65bc809a89"
+    },
+    {
+      "id": "goto",
+      "title": "Desvio de controle",
+      "description": "IF, GO TO e CALL din\u00e2mico",
+      "format": "fixed (fixture adaptada)",
+      "url": "examples/goto.json.gz",
+      "nodes": 10,
+      "edges": 10,
+      "sites": 1,
+      "bytes": 549871,
+      "sha256": "ed671597e161326bde5c9f886e897886a58c7463f47efa98724b5dff902e2fa6"
+    },
+    {
+      "id": "perform",
+      "title": "PERFORM repetido",
+      "description": "Mesmo paragraph, contextos distintos",
+      "format": "fixed",
+      "url": "examples/perform.json.gz",
+      "nodes": 10,
+      "edges": 9,
+      "sites": 2,
+      "bytes": 502663,
+      "sha256": "9b45b396ccf0171827bec9f1482bfa61934f7858d77e20fdf3975d7a94af6268"
+    },
+    {
+      "id": "cics",
+      "title": "Servi\u00e7os CICS",
+      "description": "LINK din\u00e2mico, literal e XCTL",
+      "format": "fixed",
+      "url": "examples/cics.json.gz",
+      "nodes": 9,
+      "edges": 8,
+      "sites": 3,
+      "bytes": 474303,
+      "sha256": "038ece9f8114b1315dd009400a2f0524831b90fa73cabdbda530584dece1d973"
+    },
+    {
+      "id": "large",
+      "title": "100 rotas de servi\u00e7o",
+      "description": "Escala: branches e 100 call sites",
+      "format": "fixed com sequ\u00eancia",
+      "url": "examples/large.json.gz",
+      "nodes": 503,
+      "edges": 602,
+      "sites": 100,
+      "bytes": 16499993,
+      "sha256": "95f27888e016dca6e4ec3df962cfdf085cdda0cb5c296e669948b024f2c8fece"
+    },
+    {
+      "id": "multi-call",
+      "title": "Chamadas em sequ\u00eancia",
+      "description": "CALLs literais e din\u00e2micos",
+      "format": "fixed",
+      "url": "examples/multi-call.json.gz",
+      "nodes": 8,
+      "edges": 7,
+      "sites": 3,
+      "bytes": 402451,
+      "sha256": "27ceeb058859fa32792ce8095df3d5ce861a209c796eb9b219bc399600e95b05"
+    }
+  ]
+}
