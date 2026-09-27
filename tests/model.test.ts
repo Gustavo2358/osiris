@@ -403,3 +403,22 @@ describe('FILE projection from real analyzer runs', () => {
     },
   );
 });
+
+it('COACTUPC keeps source candidates separate from unreachable control sites', async () => {
+  const m = await model('carddemo-coactupc');
+  const controls = m.sites.filter((s) => !s.sourceOnly);
+  expect(controls).toHaveLength(4);
+  for (const s of [...controls, ...m.fileSites]) {
+    expect(s.raw.reachability).toBe('UNREACHABLE_IN_MODEL');
+    expect(s.candidates).toEqual([]);
+    expect(pathsTo(m, m.entries[0].id, s.nodeIds).reachable).toBe(false);
+  }
+  const sourceOnly = m.sites.filter((s) => s.sourceOnly);
+  expect(sourceOnly).toHaveLength(1);
+  expect(sourceOnly[0].title).toContain('XCTL');
+  expect(sourceOnly[0].nodeIds).toEqual([]);
+  expect(m.documents.sources['COACTUPC.cbl']).toContain('9000-READ-ACCT.');
+  expect(m.documents.sources['CSUTLDPY.cpy']).toContain("CALL 'CSUTLDTC'");
+  expect(m.documents.sources).not.toHaveProperty('DFHAID');
+  expect(m.documents.sources).not.toHaveProperty('DFHBMSCA');
+});

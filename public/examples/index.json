@@ -194,5 +194,18 @@
     "fileSites": 1,
     "bytes": 988609,
     "sha256": "1ff8a6833789b0105502debba364ba02ba73a28a9c35e20c1b1d4f96dd5abf67"
+  },
+  {
+    "id": "carddemo-coactupc",
+    "title": "CardDemo · COACTUPC",
+    "description": "Atualização de conta real: 4.236 linhas, CICS, PERFORM e COPY; análise parcial",
+    "format": "fixed",
+    "url": "examples/carddemo-coactupc.json.gz",
+    "nodes": 3048,
+    "edges": 3887,
+    "sites": 4,
+    "fileSites": 7,
+    "bytes": 105583292,
+    "sha256": "e4a8d19265d688e7eb7da22bea65e16a88339e0cf456b8195534069f2a95a1d6"
   }
 ]

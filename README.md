@@ -12,7 +12,7 @@ npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:5173**. Dezesseis pacotes reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
+Abra **http://127.0.0.1:5173**. Dezessete pacotes reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
 
 Para servir o build estático:
 
@@ -37,6 +37,8 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 - Nas abas, use as setas, Home e End. Esc fecha a ajuda e devolve o foco ao botão que a abriu; fora da ajuda e de campos de edição, Esc aciona **Voltar**.
 - **Fonte** mostra o trecho associado; **Internos** abre os fatos originais, links, catálogos e o documento de dependencies completo.
 - O botão de download exporta o recorte com os nós/transições originais, entrada, seleção e cobertura. É uma seleção para inspeção, não um novo artefato do analisador.
+
+O exemplo **CardDemo · COACTUPC** usa o programa real de atualização de contas, com 3.048 nós. Consulte [execução, pins e limites](docs/CARDDEMO-COACTUPC.md).
 
 A interface é otimizada para desktop. Em telas abaixo de 900 px, o inspetor fica abaixo do grafo e pode ser alcançado rolando a página.
 

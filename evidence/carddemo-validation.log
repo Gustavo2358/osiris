@@ -1,0 +1,97 @@
+
+> cobol-graph-explorer@0.1.0 validate
+> npm test && npm run build && npm run test:e2e
+
+
+> cobol-graph-explorer@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /home/gustavo/workspace/teste-e2e/cobol-graph-explorer
+
+ ❯ tests/model.test.ts (54 tests | 1 failed) 4393ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: order-router 18ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: goto 9ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: perform 8ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: cics 8ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: large  354ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: multi-call 6ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: nested 3ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: copy 4ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: cycle 5ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: until 5ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: minimal 1ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: partial 5ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: files-values 10ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: files-partial 11ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: files-native 7ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: files-unknown 13ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: carddemo-coactupc  1746ms
+   ✓ Real analyzer artifacts > presents full COBOL tokens and paragraph names from source provenance 14ms
+   ✓ Real analyzer artifacts > CALL literal candidate retains its actual producer and origin 8ms
+   ✓ Real analyzer artifacts > CICS commands preserve LINK vs XCTL and its open control remainder 5ms
+   ✓ Real analyzer artifacts > PERFORM repeated contexts stay distinct and do not gain return edges 6ms
+   ✓ Real analyzer artifacts > GO TO path includes real branch alternatives and no inferred source-order edge 6ms
+   ✓ Real analyzer artifacts > COPY statements use copybook provenance without matching a line in main 3ms
+   ✓ Real analyzer artifacts > nested units retain independent same-spelling paragraphs and statement IDs 3ms
+   ✓ Real analyzer artifacts > large graph query finishes without enumerating exponentially many paths 289ms
+   ✓ Real analyzer artifacts > dynamic targets preserve path-sensitive producer results and unknown remainders 12ms
+   ✓ Real analyzer artifacts > real GO TO loop has a finite backwards slice without a fabricated return 4ms
+   ✓ Real analyzer artifacts > PERFORM UNTIL keeps real branch alternatives and the call after the loop 4ms
+   ✓ Real analyzer artifacts > does not interpret source lines, array order or opaque IDs to recover flow 9ms
+   ✓ Admission and identity isolation > never collapses local IDs across domains or owners 0ms
+   ✓ Admission and identity isolation > rejects a mismatched publication 7ms
+   ✓ Admission and identity isolation > rejects modified SP bytes even when local IDs look identical 6ms
+   ✓ Admission and identity isolation > rejects unknown CFG version 6ms
+   ✓ Admission and identity isolation > rejects dangling edges and duplicate nodes 15ms
+   ✓ Admission and identity isolation > rejects forged StatementLink label instead of repairing it 7ms
+   ✓ Admission and identity isolation > does not attach SP to AIR without typed links 8ms
+   ✓ Admission and identity isolation > AIR + CFG alone is usable and does not invent dependency candidates 4ms
+   ✓ Admission and identity isolation > rejects truncated JSON and multiple artifacts for one role 4ms
+   ✓ Admission and identity isolation > slices source by Unicode scalar columns, not UTF-16 offsets 0ms
+   ✓ Known-control query laws > intersects reverse reachability with forward reachability and activationEntry 0ms
+   ✓ Known-control query laws > cycles terminate; disconnected and unreachable targets remain distinct from unknown runtime 0ms
+   ✓ Known-control query laws > handles zero-length entry path and no fabricated edge 0ms
+   ✓ Legacy wire versions from real producers > v1 preserves the minimal entry → GOBACK → exit path 4ms
+   ✓ Legacy wire versions from real producers > v3 keeps OPAQUE facts and requires its explicit open-control flag 5ms
+   ✓ FILE projection from real analyzer runs > preserves FILE candidates, raw values, SYSID and typed operation joins 10ms
+   ✓ FILE projection from real analyzer runs > keeps known-plus-open and fully unknown results distinct 19ms
+   ✓ FILE projection from real analyzer runs > keeps bindings and declarations distinct from values at unreachable uses 7ms
+   ✓ FILE projection from real analyzer runs > AIR+CFG still identifies FILE without fabricating candidates or CALLs 10ms
+   ✓ FILE projection from real analyzer runs > rejects a broken FILE operation identity rather than matching by text 7ms
+   ✓ FILE projection from real analyzer runs > rejects a broken FILE sequence identity rather than matching by text 6ms
+   ✓ FILE projection from real analyzer runs > rejects a broken FILE entry identity rather than matching by text 7ms
+   ✓ FILE projection from real analyzer runs > rejects a broken FILE owner identity rather than matching by text 6ms
+   ✓ FILE projection from real analyzer runs > rejects a broken FILE binding identity rather than matching by text 6ms
+   × COACTUPC keeps source candidates separate from unreachable control sites 1668ms
+     → expected [ 'CICS' ] to deeply equal [ 'XCTL' ]
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/model.test.ts > COACTUPC keeps source candidates separate from unreachable control sites
+AssertionError: expected [ 'CICS' ] to deeply equal [ 'XCTL' ]
+
+- Expected
++ Received
+
+  [
+-   "XCTL",
++   "CICS",
+  ]
+
+ ❯ tests/model.test.ts:416:69
+    414|     expect(pathsTo(m, m.entries[0].id, s.nodeIds).reachable).toBe(fals…
+    415|   }
+    416|   expect(m.sites.filter((s) => s.sourceOnly).map((s) => s.command)).to…
+       |                                                                     ^
+    417|   expect(m.documents.sources['COACTUPC.cbl']).toContain('9000-READ-ACC…
+    418|   expect(m.documents.sources['CSUTLDPY.cpy']).toContain("CALL 'CSUTLDT…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 53 passed (54)
+   Start at  08:32:41
+   Duration  4.74s (transform 57ms, setup 0ms, collect 64ms, tests 4.39s, environment 0ms, prepare 54ms)
+

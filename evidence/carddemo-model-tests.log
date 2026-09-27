@@ -1,0 +1,17 @@
+
+> cobol-graph-explorer@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /home/gustavo/workspace/teste-e2e/cobol-graph-explorer
+
+ ✓ tests/model.test.ts (53 tests) 2829ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: large  366ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: carddemo-coactupc  1819ms
+   ✓ Real analyzer artifacts > large graph query finishes without enumerating exponentially many paths  304ms
+
+ Test Files  1 passed (1)
+      Tests  53 passed (53)
+   Start at  08:29:56
+   Duration  3.16s (transform 63ms, setup 0ms, collect 67ms, tests 2.83s, environment 0ms, prepare 67ms)
+

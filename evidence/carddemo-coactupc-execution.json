@@ -1,0 +1,191 @@
+{
+  "build": {
+    "repos": {
+      "proleap-poc": {
+        "sha": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+        "status": ""
+      },
+      "cobol-lower": {
+        "sha": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+        "status": ""
+      },
+      "air-java": {
+        "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+        "status": ""
+      },
+      "analysis-cfg": {
+        "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+        "status": ""
+      },
+      "analysis-ir": {
+        "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+        "status": ""
+      }
+    },
+    "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+    "sourceCount": 461,
+    "sourcesSha256": "c895d33d952b5bb659653cb3032773d4bade5c774e9fde146183b575f3837cce",
+    "libraries": {
+      "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+      "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+      "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+      "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+      "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+      "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+      "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+      "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+    }
+  },
+  "source": "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+  "sourceSha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+  "executions": [
+    {
+      "phase": "frontend",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+        "--source",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+        "--output",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp",
+        "--copybooks",
+        "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy,/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy-bms",
+        "--storage-profile",
+        "ibm-enterprise-6.4-fixed-display-1047@1",
+        "--entry-storage-state",
+        "initial",
+        "--cics-entry-mode",
+        "new-logical-level",
+        "--logical-text",
+        "disabled"
+      ],
+      "exitCode": 0
+    },
+    {
+      "phase": "lower",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "ExportLinks",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp/cobol-semantic-product.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/links.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "phase": "cfg",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/cfg.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "phase": "dependencies",
+      "command": [
+        "java",
+        "-cp",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+        "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/dependencies.json",
+        "--source-evidence",
+        "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json",
+        "--experimental-physical"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "remoteSync": {
+    "checkedAt": "2026-09-27T11:26:52.799785+00:00",
+    "repos": {
+      "proleap-poc": {
+        "branch": "main",
+        "sha": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+        "remoteMain": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+        "status": ""
+      },
+      "cobol-lower": {
+        "branch": "main",
+        "sha": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+        "remoteMain": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+        "status": ""
+      },
+      "air-java": {
+        "branch": "main",
+        "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+        "remoteMain": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+        "status": ""
+      },
+      "analysis-cfg": {
+        "branch": "main",
+        "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+        "remoteMain": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+        "status": ""
+      },
+      "analysis-ir": {
+        "branch": "main",
+        "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+        "remoteMain": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+        "status": ""
+      }
+    }
+  },
+  "sourceCorpus": {
+    "repository": "https://github.com/aws-samples/aws-mainframe-modernization-carddemo",
+    "commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+    "programSha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+    "sourceHashes": {
+      "CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "CVCUS01Y.cpy": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+      "CSSETATY.cpy": "45000f93a9be6e8132262e53faa1db03ab1f20fbee4063272b890837216d1fcb",
+      "CVCRD01Y.cpy": "52b6dbe09f7648f3fdbd7c00f4683d434fe6b631f6c8854466a24f42c1c92445",
+      "COCOM01Y.cpy": "77097557ee4c365f62138328d3e280ce7aba5f81d418c6f16434f0fbb2aafa6c",
+      "CSSTRPFY.cpy": "751bc1a625114a8660ee2172b70cdea135c259652d2305a2bfda25ff4cf34853",
+      "CSDAT01Y.cpy": "61dd7b01d974c13cd47f71774c613dd67996418a22fae730d09b246c0b710ad7",
+      "CSUSR01Y.cpy": "37c34094dc4124bc6255e0b06a0387442f4f0dd9d51dd6623b559d370aa0d2cb",
+      "CSMSG01Y.cpy": "ef8ce44572885d63e46a02516f992cabbbc57ea94235000fd376325750e26eda",
+      "CSMSG02Y.cpy": "0238a3a75e723272e0c287b46a52d365de8549dada1a73d15df75660ad7bd2ea",
+      "CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+      "COTTL01Y.cpy": "5032bfa9428354bb4a62e8c82ba1efa7dcf6b80f27544ad99a81c8a8df8ed41b",
+      "CSUTLDPY.cpy": "80f83e3d55ff84c0d9088e68399f30ebad4db763280d47bdec220eadc45ba2af",
+      "CSUTLDWY.cpy": "ecba6f07ea9db7c6f58f7fc1c5227179e8b80299f79a04743c6adb9f08190a1a",
+      "CSLKPCDY.cpy": "098d384b9580abd5b4b77ae9c33b8cb65b28be45390130b22c48c3714200cca2",
+      "COACTUP.CPY": "2ae13a55cb35c63988c17e96744ce77dfda9663896e65061b818f47d9be983dc",
+      "COACTUPC.cbl": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+      "<preprocessed>": "e072980aaa59a1ad51f2cfcd5e0d8a3d6c39544dc3cc95e0991ddda4925a719b"
+    },
+    "missingCopybooks": [
+      "DFHAID",
+      "DFHBMSCA"
+    ]
+  },
+  "artifactHashes": {
+    "air.json": "37ae9615fe43e454a8ff9de7a9cb0a634ec27de90cd39cdb0e698d0329654f6a",
+    "cfg.json": "911879b23f5dab26969c229666749a94da08fa1f04409d8c4fc9b1eb9851b612",
+    "dependencies.json": "c823fdbbc325363b28ab2bf140cf9f2bdca989a56b4645bf0fd273132e9c0883",
+    "links.json": "1ae6559eccb9f1467188401812b0bb5ecd410292e4312fa03a89fb661f338ad6"
+  },
+  "example": {
+    "id": "carddemo-coactupc",
+    "title": "CardDemo · COACTUPC",
+    "description": "Atualização de conta real: 4.236 linhas, CICS, PERFORM e COPY; análise parcial",
+    "format": "fixed",
+    "url": "examples/carddemo-coactupc.json.gz",
+    "nodes": 3048,
+    "edges": 3887,
+    "sites": 4,
+    "fileSites": 7,
+    "bytes": 105583292,
+    "sha256": "e4a8d19265d688e7eb7da22bea65e16a88339e0cf456b8195534069f2a95a1d6"
+  }
+}
