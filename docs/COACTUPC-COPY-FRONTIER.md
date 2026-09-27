@@ -1,5 +1,7 @@
 # COACTUPC: por que os acessos FILE estão inalcançáveis
 
+**Atualização posterior:** o [COACTUPC foi reexecutado com os modelos IBM sintéticos](COACTUPC-IBM-RERUN.md). Os modelos foram usados, mas os bindings físicos permaneceram indisponíveis e o CFG conservou os mesmos cortes. A investigação abaixo registra o baseline anterior ao catálogo sintético.
+
 Investigação de 27/09/2026. **A hipótese dos copybooks ausentes foi confirmada para o corte observado no RECEIVE MAP.** O efeito passa pelas provas de memória publicadas pelo frontend e pela admissão executável do lowering.
 
 ## Cadeia causal no programa real

@@ -1,0 +1,2083 @@
+{
+  "status": "COMPARISON_COMPLETED",
+  "result": "STILL_DISCONNECTED",
+  "method": "Undirected components and directed entry reachability use only original CFG transitions. Source -> control correlations use StatementLink -> LabelId. Topology equality only removes the publication namespace, preserving all other fields.",
+  "topologyEqualAfterPublicationRename": {
+    "nodes": true,
+    "transitions": true
+  },
+  "before": {
+    "provenance": {
+      "directory": ".local/carddemo-coactupc-20260927T112652Z/pipeline",
+      "execution": {
+        "build": {
+          "repos": {
+            "proleap-poc": {
+              "sha": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+              "status": ""
+            },
+            "cobol-lower": {
+              "sha": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+              "status": ""
+            },
+            "air-java": {
+              "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+              "status": ""
+            },
+            "analysis-cfg": {
+              "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+              "status": ""
+            },
+            "analysis-ir": {
+              "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+              "status": ""
+            }
+          },
+          "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+          "sourceCount": 461,
+          "sourcesSha256": "c895d33d952b5bb659653cb3032773d4bade5c774e9fde146183b575f3837cce",
+          "libraries": {
+            "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+            "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+            "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+            "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+            "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+            "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+            "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+            "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+          }
+        },
+        "source": "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+        "sourceSha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "executions": [
+          {
+            "phase": "frontend",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+              "--source",
+              "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+              "--output",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp",
+              "--copybooks",
+              "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy,/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy-bms",
+              "--storage-profile",
+              "ibm-enterprise-6.4-fixed-display-1047@1",
+              "--entry-storage-state",
+              "initial",
+              "--cics-entry-mode",
+              "new-logical-level",
+              "--logical-text",
+              "disabled"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "lower",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "ExportLinks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp/cobol-semantic-product.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/links.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "cfg",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/cfg.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "dependencies",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/dependencies.json",
+              "--source-evidence",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json",
+              "--experimental-physical"
+            ],
+            "exitCode": 0
+          }
+        ]
+      },
+      "sha256": {
+        "sp/cobol-semantic-product.json": "fbfbe0fa2ac4f6f16f61904e91a4eb0dec89b31cdd6a324d1d1288c831f946c6",
+        "air.json": "37ae9615fe43e454a8ff9de7a9cb0a634ec27de90cd39cdb0e698d0329654f6a",
+        "cfg.json": "911879b23f5dab26969c229666749a94da08fa1f04409d8c4fc9b1eb9851b612",
+        "links.json": "1ae6559eccb9f1467188401812b0bb5ecd410292e4312fa03a89fb661f338ad6",
+        "dependencies.json": "c823fdbbc325363b28ab2bf140cf9f2bdca989a56b4645bf0fd273132e9c0883"
+      }
+    },
+    "contracts": {
+      "sp": "2.47.0",
+      "cfg": "3.0.0",
+      "dependencies": "2.6.0"
+    },
+    "stages": [
+      {
+        "phase": "frontend",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+          "--source",
+          "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+          "--output",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp",
+          "--copybooks",
+          "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy,/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy-bms",
+          "--storage-profile",
+          "ibm-enterprise-6.4-fixed-display-1047@1",
+          "--entry-storage-state",
+          "initial",
+          "--cics-entry-mode",
+          "new-logical-level",
+          "--logical-text",
+          "disabled"
+        ],
+        "exitCode": 0
+      },
+      {
+        "phase": "lower",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "ExportLinks",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp/cobol-semantic-product.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/links.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json"
+        ],
+        "exitCode": 0
+      },
+      {
+        "phase": "cfg",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/cfg.json"
+        ],
+        "exitCode": 0
+      },
+      {
+        "phase": "dependencies",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/dependencies.json",
+          "--source-evidence",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json",
+          "--experimental-physical"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "nodes": 3048,
+    "transitions": 3887,
+    "reachableFromEntry": 966,
+    "unreachableFromEntry": 2082,
+    "weakComponents": [
+      {
+        "nodes": 2062,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "SEQUENCE": 2062
+        }
+      },
+      {
+        "nodes": 966,
+        "reachableFromEntry": 966,
+        "nodeKinds": {
+          "SEQUENCE": 965,
+          "ENTRY": 1
+        }
+      },
+      {
+        "nodes": 17,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "SEQUENCE": 17
+        }
+      },
+      {
+        "nodes": 2,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "SEQUENCE": 2
+        }
+      },
+      {
+        "nodes": 1,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "NORMAL_EXIT": 1
+        }
+      }
+    ],
+    "modelAssumedSymbols": 0,
+    "inputsByKind": {
+      "MISSING_COPY": 2,
+      "PHYSICAL_PROFILE": 1
+    },
+    "coverage": {
+      "inputMissingStatements": 0,
+      "inventoryStatus": "INPUT_MISSING",
+      "modeledStatements": 100,
+      "observedStatements": 1415,
+      "partialStatements": 881,
+      "readiness": {
+        "cfg": {
+          "scope": "complete observed inventory bounded by each statement's structural readiness",
+          "status": "BLOCKED"
+        },
+        "effectsDataflow": {
+          "scope": "report dependency claim bounded by each statement's effects readiness",
+          "status": "BLOCKED"
+        },
+        "lowering": {
+          "scope": "report binding claim combined with every observed statement fact",
+          "status": "BLOCKED"
+        }
+      },
+      "unsupportedStatements": 434
+    },
+    "dependencyStatus": "PARTIAL",
+    "receive": {
+      "statement": "statement:888",
+      "provenance": {
+        "exact": false,
+        "expanded": {
+          "endColumn": 191,
+          "endLine": 3430,
+          "file": "<preprocessed>",
+          "startColumn": 4,
+          "startLine": 3430
+        },
+        "includeChain": [],
+        "original": {
+          "endColumn": 18,
+          "endLine": 1045,
+          "file": "COACTUPC.cbl",
+          "startColumn": 11,
+          "startLine": 1040
+        }
+      },
+      "option": "INTO",
+      "reference": {
+        "binding": {
+          "candidates": [
+            {
+              "canonicalName": "CACTUPAI",
+              "id": "data:250"
+            }
+          ],
+          "reason": "UNIQUE_VISIBLE_DECLARATION",
+          "selected": "data:250",
+          "status": "RESOLVED"
+        },
+        "id": "operand:888:2",
+        "logicalWholeItem": "data:250",
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 113,
+            "endLine": 3430,
+            "file": "<preprocessed>",
+            "startColumn": 106,
+            "startLine": 3430
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 1045,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 1040
+          }
+        },
+        "regionalAccess": null,
+        "regionalAlternatives": [],
+        "role": "WRITE",
+        "wholeItemAccess": null
+      },
+      "binding": {
+        "cells": [],
+        "dependencies": [
+          "LOCAL_ALLOCATION/storage-base:1127"
+        ],
+        "exactCell": "",
+        "node": "storage-node:1127",
+        "region": "storage-base:1127",
+        "regions": []
+      },
+      "bindingAvailable": false,
+      "proofs": [
+        {
+          "dependencies": [
+            "REGION_CONTEXT/storage-base:1127",
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "LOCAL_ALLOCATION/storage-base:1127",
+          "inputs": [],
+          "kind": "LOCAL_ALLOCATION",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/LOCAL_ALLOCATION",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "REGION_CONTEXT/storage-base:1127",
+          "inputs": [
+            "input:0",
+            "input:1"
+          ],
+          "kind": "REGION_CONTEXT",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/REGION_CONTEXT",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [],
+          "id": "SOURCE_SYNTAX/storage-base:1127",
+          "inputs": [],
+          "kind": "SOURCE_SYNTAX",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/SOURCE_SYNTAX",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": true
+        }
+      ],
+      "inputCount": 2,
+      "inputIds": [
+        "input:0",
+        "input:1"
+      ],
+      "inputOrigins": {
+        "COACTUPC.cbl": 2
+      },
+      "controls": [
+        {
+          "node": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "586"
+          },
+          "reachableFromEntry": true,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        }
+      ]
+    },
+    "send": {
+      "statement": "statement:1206",
+      "provenance": {
+        "exact": false,
+        "expanded": {
+          "endColumn": 254,
+          "endLine": 7033,
+          "file": "<preprocessed>",
+          "startColumn": 4,
+          "startLine": 7033
+        },
+        "includeChain": [],
+        "original": {
+          "endColumn": 18,
+          "endLine": 3601,
+          "file": "COACTUPC.cbl",
+          "startColumn": 11,
+          "startLine": 3594
+        }
+      },
+      "option": "FROM",
+      "reference": {
+        "binding": {
+          "candidates": [
+            {
+              "canonicalName": "CACTUPAO",
+              "id": "data:467"
+            }
+          ],
+          "reason": "UNIQUE_VISIBLE_DECLARATION",
+          "selected": "data:467",
+          "status": "RESOLVED"
+        },
+        "id": "operand:1206:2",
+        "logicalWholeItem": "data:467",
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 126,
+            "endLine": 7033,
+            "file": "<preprocessed>",
+            "startColumn": 119,
+            "startLine": 7033
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 3601,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 3594
+          }
+        },
+        "regionalAccess": null,
+        "regionalAlternatives": [],
+        "role": "READ",
+        "wholeItemAccess": null
+      },
+      "binding": {
+        "cells": [],
+        "dependencies": [
+          "LOCAL_ALLOCATION/storage-base:1127"
+        ],
+        "exactCell": "",
+        "node": "storage-node:1886",
+        "region": "storage-base:1127",
+        "regions": []
+      },
+      "bindingAvailable": false,
+      "proofs": [
+        {
+          "dependencies": [
+            "REGION_CONTEXT/storage-base:1127",
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "LOCAL_ALLOCATION/storage-base:1127",
+          "inputs": [],
+          "kind": "LOCAL_ALLOCATION",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/LOCAL_ALLOCATION",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "REGION_CONTEXT/storage-base:1127",
+          "inputs": [
+            "input:0",
+            "input:1"
+          ],
+          "kind": "REGION_CONTEXT",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/REGION_CONTEXT",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [],
+          "id": "SOURCE_SYNTAX/storage-base:1127",
+          "inputs": [],
+          "kind": "SOURCE_SYNTAX",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/SOURCE_SYNTAX",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": true
+        }
+      ],
+      "inputCount": 2,
+      "inputIds": [
+        "input:0",
+        "input:1"
+      ],
+      "inputOrigins": {
+        "COACTUPC.cbl": 2
+      },
+      "controls": [
+        {
+          "node": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "1083"
+          },
+          "reachableFromEntry": false,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        },
+        {
+          "node": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "2094"
+          },
+          "reachableFromEntry": true,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        },
+        {
+          "node": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "695"
+          },
+          "reachableFromEntry": true,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        }
+      ]
+    },
+    "sites": [
+      {
+        "family": "call",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "856"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "call",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "1578"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "call",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "97"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "call",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "2126"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "1387"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "719"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "1028"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "400"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "2712"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "244"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "550"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      }
+    ]
+  },
+  "after": {
+    "provenance": {
+      "directory": ".local/coactupc-ibm-20260927T161359Z/pipeline",
+      "execution": {
+        "build": {
+          "repos": {
+            "proleap-poc": {
+              "sha": "22d37233373b9db691ba170d898b7523bfea5746",
+              "status": ""
+            },
+            "cobol-lower": {
+              "sha": "83f11f13dd5e521382e4903c2d8bf9e92832f11a",
+              "status": ""
+            },
+            "air-java": {
+              "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+              "status": ""
+            },
+            "analysis-cfg": {
+              "sha": "095f711d78750f27fcc60b6eb1437e23e8c1b970",
+              "status": ""
+            },
+            "analysis-ir": {
+              "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+              "status": ""
+            }
+          },
+          "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+          "sourceCount": 462,
+          "sourcesSha256": "1782126abe2d69cb4538ab3ddf819e407545c50d15acc3483e890f34138c93de",
+          "libraries": {
+            "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+            "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+            "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+            "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+            "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+            "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+            "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+            "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+          }
+        },
+        "source": "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+        "sourceSha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "executions": [
+          {
+            "phase": "frontend",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+              "--source",
+              "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+              "--output",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/sp",
+              "--copybooks",
+              "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy,/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy-bms",
+              "--storage-profile",
+              "ibm-enterprise-6.4-fixed-display-1047@1",
+              "--entry-storage-state",
+              "initial",
+              "--cics-entry-mode",
+              "new-logical-level",
+              "--logical-text",
+              "disabled"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "lower",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "ExportLinks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/sp/cobol-semantic-product.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/links.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/source-evidence.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "cfg",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/cfg.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "dependencies",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/dependencies.json",
+              "--source-evidence",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/source-evidence.json",
+              "--experimental-physical"
+            ],
+            "exitCode": 0
+          }
+        ]
+      },
+      "sha256": {
+        "sp/cobol-semantic-product.json": "30a1a19a4c45dfa5565b9b9f4f111089acf98b99d07711f025738dc297fec195",
+        "air.json": "c999be0584c467302ce9202524c879491cd6eead24a65e19912a4d0cc5b72c86",
+        "cfg.json": "d9169167b6b637c8956fb4ad8aaf89be2881579d067119839b17cc61d56d9e0b",
+        "links.json": "5342ede1eedba008932f697a03b1d8634e7c4a474329b62d245170bb1acdd23a",
+        "dependencies.json": "894af13679340c69caeeebfefef4cc0697c17886cef491cc4699b32f382185fe"
+      }
+    },
+    "contracts": {
+      "sp": "2.49.0",
+      "cfg": "3.0.0",
+      "dependencies": "2.6.0"
+    },
+    "stages": [
+      {
+        "phase": "frontend",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+          "--source",
+          "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+          "--output",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/sp",
+          "--copybooks",
+          "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy,/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy-bms",
+          "--storage-profile",
+          "ibm-enterprise-6.4-fixed-display-1047@1",
+          "--entry-storage-state",
+          "initial",
+          "--cics-entry-mode",
+          "new-logical-level",
+          "--logical-text",
+          "disabled"
+        ],
+        "exitCode": 0
+      },
+      {
+        "phase": "lower",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "ExportLinks",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/sp/cobol-semantic-product.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/air.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/links.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/source-evidence.json"
+        ],
+        "exitCode": 0
+      },
+      {
+        "phase": "cfg",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/air.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/cfg.json"
+        ],
+        "exitCode": 0
+      },
+      {
+        "phase": "dependencies",
+        "command": [
+          "java",
+          "-cp",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+          "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/air.json",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/dependencies.json",
+          "--source-evidence",
+          "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-ibm-20260927T161359Z/pipeline/source-evidence.json",
+          "--experimental-physical"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "nodes": 3048,
+    "transitions": 3887,
+    "reachableFromEntry": 966,
+    "unreachableFromEntry": 2082,
+    "weakComponents": [
+      {
+        "nodes": 2062,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "SEQUENCE": 2062
+        }
+      },
+      {
+        "nodes": 966,
+        "reachableFromEntry": 966,
+        "nodeKinds": {
+          "SEQUENCE": 965,
+          "ENTRY": 1
+        }
+      },
+      {
+        "nodes": 17,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "SEQUENCE": 17
+        }
+      },
+      {
+        "nodes": 2,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "SEQUENCE": 2
+        }
+      },
+      {
+        "nodes": 1,
+        "reachableFromEntry": 0,
+        "nodeKinds": {
+          "NORMAL_EXIT": 1
+        }
+      }
+    ],
+    "modelAssumedSymbols": 105,
+    "inputsByKind": {
+      "MISSING_COPY": 109,
+      "PHYSICAL_PROFILE": 1
+    },
+    "coverage": {
+      "inputMissingStatements": 0,
+      "inventoryStatus": "INPUT_MISSING",
+      "modeledStatements": 100,
+      "observedStatements": 1415,
+      "partialStatements": 881,
+      "readiness": {
+        "cfg": {
+          "scope": "complete observed inventory bounded by each statement's structural readiness",
+          "status": "BLOCKED"
+        },
+        "effectsDataflow": {
+          "scope": "report dependency claim bounded by each statement's effects readiness",
+          "status": "BLOCKED"
+        },
+        "lowering": {
+          "scope": "report binding claim combined with every observed statement fact",
+          "status": "BLOCKED"
+        }
+      },
+      "unsupportedStatements": 434
+    },
+    "dependencyStatus": "COMPLETE",
+    "receive": {
+      "statement": "statement:888",
+      "provenance": {
+        "exact": false,
+        "expanded": {
+          "endColumn": 191,
+          "endLine": 3537,
+          "file": "<preprocessed>",
+          "startColumn": 4,
+          "startLine": 3537
+        },
+        "includeChain": [],
+        "original": {
+          "endColumn": 18,
+          "endLine": 1045,
+          "file": "COACTUPC.cbl",
+          "startColumn": 11,
+          "startLine": 1040
+        }
+      },
+      "option": "INTO",
+      "reference": {
+        "binding": {
+          "candidates": [
+            {
+              "canonicalName": "CACTUPAI",
+              "id": "data:357"
+            }
+          ],
+          "reason": "UNIQUE_VISIBLE_DECLARATION",
+          "selected": "data:357",
+          "status": "RESOLVED"
+        },
+        "id": "operand:888:2",
+        "logicalWholeItem": "data:357",
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 113,
+            "endLine": 3537,
+            "file": "<preprocessed>",
+            "startColumn": 106,
+            "startLine": 3537
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 1045,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 1040
+          }
+        },
+        "regionalAccess": null,
+        "regionalAlternatives": [],
+        "role": "WRITE",
+        "wholeItemAccess": null
+      },
+      "binding": {
+        "cells": [],
+        "dependencies": [
+          "LOCAL_ALLOCATION/storage-base:1343"
+        ],
+        "exactCell": "",
+        "node": "storage-node:1343",
+        "region": "storage-base:1343",
+        "regions": []
+      },
+      "bindingAvailable": false,
+      "proofs": [
+        {
+          "dependencies": [
+            "REGION_CONTEXT/storage-base:1343",
+            "SOURCE_SYNTAX/storage-base:1343"
+          ],
+          "id": "LOCAL_ALLOCATION/storage-base:1343",
+          "inputs": [],
+          "kind": "LOCAL_ALLOCATION",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2229,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2228
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/LOCAL_ALLOCATION",
+          "scope": "storage-base:1343",
+          "subject": "storage-base:1343",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [
+            "SOURCE_SYNTAX/storage-base:1343"
+          ],
+          "id": "REGION_CONTEXT/storage-base:1343",
+          "inputs": [
+            "input:0",
+            "input:1",
+            "input:10",
+            "input:100",
+            "input:101",
+            "input:102",
+            "input:103",
+            "input:104",
+            "input:105",
+            "input:106",
+            "input:107",
+            "input:108",
+            "input:11",
+            "input:12",
+            "input:13",
+            "input:14",
+            "input:15",
+            "input:16",
+            "input:17",
+            "input:18",
+            "input:19",
+            "input:2",
+            "input:20",
+            "input:21",
+            "input:22",
+            "input:23",
+            "input:24",
+            "input:25",
+            "input:26",
+            "input:27",
+            "input:28",
+            "input:29",
+            "input:3",
+            "input:30",
+            "input:31",
+            "input:32",
+            "input:33",
+            "input:34",
+            "input:35",
+            "input:36",
+            "input:37",
+            "input:38",
+            "input:39",
+            "input:4",
+            "input:40",
+            "input:41",
+            "input:42",
+            "input:43",
+            "input:44",
+            "input:45",
+            "input:46",
+            "input:47",
+            "input:48",
+            "input:49",
+            "input:5",
+            "input:50",
+            "input:51",
+            "input:52",
+            "input:53",
+            "input:54",
+            "input:55",
+            "input:56",
+            "input:57",
+            "input:58",
+            "input:59",
+            "input:6",
+            "input:60",
+            "input:61",
+            "input:62",
+            "input:63",
+            "input:64",
+            "input:65",
+            "input:66",
+            "input:67",
+            "input:68",
+            "input:69",
+            "input:7",
+            "input:70",
+            "input:71",
+            "input:72",
+            "input:73",
+            "input:74",
+            "input:75",
+            "input:76",
+            "input:77",
+            "input:78",
+            "input:79",
+            "input:8",
+            "input:80",
+            "input:81",
+            "input:82",
+            "input:83",
+            "input:84",
+            "input:85",
+            "input:86",
+            "input:87",
+            "input:88",
+            "input:89",
+            "input:9",
+            "input:90",
+            "input:91",
+            "input:92",
+            "input:93",
+            "input:94",
+            "input:95",
+            "input:96",
+            "input:97",
+            "input:98",
+            "input:99"
+          ],
+          "kind": "REGION_CONTEXT",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2229,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2228
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/REGION_CONTEXT",
+          "scope": "storage-base:1343",
+          "subject": "storage-base:1343",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [],
+          "id": "SOURCE_SYNTAX/storage-base:1343",
+          "inputs": [],
+          "kind": "SOURCE_SYNTAX",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2229,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2228
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/SOURCE_SYNTAX",
+          "scope": "storage-base:1343",
+          "subject": "storage-base:1343",
+          "evaluatedAvailable": true
+        }
+      ],
+      "inputCount": 109,
+      "inputIds": [
+        "input:0",
+        "input:1",
+        "input:10",
+        "input:100",
+        "input:101",
+        "input:102",
+        "input:103",
+        "input:104",
+        "input:105",
+        "input:106",
+        "input:107",
+        "input:108",
+        "input:11",
+        "input:12",
+        "input:13",
+        "input:14",
+        "input:15",
+        "input:16",
+        "input:17",
+        "input:18",
+        "input:19",
+        "input:2",
+        "input:20",
+        "input:21",
+        "input:22",
+        "input:23",
+        "input:24",
+        "input:25",
+        "input:26",
+        "input:27",
+        "input:28",
+        "input:29",
+        "input:3",
+        "input:30",
+        "input:31",
+        "input:32",
+        "input:33",
+        "input:34",
+        "input:35",
+        "input:36",
+        "input:37",
+        "input:38",
+        "input:39",
+        "input:4",
+        "input:40",
+        "input:41",
+        "input:42",
+        "input:43",
+        "input:44",
+        "input:45",
+        "input:46",
+        "input:47",
+        "input:48",
+        "input:49",
+        "input:5",
+        "input:50",
+        "input:51",
+        "input:52",
+        "input:53",
+        "input:54",
+        "input:55",
+        "input:56",
+        "input:57",
+        "input:58",
+        "input:59",
+        "input:6",
+        "input:60",
+        "input:61",
+        "input:62",
+        "input:63",
+        "input:64",
+        "input:65",
+        "input:66",
+        "input:67",
+        "input:68",
+        "input:69",
+        "input:7",
+        "input:70",
+        "input:71",
+        "input:72",
+        "input:73",
+        "input:74",
+        "input:75",
+        "input:76",
+        "input:77",
+        "input:78",
+        "input:79",
+        "input:8",
+        "input:80",
+        "input:81",
+        "input:82",
+        "input:83",
+        "input:84",
+        "input:85",
+        "input:86",
+        "input:87",
+        "input:88",
+        "input:89",
+        "input:9",
+        "input:90",
+        "input:91",
+        "input:92",
+        "input:93",
+        "input:94",
+        "input:95",
+        "input:96",
+        "input:97",
+        "input:98",
+        "input:99"
+      ],
+      "inputOrigins": {
+        "model:ibm-cics/structural-v2/DFHBMSCA": 72,
+        "model:ibm-cics/structural-v2/DFHAID": 37
+      },
+      "controls": [
+        {
+          "node": {
+            "publication": "22921b77da12e66f45fa8121d733ca75",
+            "ordinal": "586"
+          },
+          "reachableFromEntry": true,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        }
+      ]
+    },
+    "send": {
+      "statement": "statement:1206",
+      "provenance": {
+        "exact": false,
+        "expanded": {
+          "endColumn": 254,
+          "endLine": 7140,
+          "file": "<preprocessed>",
+          "startColumn": 4,
+          "startLine": 7140
+        },
+        "includeChain": [],
+        "original": {
+          "endColumn": 18,
+          "endLine": 3601,
+          "file": "COACTUPC.cbl",
+          "startColumn": 11,
+          "startLine": 3594
+        }
+      },
+      "option": "FROM",
+      "reference": {
+        "binding": {
+          "candidates": [
+            {
+              "canonicalName": "CACTUPAO",
+              "id": "data:574"
+            }
+          ],
+          "reason": "UNIQUE_VISIBLE_DECLARATION",
+          "selected": "data:574",
+          "status": "RESOLVED"
+        },
+        "id": "operand:1206:2",
+        "logicalWholeItem": "data:574",
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 126,
+            "endLine": 7140,
+            "file": "<preprocessed>",
+            "startColumn": 119,
+            "startLine": 7140
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 3601,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 3594
+          }
+        },
+        "regionalAccess": null,
+        "regionalAlternatives": [],
+        "role": "READ",
+        "wholeItemAccess": null
+      },
+      "binding": {
+        "cells": [],
+        "dependencies": [
+          "LOCAL_ALLOCATION/storage-base:1343"
+        ],
+        "exactCell": "",
+        "node": "storage-node:2102",
+        "region": "storage-base:1343",
+        "regions": []
+      },
+      "bindingAvailable": false,
+      "proofs": [
+        {
+          "dependencies": [
+            "REGION_CONTEXT/storage-base:1343",
+            "SOURCE_SYNTAX/storage-base:1343"
+          ],
+          "id": "LOCAL_ALLOCATION/storage-base:1343",
+          "inputs": [],
+          "kind": "LOCAL_ALLOCATION",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2229,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2228
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/LOCAL_ALLOCATION",
+          "scope": "storage-base:1343",
+          "subject": "storage-base:1343",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [
+            "SOURCE_SYNTAX/storage-base:1343"
+          ],
+          "id": "REGION_CONTEXT/storage-base:1343",
+          "inputs": [
+            "input:0",
+            "input:1",
+            "input:10",
+            "input:100",
+            "input:101",
+            "input:102",
+            "input:103",
+            "input:104",
+            "input:105",
+            "input:106",
+            "input:107",
+            "input:108",
+            "input:11",
+            "input:12",
+            "input:13",
+            "input:14",
+            "input:15",
+            "input:16",
+            "input:17",
+            "input:18",
+            "input:19",
+            "input:2",
+            "input:20",
+            "input:21",
+            "input:22",
+            "input:23",
+            "input:24",
+            "input:25",
+            "input:26",
+            "input:27",
+            "input:28",
+            "input:29",
+            "input:3",
+            "input:30",
+            "input:31",
+            "input:32",
+            "input:33",
+            "input:34",
+            "input:35",
+            "input:36",
+            "input:37",
+            "input:38",
+            "input:39",
+            "input:4",
+            "input:40",
+            "input:41",
+            "input:42",
+            "input:43",
+            "input:44",
+            "input:45",
+            "input:46",
+            "input:47",
+            "input:48",
+            "input:49",
+            "input:5",
+            "input:50",
+            "input:51",
+            "input:52",
+            "input:53",
+            "input:54",
+            "input:55",
+            "input:56",
+            "input:57",
+            "input:58",
+            "input:59",
+            "input:6",
+            "input:60",
+            "input:61",
+            "input:62",
+            "input:63",
+            "input:64",
+            "input:65",
+            "input:66",
+            "input:67",
+            "input:68",
+            "input:69",
+            "input:7",
+            "input:70",
+            "input:71",
+            "input:72",
+            "input:73",
+            "input:74",
+            "input:75",
+            "input:76",
+            "input:77",
+            "input:78",
+            "input:79",
+            "input:8",
+            "input:80",
+            "input:81",
+            "input:82",
+            "input:83",
+            "input:84",
+            "input:85",
+            "input:86",
+            "input:87",
+            "input:88",
+            "input:89",
+            "input:9",
+            "input:90",
+            "input:91",
+            "input:92",
+            "input:93",
+            "input:94",
+            "input:95",
+            "input:96",
+            "input:97",
+            "input:98",
+            "input:99"
+          ],
+          "kind": "REGION_CONTEXT",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2229,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2228
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/REGION_CONTEXT",
+          "scope": "storage-base:1343",
+          "subject": "storage-base:1343",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [],
+          "id": "SOURCE_SYNTAX/storage-base:1343",
+          "inputs": [],
+          "kind": "SOURCE_SYNTAX",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2229,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2228
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/SOURCE_SYNTAX",
+          "scope": "storage-base:1343",
+          "subject": "storage-base:1343",
+          "evaluatedAvailable": true
+        }
+      ],
+      "inputCount": 109,
+      "inputIds": [
+        "input:0",
+        "input:1",
+        "input:10",
+        "input:100",
+        "input:101",
+        "input:102",
+        "input:103",
+        "input:104",
+        "input:105",
+        "input:106",
+        "input:107",
+        "input:108",
+        "input:11",
+        "input:12",
+        "input:13",
+        "input:14",
+        "input:15",
+        "input:16",
+        "input:17",
+        "input:18",
+        "input:19",
+        "input:2",
+        "input:20",
+        "input:21",
+        "input:22",
+        "input:23",
+        "input:24",
+        "input:25",
+        "input:26",
+        "input:27",
+        "input:28",
+        "input:29",
+        "input:3",
+        "input:30",
+        "input:31",
+        "input:32",
+        "input:33",
+        "input:34",
+        "input:35",
+        "input:36",
+        "input:37",
+        "input:38",
+        "input:39",
+        "input:4",
+        "input:40",
+        "input:41",
+        "input:42",
+        "input:43",
+        "input:44",
+        "input:45",
+        "input:46",
+        "input:47",
+        "input:48",
+        "input:49",
+        "input:5",
+        "input:50",
+        "input:51",
+        "input:52",
+        "input:53",
+        "input:54",
+        "input:55",
+        "input:56",
+        "input:57",
+        "input:58",
+        "input:59",
+        "input:6",
+        "input:60",
+        "input:61",
+        "input:62",
+        "input:63",
+        "input:64",
+        "input:65",
+        "input:66",
+        "input:67",
+        "input:68",
+        "input:69",
+        "input:7",
+        "input:70",
+        "input:71",
+        "input:72",
+        "input:73",
+        "input:74",
+        "input:75",
+        "input:76",
+        "input:77",
+        "input:78",
+        "input:79",
+        "input:8",
+        "input:80",
+        "input:81",
+        "input:82",
+        "input:83",
+        "input:84",
+        "input:85",
+        "input:86",
+        "input:87",
+        "input:88",
+        "input:89",
+        "input:9",
+        "input:90",
+        "input:91",
+        "input:92",
+        "input:93",
+        "input:94",
+        "input:95",
+        "input:96",
+        "input:97",
+        "input:98",
+        "input:99"
+      ],
+      "inputOrigins": {
+        "model:ibm-cics/structural-v2/DFHBMSCA": 72,
+        "model:ibm-cics/structural-v2/DFHAID": 37
+      },
+      "controls": [
+        {
+          "node": {
+            "publication": "22921b77da12e66f45fa8121d733ca75",
+            "ordinal": "1083"
+          },
+          "reachableFromEntry": false,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        },
+        {
+          "node": {
+            "publication": "22921b77da12e66f45fa8121d733ca75",
+            "ordinal": "2094"
+          },
+          "reachableFromEntry": true,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        },
+        {
+          "node": {
+            "publication": "22921b77da12e66f45fa8121d733ca75",
+            "ordinal": "695"
+          },
+          "reachableFromEntry": true,
+          "successors": [],
+          "terminator": "opaque",
+          "uncertainties": [
+            "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+            "EXECUTABLE_CAPABILITY_NOT_READY"
+          ]
+        }
+      ]
+    },
+    "sites": [
+      {
+        "family": "call",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "856"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "call",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "1578"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "call",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "97"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "call",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "2126"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "1387"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "719"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "1028"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "400"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "2712"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "244"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      },
+      {
+        "family": "file",
+        "node": {
+          "publication": "22921b77da12e66f45fa8121d733ca75",
+          "ordinal": "550"
+        },
+        "reachableFromEntry": false,
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "candidates": []
+      }
+    ]
+  }
+}

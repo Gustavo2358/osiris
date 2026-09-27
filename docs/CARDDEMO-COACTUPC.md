@@ -1,5 +1,7 @@
 # CardDemo · COACTUPC — 27/09/2026
 
+**Atualização:** a [reexecução com modelos IBM sintéticos](COACTUPC-IBM-RERUN.md) confirmou cinco componentes desconectados e a mesma estrutura de nós/transições. Os resultados abaixo documentam o baseline embutido no visualizador.
+
 ## Abrir
 
 Com `npm run dev`, abra [COACTUPC no Trama](http://127.0.0.1:5173/?example=carddemo-coactupc) ou escolha **CardDemo · COACTUPC** na lista de exemplos. O pacote `public/examples/carddemo-coactupc.json.gz` também pode ser importado em outra instância.
