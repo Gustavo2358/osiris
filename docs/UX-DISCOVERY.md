@@ -31,3 +31,41 @@ Percursos: escolher arquivo CICS → consultar valores → caminhos → produtor
 Estado inicial: oito falhas identificadas; implementação e verificação pendentes. Resultados serão acrescentados aqui, preservando as observações anteriores.
 
 Nenhum produtor, contrato, pin ou artefato bruto será alterado para esta revisão de UX. Identidades, candidatos e fluxo continuam sendo os publicados pelo analisador.
+
+### Achado adicional na revisão visual: UX-09
+
+**Prioridade alta — painel de fonte cortado em janela baixa.** Ao validar `files-values` em 1280×720, com caminhos e código abertos, o mínimo de 180 px do grafo somado ao mínimo de 190 px do código ultrapassa a altura disponível. O contêiner usa `overflow: hidden`, tornando a parte inferior do painel inacessível. Registrado após as oito implementações, antes desta correção.
+
+Aceite: as caixas do grafo e do código devem caber na área de trabalho em 1280×720, inclusive com o painel ampliado; deve ser possível alcançar GOBACK e a última linha. Em janelas ainda menores, a área composta deve permitir rolagem em vez de cortar conteúdo.
+
+
+## Resultado da implementação
+
+| ID | Estado | Verificação final |
+|---|---|---|
+| UX-01 | Corrigido | Produtor dentro do recorte o conserva; GOBACK fora dele abre o programa; Voltar recupera alvo, recorte e viewport exatos. |
+| UX-02 | Corrigido | Seleção mantém a escala escolhida. Centralizar seleção e Enquadrar recorte disponíveis, com controles em português. |
+| UX-03 | Corrigido | Busca independente para cada aba, contagem filtrada/total e Mostrar todos no estado vazio. |
+| UX-04 | Corrigido | Lista com código em múltiplas linhas, arquivo/linha, valores e contexto quando publicado. Seis spans do exemplo FILE continuam distintos e identificados por colunas contadas a partir de 1, com o fim exclusivo/inclusivo normalizado apenas na apresentação. |
+| UX-05 | Corrigido | Navegador e inspetor verificados com setas, Home/End, foco, tabIndex e painel associado. |
+| UX-06 | Corrigido | Tab permanece no modal, Esc fecha sem desfazer o recorte e foco volta para Ajuda. O primeiro teste revelou que o diálogo nativo sozinho ainda permitia foco na UI do browser; a contenção explícita corrigiu isso. |
+| UX-07 | Corrigido | Amostras de lista, localização e texto auxiliar com contraste ≥4,5:1. Limpar busca com 32×32 px. Sem rolagem horizontal da página em 800/1280/1440 px. |
+| UX-08 | Corrigido | Entrada aninhada informa 4 de 4; banner conserva ENDBR enquanto o produtor é inspecionado e permite retornar ao destino. |
+| UX-09 | Corrigido | Fonte antes ultrapassava o limite inferior por 48 px. Agora os dois painéis e os quatro controles cabem; Ctrl+End alcança GOBACK em 1280×720. |
+
+### Evidências
+
+- Discovery inicial separado da implementação no commit `2c6797d`.
+- `evidence/ux-discovery-before.log` e `.json`: primeira reprodução automatizada. Cinco falhas de produto reproduzidas; UX-08 nessa rodada falhou por seletor ambíguo do próprio teste, corrigido antes da validação. A observação do denominador foi confirmada no código e no cenário final. UX-02 e UX-04 também foram observados manualmente no browser.
+- `evidence/ux-revision-browser.log`: primeira integração, 18/19 cenários; registrou o foco escapando da ajuda.
+- `evidence/ux-revision-validation.log`: 52 testes de modelo/contrato, TypeScript, build e 19 testes de navegador passando após correção do modal.
+- `evidence/ux-09-before.log` e `ux-09-after.log`: reprodução e correção do corte de fonte.
+- `evidence/ux-final-browser.log` e `ux-final-browser.json`: regressão final, **20 testes de navegador passando**, incluindo UX-09 e todos os fluxos anteriores.
+- `evidence/ux-final-confirmation.log` e `.json`: 20/20 novamente após conferir a conversão de colunas com o intervalo real 22–42.
+- `evidence/ux-list-final.png` e `ux-paths-source-final.png`: apresentação final; revisão interativa também feita no browser local. As imagens anteriores em `ux-list-1280.png` e `ux-paths-source-1280.png` foram preservadas.
+
+### Limites e decisões
+
+A avaliação foi heurística, com automação em Chromium e revisão visual. Não substitui observação de desenvolvedores COBOL usando o produto nem auditoria completa de acessibilidade. O grafo grande continua com renderização limitada à viewport; enquadrar 503 nós exige ampliar para ler. O histórico guarda até 30 passos na publicação aberta. Os limites do analisador descritos nos relatórios anteriores permanecem.
+
+Os produtores e os pacotes reais não foram alterados. Os gates do analisador não foram repetidos: o delta está na apresentação e na navegação; os 52 testes preservam as fronteiras de identidades, controle e candidatos sobre os 16 pacotes reais.

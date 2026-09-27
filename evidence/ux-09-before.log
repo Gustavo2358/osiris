@@ -1,0 +1,46 @@
+
+> cobol-graph-explorer@0.1.0 test:e2e
+> playwright test e2e/usability.spec.ts --grep UX-09
+
+[WebServer] (node:685447) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:685465) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/usability.spec.ts:187:1 › UX-09 paths and source remain fully accessible in a short laptop window (884ms)
+
+
+  1) e2e/usability.spec.ts:187:1 › UX-09 paths and source remain fully accessible in a short laptop window 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 685
+    Received:    732
+
+      194 |   for (let i=0;i<2;i++) {
+      195 |     const box=await pane.boundingBox(), area=await workspace.boundingBox();
+    > 196 |     expect(box!.y+box!.height).toBeLessThanOrEqual(area!.y+area!.height+1);
+          |                                ^
+      197 |     const code=pane.locator('.source-document');
+      198 |     await code.focus();
+      199 |     await page.keyboard.press('Control+End');
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:196:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-09-paths-and--bf9f6-le-in-a-short-laptop-window/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-09-paths-and--bf9f6-le-in-a-short-laptop-window/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-09-paths-and--bf9f6-le-in-a-short-laptop-window/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-09-paths-and--bf9f6-le-in-a-short-laptop-window/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e/usability.spec.ts:187:1 › UX-09 paths and source remain fully accessible in a short laptop window 

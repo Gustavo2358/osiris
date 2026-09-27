@@ -29,11 +29,12 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 - **Voltar** (ou **Esc**) restaura o recorte, seleção, busca, destaques e zoom anteriores. No modo de caminhos, a ação também aparece como **Voltar à visão anterior**.
 - **Código fonte** abre um painel com o arquivo completo, números de linha e destaque da seleção. É possível trocar entre fonte original, copybooks e texto expandido, ampliar o painel ou desativar **Acompanhar seleção**. Clicar na localização do inspetor abre o trecho nesse painel.
 - **Arquivos** lista acessos FILE com busca por statement, nome lógico ou valor possível. Cada acesso oferece valores, suportes, contexto CICS/SYSID, declaração associada e caminhos de controle, como nas chamadas. **Destacar arquivos** realça esses nós.
-- Use a lista de **Chamadas** para buscar pelo statement ou por um candidato executável.
+- Use a lista de **Chamadas** para buscar pelo statement ou por um candidato executável. Cada categoria conserva sua própria busca; a contagem mostra resultados e total, e **Mostrar todos** limpa uma busca sem resultados. As listas exibem localização, contexto e prévia dos valores.
 - Selecione uma chamada para ver candidatos, valores brutos, produtores, provenance, premissas, reachability e remainders.
-- **Caminhos até aqui** mostra o subgrafo alcançável da entrada selecionada que consegue chegar ao alvo. **Um caminho** destaca um caminho estrutural mínimo.
+- **Caminhos até aqui** mostra o subgrafo alcançável da entrada selecionada que consegue chegar ao alvo. **Um caminho** destaca um caminho estrutural mínimo. O destino permanece identificado no banner enquanto você inspeciona outros trechos; clique nele para retornar. Saltos para produtores e vizinhos entram no histórico, preservando o recorte quando possível.
 - **Paragraphs** abre um recorte da região. **Vizinhança** mostra até dois passos ao redor da seleção. O contador mostra o tamanho do recorte; **Programa inteiro** restaura os nós da unit selecionada.
-- Arraste o fundo, use a roda, controles de zoom e minimapa. Selecionar uma chamada aproxima sua posição. A visão geral pode exigir zoom para ler os textos.
+- Arraste o fundo, use a roda, controles de zoom e minimapa. Selecionar outro trecho preserva o zoom. **Centralizar seleção** reencontra o trecho e **Enquadrar recorte** mostra o conjunto visível. A visão geral pode exigir zoom para ler os textos.
+- Nas abas, use as setas, Home e End. Esc fecha a ajuda e devolve o foco ao botão que a abriu; fora da ajuda e de campos de edição, Esc aciona **Voltar**.
 - **Fonte** mostra o trecho associado; **Internos** abre os fatos originais, links, catálogos e o documento de dependencies completo.
 - O botão de download exporta o recorte com os nós/transições originais, entrada, seleção e cobertura. É uma seleção para inspeção, não um novo artefato do analisador.
 
@@ -116,7 +117,7 @@ npm run test:e2e          # browser real contra o build em :4173
 # ou npm run validate
 ```
 
-[`docs/VALIDATION.md`](docs/VALIDATION.md) registra a validação inicial. [`docs/USABILITY.md`](docs/USABILITY.md) registra a ampliação de navegação, fonte e FILE, com testes e evidências atuais. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) explica as correlações e a consulta de caminhos.
+[`docs/VALIDATION.md`](docs/VALIDATION.md) registra a validação inicial. [`docs/USABILITY.md`](docs/USABILITY.md) registra a ampliação de navegação, fonte e FILE. [`docs/UX-DISCOVERY.md`](docs/UX-DISCOVERY.md) enumera a revisão posterior de UX, suas nove correções e evidências: 52 testes de contrato e 20 de navegador. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) explica as correlações e a consulta de caminhos.
 
 ## Limites reais
 

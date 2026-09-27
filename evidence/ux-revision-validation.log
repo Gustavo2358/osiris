@@ -1,0 +1,65 @@
+
+> cobol-graph-explorer@0.1.0 validate
+> npm test && npm run build && npm run test:e2e
+
+
+> cobol-graph-explorer@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /home/gustavo/workspace/teste-e2e/cobol-graph-explorer
+
+ ✓ tests/model.test.ts (52 tests) 1010ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: large  376ms
+
+ Test Files  1 passed (1)
+      Tests  52 passed (52)
+   Start at  07:42:42
+   Duration  1.32s (transform 59ms, setup 0ms, collect 62ms, tests 1.01s, environment 0ms, prepare 59ms)
+
+
+> cobol-graph-explorer@0.1.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 1915 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                             0.42 kB │ gzip:   0.30 kB
+dist/assets/elk-worker.min-C9JGDOE-.js  1,593.72 kB
+dist/assets/index-D67Z9glI.css             40.44 kB │ gzip:   8.09 kB
+dist/assets/index-DRQgxkaF.js             480.27 kB │ gzip: 154.60 kB
+✓ built in 1.82s
+
+> cobol-graph-explorer@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:684570) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 19 tests using 1 worker
+
+(node:684605) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 e2e/explorer.spec.ts:10:1 › call navigation, provenance, candidates, paths, witness, source and debug (1.4s)
+  ✓   2 e2e/explorer.spec.ts:39:1 › search, paragraph navigation and local neighborhood (1.2s)
+  ✓   3 e2e/explorer.spec.ts:56:1 › 503 node graph stays navigable and limits DOM to viewport (3.9s)
+  ✓   4 e2e/explorer.spec.ts:71:1 › nested program entry switches exact identity scopes (1.2s)
+  ✓   5 e2e/explorer.spec.ts:82:1 › import real bundle; malformed and mismatched files preserve the current program (777ms)
+  ✓   6 e2e/explorer.spec.ts:107:1 › local files remain local; no unexpected network destination (578ms)
+  ✓   7 e2e/explorer.spec.ts:116:1 › keyboard selection and tablet width keep program tools available (754ms)
+  ✓   8 e2e/explorer.spec.ts:131:1 › Back restores paragraph, selection and exact viewport after highlighting paths (1.6s)
+  ✓   9 e2e/explorer.spec.ts:162:1 › full source pane follows selection, supports COPY and closes without changing the graph (894ms)
+  ✓  10 e2e/explorer.spec.ts:197:1 › FILE values, producer navigation, SYSID, source pane and control paths (1.4s)
+  ✓  11 e2e/explorer.spec.ts:228:1 › source pane fits a tablet and reports a missing original instead of substituting expanded text (958ms)
+  ✓  12 e2e/usability.spec.ts:16:1 › UX-01 producer and flow navigation preserve the investigation and Back restores it (1.2s)
+  ✓  13 e2e/usability.spec.ts:40:1 › UX-02 selecting another statement preserves user zoom and exposes recenter (779ms)
+  ✓  14 e2e/usability.spec.ts:57:1 › UX-03 category searches are independent and empty results can recover (806ms)
+  ✓  15 e2e/usability.spec.ts:73:1 › UX-04 list previews distinguish sites and provenance shows precise spans (684ms)
+  ✓  16 e2e/usability.spec.ts:89:1 › UX-05 both tab groups follow keyboard and panel semantics (770ms)
+  ✓  17 e2e/usability.spec.ts:108:1 › UX-06 help traps focus, Escape closes it and restores the trigger without going Back (802ms)
+  ✓  18 e2e/usability.spec.ts:126:1 › UX-07 readable metadata and usable clear action at desktop and tablet sizes (734ms)
+  ✓  19 e2e/usability.spec.ts:171:1 › UX-08 active entry counts and path destination remain unambiguous (1.2s)
+
+  19 passed (22.5s)

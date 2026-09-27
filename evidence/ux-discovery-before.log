@@ -1,0 +1,245 @@
+
+> cobol-graph-explorer@0.1.0 test:e2e
+> playwright test e2e/usability.spec.ts --grep UX-01|UX-03|UX-05|UX-06|UX-07|UX-08
+
+[WebServer] (node:681320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:681338) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/usability.spec.ts:12:1 › UX-01 producer and flow navigation preserve the investigation and Back restores it (6.0s)
+(node:681431) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 e2e/usability.spec.ts:47:1 › UX-03 category searches are independent and empty results can recover (5.7s)
+(node:681519) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 e2e/usability.spec.ts:75:1 › UX-05 both tab groups follow keyboard and panel semantics (5.7s)
+(node:681679) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 e2e/usability.spec.ts:94:1 › UX-06 help traps focus, Escape closes it and restores the trigger without going Back (1.0s)
+(node:681788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 e2e/usability.spec.ts:110:1 › UX-07 readable metadata and usable clear action at desktop and tablet sizes (686ms)
+(node:681874) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 e2e/usability.spec.ts:137:1 › UX-08 active entry counts and path destination remain unambiguous (578ms)
+
+
+  1) e2e/usability.spec.ts:12:1 › UX-01 producer and flow navigation preserve the investigation and Back restores it 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.path-banner')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.path-banner') with timeout 5000ms
+      - waiting for locator('.path-banner')
+
+
+      18 |   await inspector(page).locator('.candidate-supports .producer-link').first().click();
+      19 |   await expect(inspector(page).getByRole('heading', {level:2})).toContainText("MOVE 'ACCOUNTS'");
+    > 20 |   await expect(page.locator('.path-banner')).toBeVisible();
+         |                                              ^
+      21 |   await expect(page.locator('.graph-context')).toHaveText(context);
+      22 |   await page.getByRole('button',{name:'Voltar',exact:true}).click();
+      23 |   await expect(inspector(page).getByRole('heading', {level:2})).toContainText('ENDBR');
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:20:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-01-producer-a-6370f-gation-and-Back-restores-it/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-01-producer-a-6370f-gation-and-Back-restores-it/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-01-producer-a-6370f-gation-and-Back-restores-it/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-01-producer-a-6370f-gation-and-Back-restores-it/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) e2e/usability.spec.ts:47:1 › UX-03 category searches are independent and empty results can recover 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Buscar no programa')
+    Expected: ""
+    Received: "AUDITLOG"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Buscar no programa') with timeout 5000ms
+      - waiting for getByLabel('Buscar no programa')
+        14 × locator resolved to <input value="AUDITLOG" aria-label="Buscar no programa" placeholder="Buscar no programa…"/>
+           - unexpected value "AUDITLOG"
+
+
+      51 |   await expect(navigator(page).locator('.nav-item')).toHaveCount(1);
+      52 |   await navigator(page).getByRole('tab',{name:'Paragraphs',exact:true}).click();
+    > 53 |   await expect(input).toHaveValue('');
+         |                       ^
+      54 |   await input.fill('NOT-A-PARAGRAPH');
+      55 |   await expect(navigator(page).locator('.empty-note')).toContainText('NOT-A-PARAGRAPH');
+      56 |   await navigator(page).getByRole('button',{name:'Mostrar todos',exact:true}).click();
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:53:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-03-category-s-0aad2-d-empty-results-can-recover/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-03-category-s-0aad2-d-empty-results-can-recover/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-03-category-s-0aad2-d-empty-results-can-recover/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-03-category-s-0aad2-d-empty-results-can-recover/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) e2e/usability.spec.ts:75:1 › UX-05 both tab groups follow keyboard and panel semantics ────────
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('complementary', { name: 'Navegação do programa' }).getByRole('tab').nth(1)
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('complementary', { name: 'Navegação do programa' }).getByRole('tab').nth(1) with timeout 5000ms
+      - waiting for getByRole('complementary', { name: 'Navegação do programa' }).getByRole('tab').nth(1)
+        14 × locator resolved to <button role="tab" aria-selected="true">…</button>
+           - unexpected value "inactive"
+
+
+      79 |     await tabs.first().focus();
+      80 |     await page.keyboard.press('ArrowRight');
+    > 81 |     await expect(tabs.nth(1)).toBeFocused();
+         |                               ^
+      82 |     await expect(tabs.nth(1)).toHaveAttribute('aria-selected','true');
+      83 |     await page.keyboard.press('End');
+      84 |     await expect(tabs.last()).toBeFocused();
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:81:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-05-both-tab-g-bf14b-eyboard-and-panel-semantics/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-05-both-tab-g-bf14b-eyboard-and-panel-semantics/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-05-both-tab-g-bf14b-eyboard-and-panel-semantics/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-05-both-tab-g-bf14b-eyboard-and-panel-semantics/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) e2e/usability.spec.ts:94:1 › UX-06 help traps focus, Escape closes it and restores the trigger without going Back 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      100 |   for (let i=0;i<4;i++) {
+      101 |     await page.keyboard.press('Tab');
+    > 102 |     expect(await dialog.evaluate(el => el.contains(document.activeElement))).toBe(true);
+          |                                                                              ^
+      103 |   }
+      104 |   await page.keyboard.press('Escape');
+      105 |   await expect(dialog).toHaveCount(0);
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:102:78
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-06-help-traps-ec984--trigger-without-going-Back/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-06-help-traps-ec984--trigger-without-going-Back/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-06-help-traps-ec984--trigger-without-going-Back/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-06-help-traps-ec984--trigger-without-going-Back/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) e2e/usability.spec.ts:110:1 › UX-07 readable metadata and usable clear action at desktop and tablet sizes 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 24
+    Received:    13
+
+      112 |   await page.getByLabel('Buscar no programa').fill('ACCOUNTS');
+      113 |   const size = await page.getByRole('button',{name:'Limpar busca'}).boundingBox();
+    > 114 |   expect(size!.width).toBeGreaterThanOrEqual(24);
+          |                       ^
+      115 |   expect(size!.height).toBeGreaterThanOrEqual(24);
+      116 |   for (const selector of ['.list-caption','.nav-item-body > span','.location-label','.micro']) {
+      117 |     const ratio = await page.locator(selector).first().evaluate(el => {
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:114:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-07-readable-m-55738-at-desktop-and-tablet-sizes/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-07-readable-m-55738-at-desktop-and-tablet-sizes/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-07-readable-m-55738-at-desktop-and-tablet-sizes/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-07-readable-m-55738-at-desktop-and-tablet-sizes/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) e2e/usability.spec.ts:137:1 › UX-08 active entry counts and path destination remain unambiguous 
+
+    Error: locator.selectOption: Error: strict mode violation: getByLabel('Entrada do programa') resolved to 3 elements:
+        1) <select aria-label="Entrada do programa">…</select> aka getByRole('complementary', { name: 'Navegação do programa' }).getByLabel('Entrada do programa')
+        2) <div aria-roledescription="node" aria-label="Entrada do programa" aria-describedby="react-flow__node-desc-1" class="react-flow__node react-flow__node-cobol selectable" data-id="{"domain":"cfg-node","ordinal":"2","publication":"fe668bfc95101f35c7a0ffb7367e850f"}" data-testid="rf__node-{"domain":"cfg-node","ordinal":"2","publication":"fe668bfc95101f35c7a0ffb7367e850f"}">…</div> aka getByTestId('rf__node-{"domain":"cfg-node","ordinal":"2","publication":"fe668bfc95101f35c7a0ffb7367e850f"}')
+        3) <div tabindex="0" role="button" aria-label="Entrada do programa" class="graph-card   entry-card  ">…</div> aka getByTestId('rf__node-{"domain":"cfg-node","ordinal":"2","publication":"fe668bfc95101f35c7a0ffb7367e850f"}').getByRole('button', { name: 'Entrada do programa' })
+
+    Call log:
+      - waiting for getByLabel('Entrada do programa')
+
+
+      137 | test('UX-08 active entry counts and path destination remain unambiguous', async ({page}) => {
+      138 |   await open(page,'nested');
+    > 139 |   await page.getByLabel('Entrada do programa').selectOption({index:1});
+          |                                                ^
+      140 |   await expect(page.locator('.graph-context')).toContainText('4 de 4');
+      141 |   await expect(page.locator('.graph-context')).toContainText('entrada');
+      142 |   await open(page);
+        at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/usability.spec.ts:139:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/usability-UX-08-active-ent-0ff8d-tination-remain-unambiguous/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/usability-UX-08-active-ent-0ff8d-tination-remain-unambiguous/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/usability-UX-08-active-ent-0ff8d-tination-remain-unambiguous/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/usability-UX-08-active-ent-0ff8d-tination-remain-unambiguous/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    e2e/usability.spec.ts:12:1 › UX-01 producer and flow navigation preserve the investigation and Back restores it 
+    e2e/usability.spec.ts:47:1 › UX-03 category searches are independent and empty results can recover 
+    e2e/usability.spec.ts:75:1 › UX-05 both tab groups follow keyboard and panel semantics ─────────
+    e2e/usability.spec.ts:94:1 › UX-06 help traps focus, Escape closes it and restores the trigger without going Back 
+    e2e/usability.spec.ts:110:1 › UX-07 readable metadata and usable clear action at desktop and tablet sizes 
+    e2e/usability.spec.ts:137:1 › UX-08 active entry counts and path destination remain unambiguous 

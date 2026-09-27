@@ -23,6 +23,8 @@ import { buildModel, entryGraph, pathsTo, type Model, type Site, type GraphNode 
 import { Graph } from './Graph';
 import { Inspector } from './Inspector';
 import { SourcePane } from './SourcePane';
+import { Tabs } from './Tabs';
+import { Modal } from './Modal';
 interface Example {
   id: string;
   title: string;
@@ -36,11 +38,13 @@ interface ViewState {
   entry: string;
   selected?: string;
   selectedSite?: string;
-  query: string;
+  queries: Record<string, string>;
   sidebar: string;
   mode: string;
   paragraph: string;
   routeTargets: string[];
+  routeCaption: string;
+  routeSite?: string;
   highlight: boolean;
   witness: boolean;
   viewport?: Viewport;
@@ -52,9 +56,15 @@ function App() {
     [entry, setEntry] = useState('');
   const [selected, setSelected] = useState<string>(),
     [selectedSite, setSelectedSite] = useState<string>(),
-    [query, setQuery] = useState(''),
+    [queries, setQueries] = useState<Record<string, string>>({}),
     [sidebar, setSidebar] = useState('calls');
+  const query = queries[sidebar] ?? '';
+  function setQuery(value: string) {
+    setQueries((previous) => ({ ...previous, [sidebar]: value }));
+  }
   const [routeTargets, setRouteTargets] = useState<string[]>([]);
+  const [routeCaption, setRouteCaption] = useState('');
+  const [routeSite, setRouteSite] = useState<string>();
   const [mode, setMode] = useState('all'),
     [paragraph, setParagraph] = useState(''),
     [highlight, setHighlight] = useState(false),
@@ -76,11 +86,13 @@ function App() {
         entry,
         selected,
         selectedSite,
-        query,
+        queries,
         sidebar,
         mode,
         paragraph,
         routeTargets,
+        routeCaption,
+        routeSite,
         highlight,
         witness,
         viewport: graphViewport.current,
@@ -94,11 +106,13 @@ function App() {
     setEntry(previous.entry);
     setSelected(previous.selected);
     setSelectedSite(previous.selectedSite);
-    setQuery(previous.query);
+    setQueries(previous.queries);
     setSidebar(previous.sidebar);
     setMode(previous.mode);
     setParagraph(previous.paragraph);
     setRouteTargets(previous.routeTargets);
+    setRouteCaption(previous.routeCaption);
+    setRouteSite(previous.routeSite);
     setHighlight(previous.highlight);
     setWitness(previous.witness);
     if (previous.viewport)
@@ -132,6 +146,8 @@ function App() {
     setModel(m);
     setHistory([]);
     setRouteTargets([]);
+    setRouteCaption('');
+    setRouteSite(undefined);
     setRestoreView(undefined);
     graphViewport.current = undefined;
     setSidebar(firstSite?.family === 'file' ? 'files' : 'calls');
@@ -140,7 +156,7 @@ function App() {
     setSelectedSite(firstSite?.id);
     setMode('all');
     setParagraph('');
-    setQuery('');
+    setQueries({});
     setWitness(false);
     setHighlight(false);
     setExampleId(id);
@@ -200,16 +216,25 @@ function App() {
     }
   }
   function selectNode(id: string) {
+    if (id === selected && !selectedSite) return;
+    rememberView();
+    if (!scope.nodes.some((n) => n.id === id)) {
+      setMode('all');
+      setParagraph('');
+    }
     setSelected(id);
     setSelectedSite(undefined);
   }
   function selectSite(site: Site) {
-    if (mode !== 'all') rememberView();
+    if (site.id === selectedSite && selected === site.nodeIds[0]) return;
+    rememberView();
     if (site.entry) setEntry(site.entry);
     setSelectedSite(site.id);
     setSelected(site.nodeIds[0]);
-    if (mode !== 'all') setMode('all');
-    setParagraph('');
+    if (!site.nodeIds.some((id) => scope.nodes.some((n) => n.id === id))) {
+      setMode('all');
+      setParagraph('');
+    }
   }
   const allSites = useMemo(() => (model ? [...model.sites, ...model.fileSites] : []), [model]);
   const node = model?.nodeById.get(selected ?? ''),
@@ -255,14 +280,15 @@ function App() {
     }
     return base;
   }, [baseScope, model, mode, paragraph, selected, reach]);
-  const shownSites =
+  const entrySites =
     (sidebar === 'files' ? model?.fileSites : model?.sites)?.filter(
-      (s) =>
-        (!s.entry || s.entry === entry) &&
-        `${s.title} ${s.command} ${s.candidates.map((c) => c.referenceName).join(' ')} ${s.declarations?.map((d) => `${d.logicalFile} ${d.name ?? ''}`).join(' ') ?? ''}`
-          .toLocaleLowerCase()
-          .includes(query.toLocaleLowerCase()),
+      (s) => !s.entry || s.entry === entry,
     ) ?? [];
+  const shownSites = entrySites.filter((s) =>
+    `${s.title} ${s.command} ${s.candidates.map((c) => c.referenceName).join(' ')} ${s.declarations?.map((d) => `${d.logicalFile} ${d.name ?? ''}`).join(' ') ?? ''}`
+      .toLocaleLowerCase()
+      .includes(query.toLocaleLowerCase()),
+  );
   const shownParagraphs =
     model?.paragraphs.filter(
       (p) =>
@@ -276,9 +302,25 @@ function App() {
         n.unit === model.entries.find((e) => e.id === entry)?.unit &&
         `${n.title} ${n.subtitle}`.toLowerCase().includes(query.toLowerCase()),
     ) ?? [];
+  const totalResults =
+    sidebar === 'calls' || sidebar === 'files'
+      ? entrySites.length
+      : sidebar === 'paragraphs'
+        ? (model?.paragraphs.filter((p) =>
+            p.nodeIds.some((id) => baseScope.nodes.some((n) => n.id === id)),
+          ).length ?? 0)
+        : baseScope.nodes.length;
+  const filteredResults =
+    sidebar === 'calls' || sidebar === 'files'
+      ? shownSites.length
+      : sidebar === 'paragraphs'
+        ? shownParagraphs.length
+        : foundNodes.length;
   const pathAction = () => {
     if (mode !== 'paths' || routeTargets.join() !== targetIds.join()) rememberView();
     setRouteTargets(targetIds);
+    setRouteCaption(site?.title ?? node?.title ?? 'Trecho selecionado');
+    setRouteSite(site?.id);
     setMode('paths');
     setParagraph('');
     setWitness(false);
@@ -442,31 +484,35 @@ function App() {
               </button>
             )}
           </div>
-          <div className="nav-tabs" role="tablist" aria-label="Navegar por">
-            {[
-              ['calls', 'Chamadas', PhoneOutgoing],
-              ['files', 'Arquivos', FolderOpen],
-              ['paragraphs', 'Paragraphs', Layers3],
-              ['statements', 'Trechos', FileCode2],
-            ].map(([key, label, Icon]) => (
-              <button
-                key={String(key)}
-                role="tab"
-                aria-selected={sidebar === key}
-                onClick={() => setSidebar(String(key))}
-              >
-                {typeof Icon !== 'string' && <Icon size={14} />}
-                <span>{String(label)}</span>
-              </button>
-            ))}
-          </div>
-          <div className="nav-list">
+          <Tabs
+            id="navigation"
+            className="nav-tabs"
+            label="Navegar por"
+            value={sidebar}
+            onChange={setSidebar}
+            items={[
+              { key: 'calls', label: 'Chamadas', icon: PhoneOutgoing },
+              { key: 'files', label: 'Arquivos', icon: FolderOpen },
+              { key: 'paragraphs', label: 'Paragraphs', icon: Layers3 },
+              { key: 'statements', label: 'Trechos', icon: FileCode2 },
+            ]}
+          />
+          <div
+            className="nav-list"
+            role="tabpanel"
+            id={`navigation-panel-${sidebar}`}
+            aria-labelledby={`navigation-tab-${sidebar}`}
+            tabIndex={0}
+          >
             <div className="list-caption">
-              {sidebar === 'calls' || sidebar === 'files'
-                ? `${shownSites.length} ${sidebar === 'files' ? 'ACESSOS A ARQUIVOS' : 'CALL SITES'}`
-                : sidebar === 'paragraphs'
-                  ? `${shownParagraphs.length} REGIÕES`
-                  : `${foundNodes.length} TRECHOS`}
+              {query ? `${filteredResults} de ${totalResults}` : filteredResults}{' '}
+              {sidebar === 'files'
+                ? 'ACESSOS A ARQUIVOS'
+                : sidebar === 'calls'
+                  ? 'CHAMADAS'
+                  : sidebar === 'paragraphs'
+                    ? 'REGIÕES'
+                    : 'TRECHOS'}
             </div>
             {(sidebar === 'calls' || sidebar === 'files') &&
               shownSites.map((s) => (
@@ -474,6 +520,8 @@ function App() {
                   key={s.id}
                   className={`nav-item ${site?.id === s.id ? 'active' : ''}`}
                   onClick={() => selectSite(s)}
+                  title={s.title}
+                  aria-current={site?.id === s.id ? 'true' : undefined}
                 >
                   <span
                     className={`nav-kind ${s.family === 'file' ? 'file-kind' : s.command === 'CALL' ? '' : 'cics'}`}
@@ -483,7 +531,12 @@ function App() {
                   <span className="nav-item-body">
                     <strong>{s.title}</strong>
                     <span>
-                      {s.statement?.location ? `L${s.statement.location.startLine} · ` : ''}
+                      {(s.statement?.location ?? s.location) && (
+                        <span className="site-location">
+                          {(s.statement?.location ?? s.location)!.file}:
+                          {(s.statement?.location ?? s.location)!.startLine}
+                        </span>
+                      )}
                       {s.sourceOnly
                         ? 'Sem controle publicado'
                         : `${s.candidates.length} ${s.family === 'file' ? 'valores possíveis' : 'candidatos'}`}
@@ -492,6 +545,27 @@ function App() {
                         ? ` · ${s.declarations.map((d) => d.logicalFile).join(', ')}`
                         : ''}
                     </span>
+                    {s.candidates.length > 0 && (
+                      <span
+                        className="site-values"
+                        title={s.candidates.map((c) => c.referenceName ?? c.name).join(', ')}
+                      >
+                        →{' '}
+                        {s.candidates
+                          .slice(0, 2)
+                          .map((c) => c.referenceName ?? c.name ?? 'Sem nome interpretado')
+                          .join(' · ')}
+                        {s.candidates.length > 2 ? ` · +${s.candidates.length - 2}` : ''}
+                      </span>
+                    )}
+                    {s.nodeIds
+                      .map((id) => model?.nodeById.get(id))
+                      .filter((n) => n && n.contexts > 1)
+                      .map((n) => (
+                        <span key={n!.id}>
+                          Contexto {n!.contextIndex}/{n!.contexts}
+                        </span>
+                      ))}
                   </span>
                   <ChevronRight size={13} />
                 </button>
@@ -525,7 +599,6 @@ function App() {
                   key={n.id}
                   className={`nav-item ${n.id === selected ? 'active' : ''}`}
                   onClick={() => {
-                    setMode('all');
                     selectNode(n.id);
                   }}
                 >
@@ -541,13 +614,18 @@ function App() {
             {(((sidebar === 'calls' || sidebar === 'files') && !shownSites.length) ||
               (sidebar === 'paragraphs' && !shownParagraphs.length) ||
               (sidebar === 'statements' && !foundNodes.length)) && (
-              <p className="empty-note">
+              <div className="empty-note" role="status">
                 {query
-                  ? 'Nenhum resultado para esta busca.'
+                  ? `Nenhum resultado para “${query}” nesta categoria.`
                   : sidebar === 'paragraphs'
                     ? 'Sem paragraphs correlacionados. Inclua SP e links.json.'
                     : 'Nenhuma ocorrência publicada nesta entrada.'}
-              </p>
+                {query && (
+                  <button className="clear-results" onClick={() => setQuery('')}>
+                    Mostrar todos
+                  </button>
+                )}
+              </div>
             )}
           </div>
           <div className="navigator-footer">
@@ -568,6 +646,7 @@ function App() {
             <div className="view-switch">
               <button
                 className={mode === 'all' ? 'chosen' : ''}
+                aria-pressed={mode === 'all'}
                 onClick={() => {
                   if (mode !== 'all') rememberView();
                   setMode('all');
@@ -578,6 +657,7 @@ function App() {
               </button>
               <button
                 className={mode === 'local' ? 'chosen' : ''}
+                aria-pressed={mode === 'local'}
                 disabled={!selected}
                 onClick={() => {
                   if (mode !== 'local') rememberView();
@@ -588,6 +668,7 @@ function App() {
               </button>
               <button
                 className={mode === 'paths' ? 'chosen' : ''}
+                aria-pressed={mode === 'paths'}
                 disabled={!targetIds.length}
                 onClick={pathAction}
               >
@@ -606,8 +687,8 @@ function App() {
           </div>
           <div className="graph-context">
             <span>
-              <strong>{scope.nodes.length}</strong> de {model?.nodes.length ?? 0} trechos{' '}
-              <span className="dot-separator">·</span> {scope.edges.length} transições
+              <strong>{scope.nodes.length}</strong> de {baseScope.nodes.length} trechos nesta
+              entrada <span className="dot-separator">·</span> {scope.edges.length} transições
               {mode === 'paragraph' ? ' · recorte do paragraph' : ''}
             </span>
             <label>
@@ -624,8 +705,20 @@ function App() {
               <Route size={16} />
               <span>
                 {reach?.reachable
-                  ? `${reach.nodes.size} trechos em caminhos conhecidos até a seleção`
-                  : 'Sem caminho conhecido a partir desta entrada'}
+                  ? `${reach.nodes.size} trechos em caminhos conhecidos até:`
+                  : 'Sem caminho conhecido a partir desta entrada até:'}
+                <button
+                  className="path-destination"
+                  aria-label="Inspecionar destino do caminho"
+                  title={routeCaption}
+                  onClick={() => {
+                    const targetSite = allSites.find((s) => s.id === routeSite);
+                    if (targetSite) selectSite(targetSite);
+                    else if (routeTargets[0]) selectNode(routeTargets[0]);
+                  }}
+                >
+                  {routeCaption} <ChevronRight size={13} />
+                </button>
                 <small>
                   Alcançabilidade estrutural no CFG. Não avalia a viabilidade das condições.
                   {reach?.hasOpenControl ? ' Há controle aberto neste recorte.' : ''}
@@ -719,15 +812,12 @@ function App() {
             }}
             onOperation={(key) => {
               const ids = model.operationNodes.get(key);
-              if (ids?.[0]) {
-                setMode('all');
-                selectNode(ids[0]);
-              }
+              const destination =
+                scope.nodes.find((n) => ids?.includes(n.id)) ??
+                baseScope.nodes.find((n) => ids?.includes(n.id));
+              if (destination) selectNode(destination.id);
             }}
-            onNode={(id) => {
-              if (!scope.nodes.some((n) => n.id === id)) setMode('all');
-              selectNode(id);
-            }}
+            onNode={selectNode}
           />
         )}
       </div>
@@ -741,63 +831,56 @@ function App() {
         </div>
       )}
       {help && (
-        <div className="modal-backdrop" onClick={() => setHelp(false)}>
-          <section
-            className="help-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="help-title"
-            onClick={(e) => e.stopPropagation()}
+        <Modal labelledBy="help-title" onDismiss={() => setHelp(false)}>
+          <button
+            autoFocus
+            className="modal-close icon-button"
+            aria-label="Fechar ajuda"
+            onClick={() => setHelp(false)}
           >
-            <button
-              autoFocus
-              className="modal-close icon-button"
-              aria-label="Fechar ajuda"
-              onClick={() => setHelp(false)}
-            >
-              <X />
-            </button>
-            <span className="eyebrow">TRAMA / GUIA RÁPIDO</span>
-            <h2 id="help-title">Explore com as evidências à mão.</h2>
-            <p>
-              Abra um pacote <code>.json.gz</code> ou selecione vários arquivos de uma mesma
-              execução.
-            </p>
-            <ol>
-              <li>
-                <strong>AIR + CFG</strong> fornecem o grafo e a provenance.
-              </li>
-              <li>
-                <strong>SP + links.json</strong> conectam statements, entradas e paragraphs por
-                identidade. O exportador Java deste projeto gera os links e seus hashes.
-              </li>
-              <li>
-                <strong>dependencies.json</strong> fornece candidatos, suportes e remainders.
-              </li>
-              <li>
-                <strong>Fontes .cbl/.cpy</strong> são opcionais. Seus nomes devem corresponder aos
-                nomes lógicos da provenance.
-              </li>
-            </ol>
-            <p>
-              Selecione uma chamada ou um acesso a arquivo e use <strong>Caminhos até aqui</strong>.
-              O recorte inclui o que é alcançável a partir da entrada e consegue chegar à seleção
-              pelas arestas publicadas.
-            </p>
-            <p>
-              Use Voltar (Esc) para restaurar a visão anterior. Código fonte abre o arquivo completo
-              ao lado da exploração. Zoom: roda do mouse. Navegação: arraste o fundo ou o minimapa.
-              Os nós também podem ser selecionados pelo teclado e pela lista de trechos.
-            </p>
-            <div className="privacy-note">
-              <ShieldCheck size={18} />
-              <span>
-                Os arquivos ficam na memória desta aba. Não há upload, conta, telemetria ou
-                armazenamento persistente.
-              </span>
-            </div>
-          </section>
-        </div>
+            <X />
+          </button>
+          <span className="eyebrow">TRAMA / GUIA RÁPIDO</span>
+          <h2 id="help-title">Explore com as evidências à mão.</h2>
+          <p>
+            Abra um pacote <code>.json.gz</code> ou selecione vários arquivos de uma mesma execução.
+          </p>
+          <ol>
+            <li>
+              <strong>AIR + CFG</strong> fornecem o grafo e a provenance.
+            </li>
+            <li>
+              <strong>SP + links.json</strong> conectam statements, entradas e paragraphs por
+              identidade. O exportador Java deste projeto gera os links e seus hashes.
+            </li>
+            <li>
+              <strong>dependencies.json</strong> fornece candidatos, suportes e remainders.
+            </li>
+            <li>
+              <strong>Fontes .cbl/.cpy</strong> são opcionais. Seus nomes devem corresponder aos
+              nomes lógicos da provenance.
+            </li>
+          </ol>
+          <p>
+            Selecione uma chamada ou um acesso a arquivo e use <strong>Caminhos até aqui</strong>. O
+            recorte inclui o que é alcançável a partir da entrada e consegue chegar à seleção pelas
+            arestas publicadas.
+          </p>
+          <p>
+            Use Voltar (Esc) para restaurar a visão anterior. Código fonte abre o arquivo completo
+            ao lado da exploração. Zoom: roda do mouse. Navegação: arraste o fundo ou o minimapa.
+            Centralizar seleção reencontra o trecho sem alterar o zoom; Enquadrar recorte mostra o
+            grafo visível. Nas abas, use as setas, Home e End; Enter ou Espaço selecionam um trecho.
+            Esc fecha esta ajuda.
+          </p>
+          <div className="privacy-note">
+            <ShieldCheck size={18} />
+            <span>
+              Os arquivos ficam na memória desta aba. Não há upload, conta, telemetria ou
+              armazenamento persistente.
+            </span>
+          </div>
+        </Modal>
       )}
     </div>
   );

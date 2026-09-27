@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { type Model, type GraphNode, type Site, type Location, idKey, sourceText } from './model';
 import type { Raw } from './artifacts';
+import { Tabs } from './Tabs';
 function Json({ value, label }: { value: any; label: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -29,12 +30,18 @@ function uniqueLocations(locs: Location[]) {
     ).values(),
   );
 }
-function LocationLabel({ loc }: { loc: Location }) {
+function LocationLabel({ loc, columns = false }: { loc: Location; columns?: boolean }) {
+  // The model uses zero-based offsets for slicing; display human column numbers.
+  const startColumn = loc.startColumn + 1;
+  const endColumn = loc.endColumn + (loc.endExclusive === false ? 1 : 0);
   return (
-    <span className="location-label">
+    <span className="location-label" title={columns ? 'Colunas contadas a partir de 1' : undefined}>
       <FileCode2 size={13} />
       {loc.file}:{loc.startLine}
       {loc.endLine !== loc.startLine ? `–${loc.endLine}` : ''}
+      {columns && loc.startColumn !== undefined
+        ? ` · col. ${startColumn}${endColumn !== startColumn ? `–${endColumn}` : ''}`
+        : ''}
       {!loc.exact ? ' · aproximada' : ''}
     </span>
   );
@@ -159,23 +166,25 @@ export function Inspector({
               {site?.sourceOnly && <span>Sem nó no CFG</span>}
             </div>
           </div>
-          <div className="inspector-tabs" role="tablist" aria-label="Detalhes da seleção">
-            {[
-              ['details', 'Evidências', Fingerprint],
-              ['source', 'Fonte', FileCode2],
-              ['raw', 'Internos', Code2],
-            ].map(([key, label, Icon]) => (
-              <button
-                key={String(key)}
-                role="tab"
-                aria-selected={tab === key}
-                onClick={() => setTab(String(key))}
-              >
-                {typeof Icon !== 'string' && <Icon size={14} />} {String(label)}
-              </button>
-            ))}
-          </div>
-          <div className="inspector-body">
+          <Tabs
+            id="inspection"
+            className="inspector-tabs"
+            label="Detalhes da seleção"
+            value={tab}
+            onChange={setTab}
+            items={[
+              { key: 'details', label: 'Evidências', icon: Fingerprint },
+              { key: 'source', label: 'Fonte', icon: FileCode2 },
+              { key: 'raw', label: 'Internos', icon: Code2 },
+            ]}
+          />
+          <div
+            className="inspector-body"
+            role="tabpanel"
+            id={`inspection-panel-${tab}`}
+            aria-labelledby={`inspection-tab-${tab}`}
+            tabIndex={0}
+          >
             {tab === 'details' && (
               <>
                 <button
@@ -242,7 +251,7 @@ export function Inspector({
                                         onClick={() => key && onOperation(key)}
                                         className="producer-link"
                                       >
-                                        <LocationLabel loc={l} />
+                                        <LocationLabel loc={l} columns />
                                         <ArrowUpRight size={13} />
                                       </button>
                                     ))}
@@ -476,7 +485,7 @@ export function Inspector({
                     <h3>Provenance</h3>
                     {locations.map((l, i) => (
                       <div key={i} className="provenance-location">
-                        <LocationLabel loc={l} />
+                        <LocationLabel loc={l} columns />
                       </div>
                     ))}
                     <Json

@@ -77,7 +77,7 @@ test('nested program entry switches exact identity scopes', async ({ page }) => 
   await expect(
     page.getByRole('complementary', { name: 'Navegação do programa' }).locator('.nav-item'),
   ).toHaveCount(1);
-  await expect(page.locator('.graph-context')).toContainText('4 de 8');
+  await expect(page.locator('.graph-context')).toContainText('4 de 4');
 });
 test('import real bundle; malformed and mismatched files preserve the current program', async ({
   page,
@@ -140,7 +140,7 @@ test('Back restores paragraph, selection and exact viewport after highlighting p
   const context = await page.locator('.graph-context').innerText();
   const selection = await inspector.getByRole('heading', { level: 2 }).innerText();
   // Zoom is part of the user's previous view, not just the node filter.
-  await page.getByRole('button', { name: 'Zoom Out', exact: true }).click();
+  await page.getByRole('button', { name: 'Diminuir zoom', exact: true }).click();
   await expect
     .poll(() => page.locator('.react-flow__viewport').getAttribute('style'))
     .toContain('transform');

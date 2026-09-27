@@ -4,6 +4,7 @@ import {
   Background,
   MiniMap,
   Controls,
+  ControlButton,
   Handle,
   Position,
   BaseEdge,
@@ -199,6 +200,8 @@ export function Graph({
     return () => observer.disconnect();
   }, [flow]);
   const appliedRestore = useRef(0);
+  const initializedModel = useRef<Model | undefined>(undefined);
+  const [viewportReady, setViewportReady] = useState(false);
   const [layout, setLayout] = useState<{ nodes: Node[]; edges: Edge[]; input: GraphNode[] } | null>(
       null,
     ),
@@ -206,6 +209,7 @@ export function Graph({
   const [busy, setBusy] = useState(false);
   useEffect(() => {
     setBusy(true);
+    setViewportReady(false);
     setError('');
     const elk = new ELK({ workerUrl: elkWorkerUrl });
     let active = true;
@@ -290,13 +294,18 @@ export function Graph({
   useEffect(() => {
     if (busy || !layout || layout.input !== visibleNodes) return;
     const timer = setTimeout(() => {
+      const firstView = initializedModel.current !== model;
+      initializedModel.current = model;
       if (restoreView && appliedRestore.current !== restoreView.id) {
         appliedRestore.current = restoreView.id;
         void flow.setViewport(restoreView.viewport, { duration: 0 });
       } else {
         const n = layout.nodes.find((n) => n.id === selected);
         if (n)
-          void flow.setCenter(n.position.x + 140, n.position.y + 66, { zoom: 0.85, duration: 0 });
+          void flow.setCenter(n.position.x + 140, n.position.y + 66, {
+            zoom: firstView ? 0.85 : flow.getZoom(),
+            duration: 0,
+          });
         else if (visibleNodes.length > 30) {
           const first =
             layout.nodes.find((n) => (n.data.node as GraphNode).raw.kind === 'ENTRY') ??
@@ -308,22 +317,25 @@ export function Graph({
             });
         } else void flow.fitView({ padding: 0.15, minZoom: 0.3, maxZoom: 0.95 });
       }
+      setViewportReady(true);
       onReady?.();
     }, 80);
     return () => clearTimeout(timer);
   }, [selected, layout, busy, restoreView, visibleNodes]);
-  const graphNodes = (layout?.nodes ?? []).map((n) => ({
+  const currentLayout = layout?.input === visibleNodes ? layout : null;
+  const graphNodes = (currentLayout?.nodes ?? []).map((n) => ({
     ...n,
     selected: n.id === selected,
     data: {
       ...n.data,
+      onSelect,
       dim:
         (highlightCalls && !(n.data.node as GraphNode).siteIds.length) ||
         (highlightFiles && !(n.data.node as GraphNode).fileSiteIds.length) ||
         (focusIds && !focusIds.has(n.id)),
     },
   }));
-  const graphEdges = (layout?.edges ?? []).map((e) => ({
+  const graphEdges = (currentLayout?.edges ?? []).map((e) => ({
     ...e,
     style: {
       ...e.style,
@@ -338,7 +350,7 @@ export function Graph({
       className="graph-surface"
       aria-label="Grafo de controle"
       data-testid="graph"
-      aria-busy={busy}
+      aria-busy={busy || !viewportReady || !currentLayout}
     >
       <ReactFlow
         nodes={graphNodes}
@@ -361,6 +373,13 @@ export function Graph({
         maxZoom={2}
         onlyRenderVisibleElements
         fitView={false}
+        ariaLabelConfig={{
+          'controls.zoomIn.ariaLabel': 'Aumentar zoom',
+          'controls.zoomOut.ariaLabel': 'Diminuir zoom',
+          'controls.fitView.ariaLabel': 'Enquadrar recorte',
+          'controls.ariaLabel': 'Navegação do grafo',
+          'minimap.ariaLabel': 'Minimapa do programa',
+        }}
       >
         <Background color="#cbd3df" gap={22} size={1} />
         <MiniMap
@@ -375,7 +394,23 @@ export function Graph({
           }
           maskColor="rgba(235,240,247,.72)"
         />
-        <Controls showInteractive={false} />
+        <Controls showInteractive={false}>
+          <ControlButton
+            aria-label="Centralizar seleção"
+            title="Centralizar seleção"
+            disabled={!selected || !currentLayout?.nodes.some((n) => n.id === selected)}
+            onClick={() => {
+              const n = currentLayout?.nodes.find((n) => n.id === selected);
+              if (n)
+                void flow.setCenter(n.position.x + 140, n.position.y + 66, {
+                  zoom: flow.getZoom(),
+                  duration: 0,
+                });
+            }}
+          >
+            <Focus size={16} />
+          </ControlButton>
+        </Controls>
       </ReactFlow>
       {busy && (
         <div className="layout-status" role="status">
