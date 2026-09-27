@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 const DEFAULT_RATIO = 0.58;
 const HANDLE_SIZE = 12;
-const MIN_GRAPH = 180;
-const MIN_SOURCE = 120;
+const MIN_GRAPH = 240;
+const MIN_SOURCE = 240;
 
 /** Keeps graph/source mounted while resizing; ratio is a presentation preference. */
 export function SplitWorkspace({
@@ -14,20 +14,20 @@ export function SplitWorkspace({
   source?: (controls: { expanded: boolean; onToggleExpand: () => void }) => ReactNode;
 }) {
   const area = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
   const [ratio, setRatio] = useState(DEFAULT_RATIO);
   const [dragging, setDragging] = useState(false);
   const previousRatio = useRef(DEFAULT_RATIO);
-  const drag = useRef<{ pointer: number; y: number; pixels: number } | undefined>(undefined);
+  const drag = useRef<{ pointer: number; x: number; pixels: number } | undefined>(undefined);
   const [expanded, setExpanded] = useState(false);
   useEffect(() => {
-    const observer = new ResizeObserver(([entry]) => setHeight(entry.contentRect.height));
+    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
     if (area.current) observer.observe(area.current);
     return () => observer.disconnect();
   }, []);
-  const space = Math.max(MIN_GRAPH + MIN_SOURCE, height - HANDLE_SIZE);
-  const min = MIN_GRAPH / space;
-  const max = 1 - MIN_SOURCE / space;
+  const space = Math.max(1, width - HANDLE_SIZE);
+  const min = Math.min(MIN_GRAPH, space / 2) / space;
+  const max = 1 - Math.min(MIN_SOURCE, space / 2) / space;
   const shownRatio = expanded ? min : Math.max(min, Math.min(max, ratio));
   function resize(next: number) {
     setExpanded(false);
@@ -40,7 +40,7 @@ export function SplitWorkspace({
       style={
         source
           ? {
-              gridTemplateRows: `minmax(${MIN_GRAPH}px, ${shownRatio}fr) ${HANDLE_SIZE}px minmax(${MIN_SOURCE}px, ${1 - shownRatio}fr)`,
+              gridTemplateColumns: `minmax(0, ${shownRatio}fr) ${HANDLE_SIZE}px minmax(0, ${1 - shownRatio}fr)`,
             }
           : undefined
       }
@@ -53,13 +53,13 @@ export function SplitWorkspace({
             role="separator"
             tabIndex={0}
             aria-label="Ajustar tamanho do grafo e do código"
-            aria-orientation="horizontal"
+            aria-orientation="vertical"
             aria-controls="source-pane"
             aria-valuemin={Math.round(min * 100)}
             aria-valuemax={Math.round(max * 100)}
             aria-valuenow={Math.round(shownRatio * 100)}
             aria-valuetext={`${Math.round(shownRatio * 100)}% grafo, ${Math.round((1 - shownRatio) * 100)}% código`}
-            title="Arraste para ajustar · Setas ↑/↓ · Duplo clique para equilibrar"
+            title="Arraste para ajustar · Setas ←/→ · Duplo clique para equilibrar"
             onPointerDown={(event) => {
               if (event.button !== 0) return;
               event.preventDefault();
@@ -67,14 +67,14 @@ export function SplitWorkspace({
               event.currentTarget.setPointerCapture(event.pointerId);
               drag.current = {
                 pointer: event.pointerId,
-                y: event.clientY,
+                x: event.clientX,
                 pixels: space * shownRatio,
               };
               setDragging(true);
             }}
             onPointerMove={(event) => {
               if (drag.current?.pointer === event.pointerId) {
-                resize((drag.current.pixels + event.clientY - drag.current.y) / space);
+                resize((drag.current.pixels + event.clientX - drag.current.x) / space);
               }
             }}
             onPointerUp={(event) => {
@@ -92,7 +92,7 @@ export function SplitWorkspace({
             }}
             onDoubleClick={() => resize(DEFAULT_RATIO)}
             onKeyDown={(event) => {
-              if (!['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'].includes(event.key)) return;
+              if (!['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter'].includes(event.key)) return;
               event.preventDefault();
               const step = event.shiftKey ? 0.1 : 0.025;
               resize(
@@ -102,7 +102,7 @@ export function SplitWorkspace({
                     ? max
                     : event.key === 'Enter'
                       ? DEFAULT_RATIO
-                      : shownRatio + (event.key === 'ArrowDown' ? step : -step),
+                      : shownRatio + (event.key === 'ArrowRight' ? step : -step),
               );
             }}
           >

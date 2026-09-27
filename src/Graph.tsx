@@ -39,6 +39,12 @@ const icons: Record<string, typeof GitBranch> = {
   HALT: CircleStop,
   RETURN: CornerDownRight,
 };
+const minimapNodeColor = (n: Node) =>
+  (n.data.node as GraphNode)?.fileSiteIds.length
+    ? '#73e0c9'
+    : (n.data.node as GraphNode)?.siteIds.length
+      ? '#b7b0ff'
+      : '#d4deed';
 const Card = memo(({ data, selected }: NodeProps) => {
   const n = data.node as GraphNode,
     Icon = n.fileSiteIds.length ? FolderOpen : (icons[n.kind] ?? CornerDownRight);
@@ -385,14 +391,12 @@ export function Graph({
         <MiniMap
           pannable
           zoomable
-          nodeColor={(n) =>
-            (n.data.node as GraphNode)?.fileSiteIds.length
-              ? '#238a83'
-              : (n.data.node as GraphNode)?.siteIds.length
-                ? '#6373d5'
-                : '#b6c2d3'
-          }
-          maskColor="rgba(12,22,37,.7)"
+          nodeColor={minimapNodeColor}
+          nodeStrokeColor={minimapNodeColor}
+          nodeStrokeWidth={1}
+          maskColor="rgba(12,22,37,.16)"
+          maskStrokeColor="#f4c76a"
+          maskStrokeWidth={2}
         />
         <Controls showInteractive={false}>
           <ControlButton

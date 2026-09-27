@@ -17,48 +17,73 @@ async function dragDivider(page: Page, delta: number) {
   const box = (await separator(page).boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + delta, { steps: 8 });
+  await page.mouse.move(box.x + box.width / 2 + delta, box.y + box.height / 2, { steps: 8 });
   await page.mouse.up();
 }
 
-test('dark canvas contrasts with cards, edges and branch labels', async ({ page }) => {
-  await open(page);
-  const contrast = await page.getByTestId('graph').evaluate((root) => {
-    const rgb = (s: string) => (s.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
-    const lum = (s: string) =>
-      rgb(s)
-        .map((v) => {
-          v /= 255;
-          return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-        })
-        .reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0);
-    const ratio = (a: string, b: string) =>
-      (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
-    const bg = getComputedStyle(root).backgroundColor;
-    return {
-      luminance: lum(bg),
-      cards: [...root.querySelectorAll('.graph-card')].map((el) =>
-        ratio(getComputedStyle(el).backgroundColor, bg),
-      ),
-      edges: [...root.querySelectorAll('.react-flow__edge-path')].map((el) =>
-        ratio(getComputedStyle(el).stroke, bg),
-      ),
-      labels: [...root.querySelectorAll('.edge-label')].map((el) =>
-        ratio(getComputedStyle(el).color, bg),
-      ),
-    };
+for (const example of ['files-values', 'order-router']) {
+  test(`dark canvas and minimap keep nodes visible inside and outside the viewport: ${example}`, async ({
+    page,
+  }) => {
+    await open(page, example);
+    const contrast = await page.getByTestId('graph').evaluate((root) => {
+      const rgb = (s: string) => (s.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+      const lum = (s: string) =>
+        rgb(s)
+          .map((v) => {
+            v /= 255;
+            return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+          })
+          .reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0);
+      const ratio = (a: string, b: string) =>
+        (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
+      const bg = getComputedStyle(root).backgroundColor;
+      const minimap = root.querySelector('.react-flow__minimap')!;
+      const minimapBg = getComputedStyle(minimap).backgroundColor;
+      const mask = getComputedStyle(minimap.querySelector('.react-flow__minimap-mask')!);
+      // Check the rendered result of the mask, not just each node's unmasked fill.
+      const maskChannels = (mask.fill.match(/[\d.]+/g) ?? []).map(Number);
+      const masked = (color: string) => {
+        const alpha = maskChannels[3] ?? 1;
+        return `rgb(${rgb(color)
+          .map((v, i) => v * (1 - alpha) + maskChannels[i] * alpha)
+          .join(',')})`;
+      };
+      const nodes = [...minimap.querySelectorAll('.react-flow__minimap-node')];
+      return {
+        minimapNodes: nodes.map((el) => ({
+          inside: ratio(getComputedStyle(el).fill, minimapBg),
+          outside: ratio(masked(getComputedStyle(el).fill), masked(minimapBg)),
+        })),
+        minimapViewport: ratio(mask.stroke, minimapBg),
+        luminance: lum(bg),
+        cards: [...root.querySelectorAll('.graph-card')].map((el) =>
+          ratio(getComputedStyle(el).backgroundColor, bg),
+        ),
+        edges: [...root.querySelectorAll('.react-flow__edge-path')].map((el) =>
+          ratio(getComputedStyle(el).stroke, bg),
+        ),
+        labels: [...root.querySelectorAll('.edge-label')].map((el) =>
+          ratio(getComputedStyle(el).color, bg),
+        ),
+      };
+    });
+    expect(contrast.minimapNodes.length).toBeGreaterThan(0);
+    expect(contrast.minimapNodes.every((v) => v.inside >= 3 && v.outside >= 3)).toBe(true);
+    expect(contrast.minimapViewport).toBeGreaterThanOrEqual(3);
+    expect(contrast.luminance).toBeLessThan(0.04);
+    expect(contrast.cards.length).toBeGreaterThan(0);
+    expect(contrast.edges.length).toBeGreaterThan(0);
+    expect(contrast.cards.every((v) => v >= 7)).toBe(true);
+    expect(contrast.edges.every((v) => v >= 3)).toBe(true);
+    expect(contrast.labels.every((v) => v >= 4.5)).toBe(true);
   });
-  expect(contrast.luminance).toBeLessThan(0.04);
-  expect(contrast.cards.length).toBeGreaterThan(0);
-  expect(contrast.edges.length).toBeGreaterThan(0);
-  expect(contrast.cards.every((v) => v >= 7)).toBe(true);
-  expect(contrast.edges.every((v) => v >= 3)).toBe(true);
-  expect(contrast.labels.every((v) => v >= 4.5)).toBe(true);
-});
+}
 
 test('sidebar references recenter source on repeat, and paragraphs use their own provenance', async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
   await open(page);
   await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
   const first = pane(page).locator('.selected-line').first();
@@ -126,28 +151,29 @@ test('mouse and keyboard resize both panes with bounds, reset and retained size'
   await page.setViewportSize({ width: 1280, height: 720 });
   await open(page);
   await page.getByRole('button', { name: 'Modo de visualização' }).click();
-  const initial = (await page.getByTestId('graph').boundingBox())!.height;
-  const sourceInitial = (await pane(page).boundingBox())!.height;
+  await expect(separator(page)).toHaveAttribute('aria-orientation', 'vertical');
+  const initial = (await page.getByTestId('graph').boundingBox())!.width;
+  const sourceInitial = (await pane(page).boundingBox())!.width;
   await dragDivider(page, 100);
   await expect(pane(page).locator('.selected-line').first()).toBeInViewport();
-  expect((await page.getByTestId('graph').boundingBox())!.height).toBeGreaterThan(initial + 80);
-  expect((await pane(page).boundingBox())!.height).toBeLessThan(sourceInitial - 80);
+  expect((await page.getByTestId('graph').boundingBox())!.width).toBeGreaterThan(initial + 80);
+  expect((await pane(page).boundingBox())!.width).toBeLessThan(sourceInitial - 80);
   await dragDivider(page, -160);
-  expect((await pane(page).boundingBox())!.height).toBeGreaterThan(sourceInitial + 40);
+  expect((await pane(page).boundingBox())!.width).toBeGreaterThan(sourceInitial + 40);
   await separator(page).press('Home');
-  expect((await page.getByTestId('graph').boundingBox())!.height).toBeCloseTo(180, 0);
+  expect((await page.getByTestId('graph').boundingBox())!.width).toBeCloseTo(240, 0);
   await separator(page).press('End');
-  expect((await pane(page).boundingBox())!.height).toBeCloseTo(120, 0);
+  expect((await pane(page).boundingBox())!.width).toBeCloseTo(240, 0);
   await separator(page).press('Enter');
-  expect((await page.getByTestId('graph').boundingBox())!.height).toBeCloseTo(initial, 0);
-  await separator(page).press('ArrowUp');
+  expect((await page.getByTestId('graph').boundingBox())!.width).toBeCloseTo(initial, 0);
+  await separator(page).press('ArrowLeft');
   const saved = await separator(page).getAttribute('aria-valuenow');
   await page.getByRole('button', { name: 'Sair da visualização' }).click();
   await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
   await expect(separator(page)).toHaveAttribute('aria-valuenow', saved!);
-  const normalHeight = (await pane(page).boundingBox())!.height;
+  const normalWidth = (await pane(page).boundingBox())!.width;
   await dragDivider(page, -20);
-  expect((await pane(page).boundingBox())!.height).toBeGreaterThan(normalHeight + 10);
+  expect((await pane(page).boundingBox())!.width).toBeGreaterThan(normalWidth + 10);
   await page.getByRole('button', { name: 'Modo de visualização' }).click();
   await separator(page).dblclick();
   for (const width of [800, 1280, 1440]) {
@@ -160,8 +186,12 @@ test('mouse and keyboard resize both panes with bounds, reset and retained size'
     );
     const graph = (await page.getByTestId('graph').boundingBox())!;
     const code = (await pane(page).boundingBox())!;
-    expect(graph.height).toBeGreaterThanOrEqual(180);
-    expect(code.height).toBeGreaterThanOrEqual(120);
+    expect(graph.width).toBeGreaterThanOrEqual(240);
+    expect(code.width).toBeGreaterThanOrEqual(240);
+    expect(code.x).toBeCloseTo(graph.x + graph.width + 12, 0);
+    expect(code.y).toBeCloseTo(graph.y, 0);
+    expect(code.height).toBeCloseTo(graph.height, 0);
+    expect(code.x + code.width).toBeLessThanOrEqual(width);
     expect(code.y + code.height).toBeLessThanOrEqual(721);
   }
   await page.screenshot({ path: 'test-results/viewing-mode.png', fullPage: true });

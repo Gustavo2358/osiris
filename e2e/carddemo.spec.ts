@@ -12,6 +12,26 @@ test('real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragr
   await expect(page.locator('.graph-context')).toContainText('3048 de 3048');
   await expect(page.locator('.graph-context')).toContainText('3887 transições');
   expect(await page.locator('.graph-card').count()).toBeLessThan(3048);
+  // The overview must remain visible when 3,048 nodes shrink below a screen pixel.
+  // Read the actual raster, including the mask and antialiasing; exclude the frame.
+  const overview = await page.locator('.react-flow__minimap').screenshot();
+  const visiblePixels = await page.evaluate(async (png) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${png}`;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext('2d')!;
+    context.drawImage(image, 0, 0);
+    const { data } = context.getImageData(3, 3, image.width - 6, image.height - 6);
+    let visible = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i] > 100 && data[i + 1] > 120 && data[i + 2] > 130) visible++;
+    }
+    return visible;
+  }, overview.toString('base64'));
+  expect(visiblePixels).toBeGreaterThan(50);
   const nav = page.getByRole('complementary', { name: 'Navegação do programa' });
   const inspector = page.getByRole('complementary', { name: 'Inspetor' });
   await expect(nav.locator('.nav-item')).toHaveCount(5); // Four control contexts and one source-only XCTL.
@@ -59,8 +79,8 @@ test('real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragr
   await expect(nav).not.toBeVisible();
   await expect(source.locator('.selected-line').first()).toBeInViewport();
   const divider = page.getByRole('separator', { name: 'Ajustar tamanho do grafo e do código' });
-  await divider.press('ArrowUp');
-  await divider.press('ArrowUp');
+  await divider.press('ArrowLeft');
+  await divider.press('ArrowLeft');
   await expect(source.locator('.selected-line').first()).toBeInViewport();
   await page.screenshot({ path: 'test-results/carddemo-viewing.png', fullPage: true });
   await page.getByRole('button', { name: 'Sair da visualização' }).click();

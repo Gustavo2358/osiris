@@ -947,7 +947,7 @@ function App() {
           </p>
           <p>
             Modo de visualização mostra apenas grafo e código; Esc retorna à exploração. Arraste a
-            divisória entre os painéis para ajustar seus tamanhos. Com foco na divisória, use ↑/↓
+            divisória entre os painéis para ajustar seus tamanhos. Com foco na divisória, use ←/→
             para ajustar, Home/End para os limites e Enter para restaurar a proporção inicial.
           </p>
           <div className="privacy-note">

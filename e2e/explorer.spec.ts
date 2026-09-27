@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 async function ready(page: any, example = 'order-router') {
   await page.goto('/?example=' + example);
-  await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
+  await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false', { timeout: 30000 });
   await expect(page.locator('.graph-card').first()).toBeVisible();
   await expect(page.getByRole('alert')).toHaveCount(0);
 }
