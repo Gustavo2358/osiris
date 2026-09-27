@@ -26,6 +26,7 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 
 ## Explorar
 
+- **Exemplos reais** fica no cabeçalho, também no modo de visualização. O grafo começa logo abaixo das ferramentas, sem a antiga faixa de apresentação do programa.
 - **Voltar** (ou **Esc**) restaura o recorte, seleção, busca, destaques e zoom anteriores. No modo de caminhos, a ação também aparece como **Voltar à visão anterior**.
 - **Código fonte** abre um painel com o arquivo completo, números de linha e destaque da seleção. É possível trocar entre fonte original, copybooks e texto expandido, ampliar o painel ou desativar **Acompanhar seleção**. Clicar na localização do inspetor abre o trecho nesse painel. Chamadas, arquivos, paragraphs e trechos na barra lateral também acompanham a seleção, inclusive ao clicar novamente na mesma referência.
 - **Modo de visualização** mostra apenas o grafo e o código, com cabeçalho compacto. **Sair da visualização** ou **Esc** restaura as ferramentas, mantendo seleção, recorte e zoom.

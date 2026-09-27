@@ -390,6 +390,9 @@ function App() {
       }}
     >
       <header className="app-header">
+        <h1 className="sr-only">
+          {model ? [...new Set(model.units.values())].join(' / ') : 'COBOL Graph Explorer'}
+        </h1>
         <div className="brand">
           <span className="brand-mark">
             <Network size={24} />
@@ -398,6 +401,26 @@ function App() {
           <span className="brand-divider" />
           <span className="brand-sub">COBOL GRAPH EXPLORER</span>
         </div>
+        <label className="example-picker">
+          <span>EXEMPLOS REAIS</span>
+          <select
+            aria-label="Escolher exemplo"
+            value={exampleId}
+            onChange={(e) => {
+              const ex = examples.find((x) => x.id === e.target.value);
+              if (ex) void loadExample(ex);
+            }}
+          >
+            <option value="" disabled>
+              Publicação importada
+            </option>
+            {examples.map((ex) => (
+              <option key={ex.id} value={ex.id}>
+                {ex.title} · {ex.nodes} nós
+              </option>
+            ))}
+          </select>
+        </label>
         <div className="viewing-context">
           <strong>{model ? [...new Set(model.units.values())].join(' / ') : ''}</strong>
           <span title={mode === 'paths' ? routeCaption : undefined}>
@@ -418,29 +441,39 @@ function App() {
           <button
             className="viewing-toggle source-toggle"
             aria-pressed={viewing}
+            aria-label={viewing ? 'Sair da visualização' : 'Modo de visualização'}
             disabled={!model}
             title={viewing ? 'Sair da visualização (Esc)' : 'Mostrar somente grafo e código'}
             onClick={() => setViewing(!viewing)}
           >
             {viewing ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-            {viewing ? 'Sair da visualização' : 'Modo de visualização'}
+            <span className="header-action-label">
+              {viewing ? 'Sair da visualização' : 'Modo de visualização'}
+            </span>
           </button>
           <span className="local-badge">
             <ShieldCheck size={14} /> Local no browser
           </span>
           <button
             className={`source-toggle code-toggle ${sourceOpen ? 'active' : ''}`}
+            aria-label="Código fonte"
+            title="Código fonte"
             aria-expanded={sourceOpen}
             disabled={!model}
             onClick={() => setSourceOpen(!sourceOpen)}
           >
-            <FileCode2 size={16} /> Código fonte
+            <FileCode2 size={16} /> <span className="header-action-label">Código fonte</span>
           </button>
           <button className="icon-button" aria-label="Ajuda" onClick={() => setHelp(true)}>
             <HelpCircle size={19} />
           </button>
-          <button className="primary-button" onClick={() => input.current?.click()}>
-            <Upload size={15} /> Abrir artefatos
+          <button
+            className="primary-button"
+            aria-label="Abrir artefatos"
+            title="Abrir artefatos"
+            onClick={() => input.current?.click()}
+          >
+            <Upload size={15} /> <span className="header-action-label">Abrir artefatos</span>
           </button>
           <input
             ref={input}
@@ -461,39 +494,6 @@ function App() {
           </button>
         </div>
       )}
-      <div className="workspace-heading">
-        <div>
-          <div className="breadcrumb">
-            WORKSPACE <ChevronRight size={12} /> {model?.documents.title ?? 'Publicação local'}
-          </div>
-          <h1>
-            {model
-              ? [...new Set(model.units.values())].join(' / ')
-              : 'Explore o fluxo do seu COBOL'}
-          </h1>
-          <p>Do programa às evidências. Cada caminho conserva o fluxo do analisador.</p>
-        </div>
-        <label className="example-picker">
-          EXEMPLOS REAIS
-          <select
-            aria-label="Escolher exemplo"
-            value={exampleId}
-            onChange={(e) => {
-              const ex = examples.find((x) => x.id === e.target.value);
-              if (ex) void loadExample(ex);
-            }}
-          >
-            <option value="" disabled>
-              Publicação importada
-            </option>
-            {examples.map((ex) => (
-              <option key={ex.id} value={ex.id}>
-                {ex.title} · {ex.nodes} nós
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
       <div className="workspace">
         <aside className="navigator" aria-label="Navegação do programa">
           <div className="nav-heading">

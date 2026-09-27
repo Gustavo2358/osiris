@@ -83,7 +83,7 @@ for (const example of ['files-values', 'order-router']) {
 test('sidebar references recenter source on repeat, and paragraphs use their own provenance', async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.setViewportSize({ width: 1280, height: 600 });
   await open(page);
   await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
   const first = pane(page).locator('.selected-line').first();

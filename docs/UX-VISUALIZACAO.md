@@ -55,3 +55,11 @@ Evidências desta revisão:
 - `evidence/vertical-view-browser-results.json`
 - `evidence/vertical-view.png`
 - `evidence/carddemo-vertical-view.png`
+
+## Cabeçalho e área útil
+
+A faixa de apresentação do programa foi removida. O seletor **Exemplos reais** passou para o cabeçalho existente, recuperando 113 px de altura na exploração desktop. Ele também permanece disponível no modo de visualização. Em janelas estreitas, as ações do cabeçalho usam ícones com rótulos acessíveis e dicas; o nome do programa continua na entrada selecionada e no cabeçalho do modo de visualização.
+
+O teste de navegação repetida usa agora uma janela de 600 px de altura para continuar exercitando um trecho fora da área visível, já que o fonte ganhou espaço com a remoção da faixa.
+
+Verificação: TypeScript/build, **26 testes Playwright**, formatação e `git diff --check` passaram. A troca para **PERFORM repetido** pelo novo seletor foi conferida no navegador, junto com a entrada e saída do modo de visualização. Evidências: `evidence/header-layout-validation.log`, `evidence/header-layout-browser-results.json` e `evidence/header-layout.png`.
