@@ -10,6 +10,7 @@ parser.add_argument('source',type=pathlib.Path);parser.add_argument('--out',requ
 parser.add_argument('--copybooks',type=pathlib.Path,action='append',default=[])
 parser.add_argument('--compilation',action='store_true',help='Use the multi-unit SP envelope')
 parser.add_argument('--storage-profile',default='unspecified');parser.add_argument('--logical-text',default='auto',choices=['auto','enabled','disabled']);parser.add_argument('--entry-storage-state',default='unknown',choices=['unknown','initial','preserved']);parser.add_argument('--cics-entry-mode',default='unknown',choices=['unknown','new-logical-level','disabled'])
+parser.add_argument('--experimental-physical', action='store_true', help='Use the analyzer physical storage mode for FILE values')
 args=parser.parse_args();source=args.source.resolve();out=args.out.resolve()
 if not source.is_file():parser.error('Source does not exist')
 if out.exists():parser.error('Choose a new output directory; existing evidence is never replaced')
@@ -25,7 +26,7 @@ run('frontend',['io.github.gustavo2358.cobolexplorer.ExplorerMain','--source',st
 sp=front/('cobol-semantic-compilation.json' if args.compilation else 'cobol-semantic-product.json')
 run('lower',['ExportLinks',str(sp),str(out/'air.json'),str(out/'links.json'),str(out/'source-evidence.json')],ROOT)
 run('cfg',['io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg',str(out/'air.json'),str(out/'cfg.json')],ROOT)
-run('dependencies',['io.github.gustavo2358.analysis.launcher.AnalysisDependencies',str(out/'air.json'),str(out/'dependencies.json'),'--source-evidence',str(out/'source-evidence.json')],ROOT)
+run('dependencies',['io.github.gustavo2358.analysis.launcher.AnalysisDependencies',str(out/'air.json'),str(out/'dependencies.json'),'--source-evidence',str(out/'source-evidence.json'),*(['--experimental-physical'] if args.experimental_physical else [])],ROOT)
 files={'sp.json':sp,**{r+'.json':out/(r+'.json') for r in ['air','cfg','links','dependencies']}}
 # Never open paths discovered in untrusted provenance. Include only explicit source
 # and preprocessed file. Additional copybooks can be passed to pack.py by name.

@@ -1,0 +1,1301 @@
+[
+  {
+    "example": {
+      "id": "files-values",
+      "title": "Arquivos CICS · valores dinâmicos",
+      "description": "FILE com ACCOUNTS/CUSTOMER e contexto SYSID",
+      "format": "fixed",
+      "url": "examples/files-values.json.gz",
+      "nodes": 8,
+      "edges": 8,
+      "sites": 0,
+      "fileSites": 1,
+      "bytes": 993730,
+      "sha256": "024059faf99cbe43dfcbbda37e4683ca3342c9cf25a06dba1edaeb037387f941"
+    },
+    "execution": {
+      "build": {
+        "repos": {
+          "proleap-poc": {
+            "sha": "f33fae3b13edc8e2ba044e948836875fe55cb7de",
+            "status": ""
+          },
+          "cobol-lower": {
+            "sha": "6486b36e701b7e280a5ca4e05df67f0882874ee5",
+            "status": ""
+          },
+          "air-java": {
+            "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+            "status": ""
+          },
+          "analysis-cfg": {
+            "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+            "status": ""
+          },
+          "analysis-ir": {
+            "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+            "status": ""
+          }
+        },
+        "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+        "sourceCount": 461,
+        "sourcesSha256": "6c7f7682f210b5c3e4b5f8b95167f93c7ec295a6da24327b15cc0d629152bc53",
+        "libraries": {
+          "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+          "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+          "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+          "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+          "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+          "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+          "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+          "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+        }
+      },
+      "source": "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8/computed-closed.cbl",
+      "sourceSha256": "cea32bd87ee1bff6de12d2c03c476df5eee71636b1f71ceaf6019166bf7b7281",
+      "executions": [
+        {
+          "phase": "frontend",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+            "--source",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8/computed-closed.cbl",
+            "--output",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/sp",
+            "--copybooks",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8",
+            "--storage-profile",
+            "ibm-enterprise-6.4-fixed-display-1047@1",
+            "--entry-storage-state",
+            "initial",
+            "--cics-entry-mode",
+            "new-logical-level",
+            "--logical-text",
+            "disabled"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "lower",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "ExportLinks",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/sp/cobol-semantic-product.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/links.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/source-evidence.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "cfg",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/cfg.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "dependencies",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/dependencies.json",
+            "--source-evidence",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-values-20260927/source-evidence.json",
+            "--experimental-physical"
+          ],
+          "exitCode": 0
+        }
+      ]
+    },
+    "fileSites": [
+      {
+        "action": "endbr",
+        "analysisReasons": [
+          "FILE_SOURCE_VALUE_REMAINDER"
+        ],
+        "bindings": [],
+        "candidates": [
+          {
+            "rawValue": "ACCOUNTS",
+            "referenceName": "ACCOUNTS",
+            "supports": [
+              {
+                "kind": "VALUE_PRODUCER",
+                "origin": {
+                  "domain": "origin",
+                  "localId": "252ff8d00e857172fb73fa891d711396",
+                  "publication": "d943d826fd196eb1cebe5b991e18f509"
+                },
+                "premises": [],
+                "producer": {
+                  "domain": "operation",
+                  "localId": "02a1e9269ccbfc94dca5f06179a052af",
+                  "publication": "d943d826fd196eb1cebe5b991e18f509",
+                  "unit": "unit"
+                }
+              }
+            ]
+          },
+          {
+            "rawValue": "CUSTOMER",
+            "referenceName": "CUSTOMER",
+            "supports": [
+              {
+                "kind": "VALUE_PRODUCER",
+                "origin": {
+                  "domain": "origin",
+                  "localId": "6cf2e907d240df4b0f6c4d0dc9e087ca",
+                  "publication": "d943d826fd196eb1cebe5b991e18f509"
+                },
+                "premises": [],
+                "producer": {
+                  "domain": "operation",
+                  "localId": "7dd840762ed7499dbb8d7e50d854fdbd",
+                  "publication": "d943d826fd196eb1cebe5b991e18f509",
+                  "unit": "unit"
+                }
+              }
+            ]
+          }
+        ],
+        "context": {
+          "analysisReasons": [
+            "CICS_SYSID_SOURCE_VALUE_REMAINDER"
+          ],
+          "candidates": [
+            {
+              "rawValue": "R001",
+              "referenceName": "R001",
+              "supports": [
+                {
+                  "kind": "VALUE_PRODUCER",
+                  "origin": {
+                    "domain": "origin",
+                    "localId": "e57af4e61a43980b32b2bcb485b6d047",
+                    "publication": "d943d826fd196eb1cebe5b991e18f509"
+                  },
+                  "premises": [],
+                  "producer": {
+                    "domain": "operation",
+                    "localId": "cf891688fab1f7062b76db6c4831ed2f",
+                    "publication": "d943d826fd196eb1cebe5b991e18f509",
+                    "unit": "unit"
+                  }
+                }
+              ]
+            }
+          ],
+          "origin": {
+            "domain": "origin",
+            "localId": "6e7a5eefbde2e24694e9fdd5e2bf4f88",
+            "publication": "d943d826fd196eb1cebe5b991e18f509"
+          },
+          "selection": "EXPLICIT",
+          "targetKind": "COMPUTED",
+          "unknownRemainder": false,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "d943d826fd196eb1cebe5b991e18f509",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+              "publication": "d943d826fd196eb1cebe5b991e18f509",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "d943d826fd196eb1cebe5b991e18f509",
+          "unit": "unit"
+        },
+        "namespace": "cics.file",
+        "operation": {
+          "domain": "operation",
+          "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+          "publication": "d943d826fd196eb1cebe5b991e18f509",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "dfbe21c1d3904d886513fef852a48687",
+          "publication": "d943d826fd196eb1cebe5b991e18f509"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "d943d826fd196eb1cebe5b991e18f509"
+        },
+        "reachability": "REACHABLE",
+        "sequence": {
+          "domain": "label",
+          "localId": "edc6c344869074e429549b820e56a3e5",
+          "publication": "d943d826fd196eb1cebe5b991e18f509",
+          "unit": "unit"
+        },
+        "targetKind": "COMPUTED",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "31aa2791a336b6a276bc2322368d1806",
+          "publication": "d943d826fd196eb1cebe5b991e18f509"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "ddeeb987b827986861d5558fb2a29018",
+            "publication": "d943d826fd196eb1cebe5b991e18f509"
+          }
+        ],
+        "unknownRemainder": false,
+        "valuePoint": {
+          "entryId": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "d943d826fd196eb1cebe5b991e18f509",
+            "unit": "unit"
+          },
+          "operationId": {
+            "domain": "operation",
+            "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+            "publication": "d943d826fd196eb1cebe5b991e18f509",
+            "unit": "unit"
+          },
+          "outcome": null,
+          "position": "BEFORE"
+        }
+      }
+    ],
+    "declarations": []
+  },
+  {
+    "example": {
+      "id": "files-partial",
+      "title": "Arquivos CICS · valores em aberto",
+      "description": "Valor conhecido e alternativas desconhecidas",
+      "format": "fixed",
+      "url": "examples/files-partial.json.gz",
+      "nodes": 8,
+      "edges": 8,
+      "sites": 0,
+      "fileSites": 1,
+      "bytes": 992614,
+      "sha256": "71bf47c88a44fb20ec66ce7ff9cf16f008b24ce31d8bc2faad58dcc92ecb4acb"
+    },
+    "execution": {
+      "build": {
+        "repos": {
+          "proleap-poc": {
+            "sha": "f33fae3b13edc8e2ba044e948836875fe55cb7de",
+            "status": ""
+          },
+          "cobol-lower": {
+            "sha": "6486b36e701b7e280a5ca4e05df67f0882874ee5",
+            "status": ""
+          },
+          "air-java": {
+            "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+            "status": ""
+          },
+          "analysis-cfg": {
+            "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+            "status": ""
+          },
+          "analysis-ir": {
+            "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+            "status": ""
+          }
+        },
+        "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+        "sourceCount": 461,
+        "sourcesSha256": "6c7f7682f210b5c3e4b5f8b95167f93c7ec295a6da24327b15cc0d629152bc53",
+        "libraries": {
+          "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+          "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+          "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+          "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+          "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+          "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+          "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+          "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+        }
+      },
+      "source": "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8/computed-partial.cbl",
+      "sourceSha256": "c80b2264504f4acfe266c56d8eb2579df0e6f0be6f363c0326d55420ff825977",
+      "executions": [
+        {
+          "phase": "frontend",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+            "--source",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8/computed-partial.cbl",
+            "--output",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/sp",
+            "--copybooks",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8",
+            "--storage-profile",
+            "ibm-enterprise-6.4-fixed-display-1047@1",
+            "--entry-storage-state",
+            "unknown",
+            "--cics-entry-mode",
+            "new-logical-level",
+            "--logical-text",
+            "disabled"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "lower",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "ExportLinks",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/sp/cobol-semantic-product.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/links.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/source-evidence.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "cfg",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/cfg.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "dependencies",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/dependencies.json",
+            "--source-evidence",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-partial-20260927/source-evidence.json",
+            "--experimental-physical"
+          ],
+          "exitCode": 0
+        }
+      ]
+    },
+    "fileSites": [
+      {
+        "action": "endbr",
+        "analysisReasons": [
+          "FILE_MODEL_VALUE_REMAINDER",
+          "FILE_SOURCE_VALUE_REMAINDER"
+        ],
+        "bindings": [],
+        "candidates": [
+          {
+            "rawValue": "ACCOUNTS",
+            "referenceName": "ACCOUNTS",
+            "supports": [
+              {
+                "kind": "VALUE_PRODUCER",
+                "origin": {
+                  "domain": "origin",
+                  "localId": "252ff8d00e857172fb73fa891d711396",
+                  "publication": "7fad91f004cfafb32297f25a19a7bd49"
+                },
+                "premises": [],
+                "producer": {
+                  "domain": "operation",
+                  "localId": "02a1e9269ccbfc94dca5f06179a052af",
+                  "publication": "7fad91f004cfafb32297f25a19a7bd49",
+                  "unit": "unit"
+                }
+              }
+            ]
+          }
+        ],
+        "context": {
+          "analysisReasons": [
+            "CICS_SYSID_SOURCE_VALUE_REMAINDER"
+          ],
+          "candidates": [
+            {
+              "rawValue": "R001",
+              "referenceName": "R001",
+              "supports": [
+                {
+                  "kind": "VALUE_PRODUCER",
+                  "origin": {
+                    "domain": "origin",
+                    "localId": "e57af4e61a43980b32b2bcb485b6d047",
+                    "publication": "7fad91f004cfafb32297f25a19a7bd49"
+                  },
+                  "premises": [],
+                  "producer": {
+                    "domain": "operation",
+                    "localId": "cf891688fab1f7062b76db6c4831ed2f",
+                    "publication": "7fad91f004cfafb32297f25a19a7bd49",
+                    "unit": "unit"
+                  }
+                }
+              ]
+            }
+          ],
+          "origin": {
+            "domain": "origin",
+            "localId": "6e7a5eefbde2e24694e9fdd5e2bf4f88",
+            "publication": "7fad91f004cfafb32297f25a19a7bd49"
+          },
+          "selection": "EXPLICIT",
+          "targetKind": "COMPUTED",
+          "unknownRemainder": false,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "7fad91f004cfafb32297f25a19a7bd49",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+              "publication": "7fad91f004cfafb32297f25a19a7bd49",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "7fad91f004cfafb32297f25a19a7bd49",
+          "unit": "unit"
+        },
+        "namespace": "cics.file",
+        "operation": {
+          "domain": "operation",
+          "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+          "publication": "7fad91f004cfafb32297f25a19a7bd49",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "dfbe21c1d3904d886513fef852a48687",
+          "publication": "7fad91f004cfafb32297f25a19a7bd49"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "7fad91f004cfafb32297f25a19a7bd49"
+        },
+        "reachability": "REACHABLE",
+        "sequence": {
+          "domain": "label",
+          "localId": "edc6c344869074e429549b820e56a3e5",
+          "publication": "7fad91f004cfafb32297f25a19a7bd49",
+          "unit": "unit"
+        },
+        "targetKind": "COMPUTED",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "31aa2791a336b6a276bc2322368d1806",
+          "publication": "7fad91f004cfafb32297f25a19a7bd49"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "ddeeb987b827986861d5558fb2a29018",
+            "publication": "7fad91f004cfafb32297f25a19a7bd49"
+          }
+        ],
+        "unknownRemainder": true,
+        "valuePoint": {
+          "entryId": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "7fad91f004cfafb32297f25a19a7bd49",
+            "unit": "unit"
+          },
+          "operationId": {
+            "domain": "operation",
+            "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+            "publication": "7fad91f004cfafb32297f25a19a7bd49",
+            "unit": "unit"
+          },
+          "outcome": null,
+          "position": "BEFORE"
+        }
+      }
+    ],
+    "declarations": []
+  },
+  {
+    "example": {
+      "id": "files-native",
+      "title": "Arquivos COBOL · SELECT e OPEN",
+      "description": "Dois conectores com usos e declarações distintos",
+      "format": "fixed",
+      "url": "examples/files-native.json.gz",
+      "nodes": 27,
+      "edges": 30,
+      "sites": 0,
+      "fileSites": 4,
+      "bytes": 582798,
+      "sha256": "812860a53759b1c276762c16ed6d1b9496b1671a8dc0ec569a9f7d41d963bd39"
+    },
+    "execution": {
+      "build": {
+        "repos": {
+          "proleap-poc": {
+            "sha": "f33fae3b13edc8e2ba044e948836875fe55cb7de",
+            "status": ""
+          },
+          "cobol-lower": {
+            "sha": "6486b36e701b7e280a5ca4e05df67f0882874ee5",
+            "status": ""
+          },
+          "air-java": {
+            "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+            "status": ""
+          },
+          "analysis-cfg": {
+            "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+            "status": ""
+          },
+          "analysis-ir": {
+            "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+            "status": ""
+          }
+        },
+        "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+        "sourceCount": 461,
+        "sourcesSha256": "6c7f7682f210b5c3e4b5f8b95167f93c7ec295a6da24327b15cc0d629152bc53",
+        "libraries": {
+          "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+          "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+          "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+          "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+          "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+          "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+          "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+          "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+        }
+      },
+      "source": "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w2/multi-open.cbl",
+      "sourceSha256": "019161d383a3066b53415ca72f090d152f797151e1c0777e601e7ba442707316",
+      "executions": [
+        {
+          "phase": "frontend",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+            "--source",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w2/multi-open.cbl",
+            "--output",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/sp",
+            "--copybooks",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w2",
+            "--storage-profile",
+            "ibm-enterprise-6.4-fixed-display-1047@1",
+            "--entry-storage-state",
+            "initial",
+            "--cics-entry-mode",
+            "new-logical-level",
+            "--logical-text",
+            "disabled"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "lower",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "ExportLinks",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/sp/cobol-semantic-product.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/links.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/source-evidence.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "cfg",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/cfg.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "dependencies",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/dependencies.json",
+            "--source-evidence",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-native-20260927/source-evidence.json"
+          ],
+          "exitCode": 0
+        }
+      ]
+    },
+    "fileSites": [
+      {
+        "action": "open",
+        "analysisReasons": [],
+        "bindings": [
+          {
+            "declaration": {
+              "domain": "resource",
+              "localId": "88cce8e79900952ecabea58b6b22471e",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "origin": {
+              "domain": "origin",
+              "localId": "ef5e6dfde497d511d7c928c8dc468f77",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "role": "open-output"
+          }
+        ],
+        "candidates": [],
+        "context": null,
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "namespace": "cobol.external-file-name",
+        "operation": {
+          "domain": "operation",
+          "localId": "ab1796d8d095fd63557ce69501f2ba53",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "57787ae1ec0aeef4244952350a55d688",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "sequence": {
+          "domain": "label",
+          "localId": "34230b59880f515e539b699204d26cb7",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "targetKind": "LITERAL",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "b8eca3fd49517b23f254979fda24308d",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "02f9948e28cd8995d17682d2faa9a69b",
+            "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+          }
+        ],
+        "unknownRemainder": false,
+        "valuePoint": null
+      },
+      {
+        "action": "close",
+        "analysisReasons": [],
+        "bindings": [
+          {
+            "declaration": {
+              "domain": "resource",
+              "localId": "4d225131b54c34b24b20af8864e74e55",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "origin": {
+              "domain": "origin",
+              "localId": "5bb68cb1979fa4e837e65e3f8661e832",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "role": "lifecycle"
+          }
+        ],
+        "candidates": [
+          {
+            "rawValue": "CLIENTDD",
+            "referenceName": "CLIENTDD",
+            "supports": [
+              {
+                "kind": "FILE_LITERAL",
+                "origin": {
+                  "domain": "origin",
+                  "localId": "795513da5a0716ac5a51c84f61dfa73d",
+                  "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+                },
+                "premises": [],
+                "producer": {
+                  "domain": "operation",
+                  "localId": "b041f278f2e2d6b35219a3a7c70004e9",
+                  "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+                  "unit": "unit"
+                }
+              }
+            ]
+          }
+        ],
+        "context": null,
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "namespace": "cobol.external-file-name",
+        "operation": {
+          "domain": "operation",
+          "localId": "b041f278f2e2d6b35219a3a7c70004e9",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "373d4424a98063f5c325444c0aca9196",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "reachability": "REACHABLE",
+        "sequence": {
+          "domain": "label",
+          "localId": "922aef9ead0e4063c3835fed371fce40",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "targetKind": "LITERAL",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "795513da5a0716ac5a51c84f61dfa73d",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "47b5b924cbc091fe87c816721b38a0ae",
+            "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+          }
+        ],
+        "unknownRemainder": false,
+        "valuePoint": null
+      },
+      {
+        "action": "open",
+        "analysisReasons": [],
+        "bindings": [
+          {
+            "declaration": {
+              "domain": "resource",
+              "localId": "4d225131b54c34b24b20af8864e74e55",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "origin": {
+              "domain": "origin",
+              "localId": "e8da7feb4c1ff9c4aa446afffdc5c2dd",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "role": "open-input"
+          }
+        ],
+        "candidates": [
+          {
+            "rawValue": "CLIENTDD",
+            "referenceName": "CLIENTDD",
+            "supports": [
+              {
+                "kind": "FILE_LITERAL",
+                "origin": {
+                  "domain": "origin",
+                  "localId": "2e054f6f3ddc539d8f8f6798e9db5d18",
+                  "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+                },
+                "premises": [],
+                "producer": {
+                  "domain": "operation",
+                  "localId": "ba7912d0697b242def922fd934c46f85",
+                  "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+                  "unit": "unit"
+                }
+              }
+            ]
+          }
+        ],
+        "context": null,
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "namespace": "cobol.external-file-name",
+        "operation": {
+          "domain": "operation",
+          "localId": "ba7912d0697b242def922fd934c46f85",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "3bb45a963b94412c2e4c448ef3014ee6",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "reachability": "REACHABLE",
+        "sequence": {
+          "domain": "label",
+          "localId": "80fc541061654c791f9de3ed24cb6251",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "targetKind": "LITERAL",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "2e054f6f3ddc539d8f8f6798e9db5d18",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "6126b6cf099314550efe981384013eef",
+            "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+          }
+        ],
+        "unknownRemainder": false,
+        "valuePoint": null
+      },
+      {
+        "action": "close",
+        "analysisReasons": [],
+        "bindings": [
+          {
+            "declaration": {
+              "domain": "resource",
+              "localId": "88cce8e79900952ecabea58b6b22471e",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "origin": {
+              "domain": "origin",
+              "localId": "d7a1b42f92ee772191a51a96af5311e7",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+            },
+            "role": "lifecycle"
+          }
+        ],
+        "candidates": [],
+        "context": null,
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "namespace": "cobol.external-file-name",
+        "operation": {
+          "domain": "operation",
+          "localId": "f409b58c3ba4a9385a61f8fd451393c3",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "3027d4fd1f86aae0cdc9722861fd663d",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "reachability": "UNREACHABLE_IN_MODEL",
+        "sequence": {
+          "domain": "label",
+          "localId": "c8e1fd52d2b7c944964a8b09da819062",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+          "unit": "unit"
+        },
+        "targetKind": "LITERAL",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "07472d6f22fc7cec7626e0836187626b",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "f2bcb4004072f3d3141ef2c253df1f10",
+            "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+          }
+        ],
+        "unknownRemainder": false,
+        "valuePoint": null
+      }
+    ],
+    "declarations": [
+      {
+        "classification": "cobol.fd",
+        "id": {
+          "domain": "resource",
+          "localId": "4d225131b54c34b24b20af8864e74e55",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "logicalFile": "F",
+        "name": "CLIENTDD",
+        "namespace": "cobol.external-file-name",
+        "objects": [
+          {
+            "object": {
+              "domain": "object",
+              "localId": "3087d26e9141adf8b327c1587927ef9e",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+              "unit": "unit"
+            },
+            "role": "record"
+          }
+        ],
+        "origin": {
+          "domain": "origin",
+          "localId": "2488075d59f467d543890f5ddb9eb4a5",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "sourceKind": "ASSIGNMENT_NAME",
+        "targetKind": "LITERAL"
+      },
+      {
+        "classification": "cobol.fd",
+        "id": {
+          "domain": "resource",
+          "localId": "88cce8e79900952ecabea58b6b22471e",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "logicalFile": "G",
+        "name": "OTHERDD",
+        "namespace": "cobol.external-file-name",
+        "objects": [
+          {
+            "object": {
+              "domain": "object",
+              "localId": "b98d4fb883aa0a9af270e1b361f344ae",
+              "publication": "c956b7b1bf42c4e128e97e944585b0d8",
+              "unit": "unit"
+            },
+            "role": "record"
+          }
+        ],
+        "origin": {
+          "domain": "origin",
+          "localId": "0a70e30ae346a2db667dfbab6688b64b",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "c956b7b1bf42c4e128e97e944585b0d8"
+        },
+        "sourceKind": "ASSIGNMENT_NAME",
+        "targetKind": "LITERAL"
+      }
+    ]
+  },
+  {
+    "example": {
+      "id": "files-unknown",
+      "title": "Arquivos CICS · sem valores publicados",
+      "description": "Consulta sem candidatos no modo lógico",
+      "format": "fixed",
+      "url": "examples/files-unknown.json.gz",
+      "nodes": 8,
+      "edges": 8,
+      "sites": 0,
+      "fileSites": 1,
+      "bytes": 988609,
+      "sha256": "1ff8a6833789b0105502debba364ba02ba73a28a9c35e20c1b1d4f96dd5abf67"
+    },
+    "execution": {
+      "build": {
+        "repos": {
+          "proleap-poc": {
+            "sha": "f33fae3b13edc8e2ba044e948836875fe55cb7de",
+            "status": ""
+          },
+          "cobol-lower": {
+            "sha": "6486b36e701b7e280a5ca4e05df67f0882874ee5",
+            "status": ""
+          },
+          "air-java": {
+            "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+            "status": ""
+          },
+          "analysis-cfg": {
+            "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+            "status": ""
+          },
+          "analysis-ir": {
+            "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+            "status": ""
+          }
+        },
+        "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+        "sourceCount": 461,
+        "sourcesSha256": "6c7f7682f210b5c3e4b5f8b95167f93c7ec295a6da24327b15cc0d629152bc53",
+        "libraries": {
+          "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+          "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+          "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+          "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+          "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+          "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+          "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+          "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+        }
+      },
+      "source": "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8/computed-closed.cbl",
+      "sourceSha256": "cea32bd87ee1bff6de12d2c03c476df5eee71636b1f71ceaf6019166bf7b7281",
+      "executions": [
+        {
+          "phase": "frontend",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+            "--source",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8/computed-closed.cbl",
+            "--output",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/sp",
+            "--copybooks",
+            "/home/gustavo/workspace/teste-e2e/analysis-cfg/analysis-adapters/src/test/resources/file-dependencies/w8",
+            "--storage-profile",
+            "ibm-enterprise-6.4-fixed-display-1047@1",
+            "--entry-storage-state",
+            "initial",
+            "--cics-entry-mode",
+            "new-logical-level",
+            "--logical-text",
+            "disabled"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "lower",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "ExportLinks",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/sp/cobol-semantic-product.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/links.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/source-evidence.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "cfg",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/cfg.json"
+          ],
+          "exitCode": 0
+        },
+        {
+          "phase": "dependencies",
+          "command": [
+            "java",
+            "-cp",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+            "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/air.json",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/dependencies.json",
+            "--source-evidence",
+            "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/files-closed-20260927/source-evidence.json"
+          ],
+          "exitCode": 0
+        }
+      ]
+    },
+    "fileSites": [
+      {
+        "action": "endbr",
+        "analysisReasons": [
+          "FILE_MODEL_VALUE_REMAINDER",
+          "FILE_SOURCE_VALUE_REMAINDER"
+        ],
+        "bindings": [],
+        "candidates": [],
+        "context": {
+          "analysisReasons": [
+            "CICS_SYSID_MODEL_VALUE_REMAINDER",
+            "CICS_SYSID_SOURCE_VALUE_REMAINDER"
+          ],
+          "candidates": [],
+          "origin": {
+            "domain": "origin",
+            "localId": "6e7a5eefbde2e24694e9fdd5e2bf4f88",
+            "publication": "d943d826fd196eb1cebe5b991e18f509"
+          },
+          "selection": "EXPLICIT",
+          "targetKind": "COMPUTED",
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "d943d826fd196eb1cebe5b991e18f509",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+              "publication": "d943d826fd196eb1cebe5b991e18f509",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "control": "OPEN",
+        "effects": "OPEN",
+        "entry": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "d943d826fd196eb1cebe5b991e18f509",
+          "unit": "unit"
+        },
+        "namespace": "cics.file",
+        "operation": {
+          "domain": "operation",
+          "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+          "publication": "d943d826fd196eb1cebe5b991e18f509",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "dfbe21c1d3904d886513fef852a48687",
+          "publication": "d943d826fd196eb1cebe5b991e18f509"
+        },
+        "owner": {
+          "domain": "unit",
+          "localId": "unit",
+          "publication": "d943d826fd196eb1cebe5b991e18f509"
+        },
+        "reachability": "REACHABLE",
+        "sequence": {
+          "domain": "label",
+          "localId": "edc6c344869074e429549b820e56a3e5",
+          "publication": "d943d826fd196eb1cebe5b991e18f509",
+          "unit": "unit"
+        },
+        "targetKind": "COMPUTED",
+        "targetOrigin": {
+          "domain": "origin",
+          "localId": "31aa2791a336b6a276bc2322368d1806",
+          "publication": "d943d826fd196eb1cebe5b991e18f509"
+        },
+        "uncertaintyRefs": [
+          {
+            "domain": "uncertainty",
+            "localId": "ddeeb987b827986861d5558fb2a29018",
+            "publication": "d943d826fd196eb1cebe5b991e18f509"
+          }
+        ],
+        "unknownRemainder": true,
+        "valuePoint": {
+          "entryId": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "d943d826fd196eb1cebe5b991e18f509",
+            "unit": "unit"
+          },
+          "operationId": {
+            "domain": "operation",
+            "localId": "50f45f11d5dc7bd137db56b9fe81746a",
+            "publication": "d943d826fd196eb1cebe5b991e18f509",
+            "unit": "unit"
+          },
+          "outcome": null,
+          "position": "BEFORE"
+        }
+      }
+    ],
+    "declarations": []
+  }
+]

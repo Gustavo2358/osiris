@@ -1,0 +1,58 @@
+
+> cobol-graph-explorer@0.1.0 validate
+> npm test && npm run build && npm run test:e2e
+
+
+> cobol-graph-explorer@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /home/gustavo/workspace/teste-e2e/cobol-graph-explorer
+
+ ✓ tests/model.test.ts (52 tests) 2066ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: large  792ms
+   ✓ Real analyzer artifacts > large graph query finishes without enumerating exponentially many paths  591ms
+
+ Test Files  1 passed (1)
+      Tests  52 passed (52)
+   Start at  07:21:44
+   Duration  2.77s (transform 188ms, setup 0ms, collect 212ms, tests 2.07s, environment 0ms, prepare 97ms)
+
+
+> cobol-graph-explorer@0.1.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 1913 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                             0.42 kB │ gzip:   0.30 kB
+dist/assets/elk-worker.min-C9JGDOE-.js  1,593.72 kB
+dist/assets/index-wbPPhi3t.css             38.46 kB │ gzip:   8.07 kB
+dist/assets/index-6oYnX6nL.js             476.11 kB │ gzip: 153.22 kB
+✓ built in 3.79s
+
+> cobol-graph-explorer@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:622522) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 11 tests using 1 worker
+
+(node:622581) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 e2e/explorer.spec.ts:10:1 › call navigation, provenance, candidates, paths, witness, source and debug (3.0s)
+  ✓   2 e2e/explorer.spec.ts:39:1 › search, paragraph navigation and local neighborhood (3.1s)
+  ✓   3 e2e/explorer.spec.ts:56:1 › 503 node graph stays navigable and limits DOM to viewport (8.4s)
+  ✓   4 e2e/explorer.spec.ts:71:1 › nested program entry switches exact identity scopes (1.7s)
+  ✓   5 e2e/explorer.spec.ts:82:1 › import real bundle; malformed and mismatched files preserve the current program (2.3s)
+  ✓   6 e2e/explorer.spec.ts:107:1 › local files remain local; no unexpected network destination (984ms)
+  ✓   7 e2e/explorer.spec.ts:116:1 › keyboard selection and tablet width keep program tools available (1.6s)
+  ✓   8 e2e/explorer.spec.ts:131:1 › Back restores paragraph, selection and exact viewport after highlighting paths (2.4s)
+  ✓   9 e2e/explorer.spec.ts:162:1 › full source pane follows selection, supports COPY and closes without changing the graph (1.4s)
+  ✓  10 e2e/explorer.spec.ts:197:1 › FILE values, producer navigation, SYSID, source pane and control paths (2.0s)
+  ✓  11 e2e/explorer.spec.ts:228:1 › source pane fits a tablet and reports a missing original instead of substituting expanded text (1.8s)
+
+  11 passed (30.7s)

@@ -24,6 +24,7 @@ flowchart LR
 - `src/artifacts.ts`: reconhecimento por contrato, descompressão, rejeição de versões/publicações incompatíveis e SHA-256 do sidecar.
 - `src/model.ts`: índices de identidades, joins explícitos, projeção de apresentação e consultas sobre arestas publicadas.
 - `src/Graph.tsx`: geometria ELK, cancelamento de layouts antigos, renderização do viewport e seleção. Os nós não são editáveis.
+- `src/SourcePane.tsx`: fonte integral, troca explícita de arquivo, destaque por span e acompanhamento opcional da seleção. Não reconstrói relações do grafo a partir de linhas.
 - `src/Inspector.tsx`: fatos de COBOL, candidatos/suportes, fonte, limites e detalhes brutos carregados visualmente sob demanda.
 - `bridge/ExportLinks.java`: adapter externo ao analisador; usa `FileLowering`, `CobolLowerer`, `AirFileOutput` e o `LoweringResult` retornado pela mesma API de produção.
 
@@ -38,7 +39,8 @@ Documentos brutos permanecem disponíveis. O visualizador não implementa um par
 5. `links.entries[].target` → EntryId completo; a identidade fonte conserva compilationUnitId, structuralPath e canonicalProgramName.
 6. `dependencies.sites` → EntryId + OperationId; `sequence` identifica o trecho publicado. Candidatos conservam `supports`, `producer`, `origin`, `premises` e remainders originais.
 7. `dependencies.programs[].sourceOccurrence` pode agregar evidência fonte a uma ocorrência já correlacionada. Autoridades diferentes e candidatos condicionais não são misturados com a consulta executável.
-8. O DAG de origins é percorrido por OriginId; artefatos por ArtifactId. Spans servem apenas para extrair o texto explicitamente fornecido.
+8. `fileDependencies.sites` → EntryId + OperationId + sequence; valida owner e categoria FILE da AIR. `bindings[].declaration` → ResourceId → declaração/uses AIR, conferindo operação e role. Sites FILE ficam separados de chamadas, mesmo quando ambos usam `invoke`. Candidatos e SYSID são conservados literalmente; declaração não supre valores de usos inalcançáveis.
+9. O DAG de origins é percorrido por OriginId; artefatos por ArtifactId. Spans servem apenas para extrair o texto explicitamente fornecido.
 
 A chave de uma identidade conserva domínio, publicação, unit, localId e owner quando presente. O domínio dos IDs CFG/AIR no wire CFG é definido pelo campo tipado, conforme o contrato. Objetos são comparados por conteúdo canônico, não pela ordem das chaves. Não há decodificação de hashes, interpretação de `sourceKey`, basename heurístico ou reconciliação por linha/texto.
 
@@ -65,6 +67,12 @@ Para uma EntryId escolhida:
 Custo O(V+E) e memória O(V+E). Ciclos terminam por conjuntos de visitados. Os caminhos incluem as possibilidades estruturais publicadas, inclusive voltas em ciclos. Um caminho mínimo não resolve predicados. Não ter caminho conhecido é diferente de provar impossibilidade no COBOL completo.
 
 A seleção usada como alvo permanece fixa enquanto o usuário inspeciona outros nós do recorte. As ações de navegação podem voltar à visão completa quando o destino está fora do recorte.
+
+## Estado de navegação e fonte
+
+Entrar em caminhos, vizinhança ou paragraph guarda um snapshot do recorte anterior, entrada, seleção, busca, aba, destaques e viewport. A pilha fica na memória, limitada a 30 snapshots por publicação. Voltar/Esc aplica o snapshot; o viewport é restaurado após o layout correspondente estar pronto. Inspecionar um nó dentro do recorte não muda o alvo fixo da consulta. Trocar a publicação limpa o histórico.
+
+O painel de fonte usa somente `documents.sources[nomeLógico]`. Original, copybook e expandido são escolhas explícitas. Se o original não foi fornecido, o painel informa a ausência; não o substitui pelo expandido. Os spans publicados destacam as linhas/colunas usando caracteres Unicode e a convenção de fim publicada. Redimensionar o painel mantém o centro e zoom do grafo.
 
 ## Escala e segurança local
 

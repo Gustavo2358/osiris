@@ -185,6 +185,19 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
       'Dependencies pertencem a outra publicação.',
     );
     assert(Array.isArray(dep.sites), 'Dependencies sem inventário de sites.');
+    if (dep.fileDependencies) {
+      assert(
+        Array.isArray(dep.fileDependencies.sites) &&
+          Array.isArray(dep.fileDependencies.declarations),
+        'Inventário FILE inválido.',
+      );
+      assert(
+        ['file-literal@1', 'file-values@1', 'file-values-context@1'].includes(
+          dep.fileDependencies.valuesProfile,
+        ),
+        'Perfil de valores FILE não suportado.',
+      );
+    }
   }
   return { air, cfg, sp, links, dependencies: dep, sources, title, evidence, files: expanded };
 }

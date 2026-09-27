@@ -127,3 +127,132 @@ test('keyboard selection and tablet width keep program tools available', async (
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.getByRole('button', { name: 'Fechar ajuda' }).click();
 });
+
+test('Back restores paragraph, selection and exact viewport after highlighting paths', async ({
+  page,
+}) => {
+  await ready(page);
+  const nav = page.getByRole('complementary', { name: 'Navegação do programa' });
+  const inspector = page.getByRole('complementary', { name: 'Inspetor' });
+  await nav.getByRole('tab', { name: 'Paragraphs' }).click();
+  await nav.getByRole('button', { name: /VALIDATE-ORDER/ }).click();
+  await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
+  const context = await page.locator('.graph-context').innerText();
+  const selection = await inspector.getByRole('heading', { level: 2 }).innerText();
+  // Zoom is part of the user's previous view, not just the node filter.
+  await page.getByRole('button', { name: 'Zoom Out', exact: true }).click();
+  await expect
+    .poll(() => page.locator('.react-flow__viewport').getAttribute('style'))
+    .toContain('transform');
+  const viewport = await page.locator('.react-flow__viewport').getAttribute('style');
+  await inspector.getByRole('button', { name: 'Caminhos até aqui' }).click();
+  await page.getByLabel('Um caminho', { exact: true }).check();
+  await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
+  await page.getByRole('button', { name: 'Voltar à visão anterior', exact: true }).click();
+  await expect(page.locator('.path-banner')).toHaveCount(0);
+  await expect(page.locator('.graph-context')).toHaveText(context);
+  await expect(inspector.getByRole('heading', { level: 2 })).toHaveText(selection);
+  await expect(page.locator('.react-flow__viewport')).toHaveAttribute('style', viewport!);
+  await page.getByRole('button', { name: 'Caminhos', exact: true }).click();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.graph-context')).toHaveText(context);
+  await expect(page.locator('.path-banner')).toHaveCount(0);
+});
+
+test('full source pane follows selection, supports COPY and closes without changing the graph', async ({
+  page,
+}) => {
+  await ready(page, 'copy');
+  await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
+  const pane = page.getByRole('region', { name: 'Código fonte original' });
+  await expect(pane).toBeVisible();
+  await expect
+    .poll(async () => {
+      const card = await page.locator('.graph-card.is-selected').boundingBox();
+      const graph = await page.getByTestId('graph').boundingBox();
+      return (
+        !!card &&
+        !!graph &&
+        card.y >= graph.y &&
+        card.y + card.height <= graph.y + graph.height - 30
+      );
+    })
+    .toBe(true);
+  const nav = page.getByRole('complementary', { name: 'Navegação do programa' });
+  await nav.getByRole('button', { name: /CALL WS-PGM/ }).click();
+  await expect(pane.getByLabel('Arquivo de código fonte')).toHaveValue('CALLPART.cpy');
+  await expect(pane.locator('.selected-line')).toContainText('CALL WS-PGM');
+  await pane.getByLabel('Arquivo de código fonte').selectOption('COPY-DEMO.cbl');
+  await expect(pane.getByLabel('Acompanhar seleção')).not.toBeChecked();
+  await expect(pane.locator('.source-document')).toContainText('IDENTIFICATION DIVISION');
+  await expect(pane.locator('.source-document')).toContainText('GOBACK');
+  await pane.getByRole('button', { name: 'Ir para a seleção no código' }).click();
+  await expect(pane.getByLabel('Arquivo de código fonte')).toHaveValue('CALLPART.cpy');
+  const context = await page.locator('.graph-context').innerText();
+  await pane.getByRole('button', { name: 'Fechar código fonte' }).click();
+  await expect(pane).toHaveCount(0);
+  await expect(page.locator('.graph-context')).toHaveText(context);
+});
+
+test('FILE values, producer navigation, SYSID, source pane and control paths', async ({ page }) => {
+  await ready(page, 'files-values');
+  const nav = page.getByRole('complementary', { name: 'Navegação do programa' });
+  const inspector = page.getByRole('complementary', { name: 'Inspetor' });
+  await expect(nav.getByRole('tab', { name: 'Arquivos', exact: true })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+  await page.getByLabel('Buscar no programa').fill('CUSTOMER');
+  await expect(nav.locator('.nav-item')).toHaveCount(1);
+  await nav.locator('.nav-item').click();
+  await expect(
+    inspector.getByRole('heading', { name: 'Valores possíveis', exact: true }),
+  ).toBeVisible();
+  await expect(inspector.locator('.candidate-name')).toContainText(['ACCOUNTS', 'CUSTOMER']);
+  await expect(inspector.locator('.file-context')).toContainText('R001');
+  await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
+  await expect(page.locator('.selected-line')).toContainText(['EXEC CICS ENDBR', 'NOHANDLE']);
+  await inspector.locator('.candidate-supports .producer-link').first().click();
+  await expect(inspector.getByRole('heading', { level: 2 })).toContainText('MOVE');
+  await nav.locator('.nav-item').click();
+  await inspector.getByRole('button', { name: 'Caminhos até aqui' }).click();
+  await expect(page.locator('.path-banner')).toContainText('caminhos conhecidos');
+  await page.getByLabel('Destacar arquivos', { exact: true }).check();
+  await page.getByRole('button', { name: 'Voltar', exact: true }).click();
+  await expect(page.locator('.path-banner')).toHaveCount(0);
+  await expect(page.getByLabel('Destacar arquivos', { exact: true })).not.toBeChecked();
+  await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
+  await page.screenshot({ path: 'test-results/files-source.png', fullPage: true });
+});
+
+test('source pane fits a tablet and reports a missing original instead of substituting expanded text', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 800, height: 900 });
+  await ready(page, 'files-values');
+  await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
+  const pane = page.getByRole('region', { name: 'Código fonte original' });
+  await expect(pane.getByLabel('Arquivo de código fonte')).toHaveValue('computed-closed.cbl');
+  await pane.getByRole('button', { name: 'Ampliar painel de código' }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(800);
+  const bundle = JSON.parse(
+    gunzipSync(readFileSync('public/examples/files-values.json.gz')).toString(),
+  );
+  delete bundle.sources['computed-closed.cbl'];
+  await page.getByLabel('Selecionar artefatos').setInputFiles({
+    name: 'missing-source.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(bundle)),
+  });
+  await expect(pane).toContainText('não foi fornecido');
+  await expect(pane.locator('.source-document')).toHaveCount(0);
+  await pane.getByLabel('Arquivo de código fonte').selectOption('<preprocessed>');
+  await expect(pane).toContainText('Fonte expandido');
+  await expect(pane.locator('.source-document')).toContainText('EXEC CICS ENDBR');
+  await page
+    .getByRole('complementary', { name: 'Inspetor' })
+    .getByRole('button', { name: /computed-closed.cbl:20/ })
+    .click();
+  await expect(pane.getByLabel('Arquivo de código fonte')).toHaveValue('computed-closed.cbl');
+  await expect(pane).toContainText('não foi fornecido');
+});

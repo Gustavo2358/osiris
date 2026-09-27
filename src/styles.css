@@ -1373,3 +1373,217 @@ input[type='checkbox'] {
 .source-evidence {
   margin-top: 12px;
 }
+
+/* Returning from a focused view is a visible action, with a preserved viewport. */
+.back-button,
+.return-view,
+.source-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  background: white;
+}
+.back-button:not(:disabled),
+.return-view,
+.source-toggle.active {
+  color: #4655bd;
+  border-color: #ccd3f0;
+}
+.graph-toolbar {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.graph-toolbar .view-switch {
+  flex: 1;
+}
+.path-banner {
+  flex-wrap: wrap;
+}
+.path-banner > span {
+  flex: 1;
+  min-width: 180px;
+}
+.path-banner .return-view {
+  background: white;
+  padding: 7px 9px;
+}
+.nav-tabs button {
+  min-width: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 10px;
+}
+.nav-kind.file-kind {
+  color: #218078;
+  background: #e7f5f2;
+}
+.graph-card.file-card {
+  border-color: #a6d4cc;
+}
+.graph-card.file-card .card-meta > span:first-child {
+  color: #218078;
+}
+.legend-file {
+  background: #218078;
+}
+.source-location-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 0;
+  text-align: left;
+}
+.file-binding {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  margin-top: 10px;
+}
+.file-binding > span {
+  float: right;
+  font-size: 10px;
+  color: var(--muted);
+}
+.file-binding .micro {
+  margin: 7px 0;
+}
+.file-context {
+  margin-top: 18px;
+}
+.graph-source-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.graph-source-workspace > .graph-surface {
+  flex: 1;
+  min-height: 180px;
+}
+.source-pane {
+  height: 42%;
+  min-height: 190px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid #cdd5ec;
+  background: #fbfcfe;
+}
+.source-pane.expanded {
+  height: calc(100% - 180px);
+}
+.source-pane-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.source-pane-toolbar strong {
+  font-size: 11px;
+  white-space: nowrap;
+}
+.source-pane-toolbar select {
+  min-width: 0;
+  flex: 1;
+  font-size: 11px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: white;
+}
+.source-pane-toolbar .icon-button {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.source-pane-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 12px;
+  color: #68758c;
+  font-size: 10px;
+}
+.source-pane-caption label {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.source-document {
+  position: relative;
+  overflow: auto;
+  flex: 1;
+  padding-bottom: 16px;
+  font-size: 12px;
+  line-height: 22px;
+  tab-size: 4;
+}
+.source-line {
+  display: flex;
+  min-width: max-content;
+  min-height: 22px;
+}
+.source-line.selected-line {
+  background: #eef0ff;
+}
+.source-line code {
+  white-space: pre;
+  padding-right: 20px;
+}
+.source-line mark {
+  background: #dbe1ff;
+  color: #1f387a;
+  border-radius: 2px;
+}
+.source-line-number {
+  position: sticky;
+  left: 0;
+  width: 54px;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 12px;
+  margin-right: 12px;
+  color: #909bad;
+  user-select: none;
+  background: #f4f6fb;
+  border-right: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.source-line.selected-line .source-line-number {
+  color: #4d5abd;
+  background: #e6eaff;
+}
+@media (max-width: 1100px) {
+  .header-actions .local-badge {
+    display: none;
+  }
+  .path-banner .return-view {
+    margin-left: auto;
+  }
+}
+@media (max-width: 900px) {
+  .graph-source-workspace {
+    min-height: 420px;
+  }
+  .source-pane {
+    height: 250px;
+  }
+  .source-pane.expanded {
+    height: 370px;
+  }
+  .source-pane-toolbar strong {
+    display: none;
+  }
+  .graph-source-workspace > .graph-surface {
+    min-height: 250px;
+  }
+}

@@ -142,5 +142,57 @@
     "sites": 1,
     "bytes": 386786,
     "sha256": "d61b87e11c09263ebd3badda99552adf52c05693aa5ca3cd611b48c39ee44ce6"
+  },
+  {
+    "id": "files-values",
+    "title": "Arquivos CICS · valores dinâmicos",
+    "description": "FILE com ACCOUNTS/CUSTOMER e contexto SYSID",
+    "format": "fixed",
+    "url": "examples/files-values.json.gz",
+    "nodes": 8,
+    "edges": 8,
+    "sites": 0,
+    "fileSites": 1,
+    "bytes": 993730,
+    "sha256": "024059faf99cbe43dfcbbda37e4683ca3342c9cf25a06dba1edaeb037387f941"
+  },
+  {
+    "id": "files-partial",
+    "title": "Arquivos CICS · valores em aberto",
+    "description": "Valor conhecido e alternativas desconhecidas",
+    "format": "fixed",
+    "url": "examples/files-partial.json.gz",
+    "nodes": 8,
+    "edges": 8,
+    "sites": 0,
+    "fileSites": 1,
+    "bytes": 992614,
+    "sha256": "71bf47c88a44fb20ec66ce7ff9cf16f008b24ce31d8bc2faad58dcc92ecb4acb"
+  },
+  {
+    "id": "files-native",
+    "title": "Arquivos COBOL · SELECT e OPEN",
+    "description": "Dois conectores com usos e declarações distintos",
+    "format": "fixed",
+    "url": "examples/files-native.json.gz",
+    "nodes": 27,
+    "edges": 30,
+    "sites": 0,
+    "fileSites": 4,
+    "bytes": 582798,
+    "sha256": "812860a53759b1c276762c16ed6d1b9496b1671a8dc0ec569a9f7d41d963bd39"
+  },
+  {
+    "id": "files-unknown",
+    "title": "Arquivos CICS · sem valores publicados",
+    "description": "Consulta sem candidatos no modo lógico",
+    "format": "fixed",
+    "url": "examples/files-unknown.json.gz",
+    "nodes": 8,
+    "edges": 8,
+    "sites": 0,
+    "fileSites": 1,
+    "bytes": 988609,
+    "sha256": "1ff8a6833789b0105502debba364ba02ba73a28a9c35e20c1b1d4f96dd5abf67"
   }
 ]

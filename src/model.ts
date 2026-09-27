@@ -55,6 +55,7 @@ export interface GraphNode {
   contexts: number;
   contextIndex: number;
   siteIds: string[];
+  fileSiteIds: string[];
   unit: string;
 }
 export interface GraphEdge {
@@ -66,6 +67,9 @@ export interface GraphEdge {
   raw: Raw;
 }
 export interface Site {
+  family: 'program' | 'file';
+  location?: Location;
+  declarations?: Raw[];
   id: string;
   raw: Raw;
   nodeIds: string[];
@@ -91,6 +95,8 @@ export interface Model {
   nodes: GraphNode[];
   edges: GraphEdge[];
   sites: Site[];
+  fileSites: Site[];
+  fileDeclarations: Raw[];
   entries: { id: string; title: string; nodeId: string; raw: Raw; unit: string }[];
   paragraphs: Paragraph[];
   nodeById: Map<string, GraphNode>;
@@ -366,7 +372,8 @@ export function buildModel(doc: Documents): Model {
         branch: 'Decisão',
         return: 'Retorno',
         halt: 'Fim da execução',
-        invoke: 'Chamada externa',
+        invoke:
+          seq?.terminator?.target?.category === 'file' ? 'Acesso a arquivo' : 'Chamada externa',
         opaque: 'Operação parcialmente modelada',
       }[seq?.terminator?.kind as string] ||
       'Trecho de controle';
@@ -396,6 +403,7 @@ export function buildModel(doc: Documents): Model {
       contexts: 1,
       contextIndex: 1,
       siteIds: [],
+      fileSiteIds: [],
       unit: idKey(unitId, 'unit'),
     };
     nodes.push(node);
@@ -467,6 +475,7 @@ export function buildModel(doc: Documents): Model {
     const st = opStatements.get(opKey)?.[0];
     const command = s.command ?? 'CALL';
     const site: Site = {
+      family: 'program',
       id: canonical({ entry: s.entry, operation: s.operation }),
       raw: s,
       nodeIds: ids,
@@ -486,10 +495,11 @@ export function buildModel(doc: Documents): Model {
     ids.forEach((id) => nodeById.get(id)!.siteIds.push(site.id));
   }
   for (const [key, op] of operations)
-    if (op.kind === 'invoke' && !opSeen.has(key)) {
+    if (op.kind === 'invoke' && op.target?.category !== 'file' && !opSeen.has(key)) {
       const ids = operationNodes.get(key) ?? [],
         st = opStatements.get(key)?.[0];
       const site: Site = {
+        family: 'program',
         id: key,
         raw: {
           targetStatus: 'DEPENDENCIES_NOT_AVAILABLE',
@@ -531,6 +541,7 @@ export function buildModel(doc: Documents): Model {
       continue;
     const statement = key ? statements.get(key) : undefined;
     sites.push({
+      family: 'program',
       id: `source-only:${i}`,
       raw: s,
       nodeIds: [],
@@ -542,6 +553,116 @@ export function buildModel(doc: Documents): Model {
       sourceOnly: true,
       statement,
     });
+  }
+  // FILE is a separate typed projection. Never infer a file from a CALL name,
+  // source spelling, line number or a declaration's external name.
+  const fileSites: Site[] = [];
+  const fileDeclarations: Raw[] = doc.dependencies?.fileDependencies?.declarations ?? [];
+  const resources = new Map<string, Raw>(
+    (p.resources ?? []).map((r: Raw) => [idKey(r.id, 'resource'), r]),
+  );
+  const declarations = new Map<string, Raw>();
+  for (const d of fileDeclarations) {
+    const key = idKey(d.id, 'resource'),
+      resource = resources.get(key);
+    assert(resource?.declaration, 'Declaração FILE ausente na AIR.');
+    assert(
+      units.has(idKey(d.owner, 'unit')) &&
+        idKey(resource.declaration.owner, 'unit') === idKey(d.owner, 'unit'),
+      'Owner da declaração FILE diverge da AIR.',
+    );
+    put(declarations, key, d, 'declarações FILE');
+  }
+  const fileOps = new Set<string>();
+  for (const raw of doc.dependencies?.fileDependencies?.sites ?? []) {
+    const operation = idKey(raw.operation, 'operation'),
+      op = operations.get(operation);
+    const sequence = sequences.get(idKey(raw.sequence, 'label'));
+    assert(
+      op &&
+        sequence &&
+        [...sequence.instructions, sequence.terminator].some(
+          (o: Raw) => idKey(o.header.id, 'operation') === operation,
+        ),
+      'Site FILE aponta para operação/sequence AIR ausente ou incorreta.',
+    );
+    assert(airEntries.has(idKey(raw.entry, 'entry')), 'Entrada FILE ausente na AIR.');
+    assert(
+      idKey(raw.owner, 'unit') ===
+        idKey({ publication: raw.operation.publication, localId: raw.operation.unit }, 'unit') &&
+        raw.entry.unit === raw.operation.unit,
+      'Owner/entrada FILE diverge da operação AIR.',
+    );
+    const bound = (raw.bindings ?? []).map((b: Raw) => {
+      const d = declarations.get(idKey(b.declaration, 'resource'));
+      assert(d, 'Binding FILE aponta para declaração ausente.');
+      const r = resources.get(idKey(b.declaration, 'resource'))!;
+      assert(
+        r.declaration.uses.some(
+          (u: Raw) => idKey(u.operation, 'operation') === operation && u.role === b.role,
+        ),
+        'Binding FILE não corresponde ao uso tipado AIR.',
+      );
+      return d;
+    });
+    assert(
+      raw.targetKind === 'LOCAL' ? bound.length > 0 : op.target?.category === 'file',
+      'Site FILE incompatível com a categoria AIR.',
+    );
+    const statement = opStatements.get(operation)?.[0],
+      ids = operationNodes.get(operation) ?? [];
+    const location =
+      statement?.location ?? locations(raw.origin).find((l) => l.file !== '<preprocessed>');
+    const command = String(raw.action).toUpperCase();
+    const site: Site = {
+      family: 'file',
+      id: 'file:' + canonical({ entry: raw.entry, operation: raw.operation }),
+      raw,
+      operation,
+      entry: idKey(raw.entry, 'entry'),
+      nodeIds: ids,
+      statement,
+      location,
+      declarations: bound,
+      command,
+      title:
+        statement?.title ||
+        sourceText(location, doc.sources, 1) ||
+        `${command} ${bound.map((d: Raw) => d.logicalFile).join(', ') || 'arquivo'}`,
+      candidates: raw.candidates ?? [],
+      sourceOnly: !ids.length,
+    };
+    assert(!fileSites.some((s) => s.id === site.id), 'Site FILE duplicado.');
+    fileSites.push(site);
+    fileOps.add(operation);
+    ids.forEach((id) => nodeById.get(id)!.fileSiteIds.push(site.id));
+  }
+  for (const [key, op] of operations) {
+    if (op.kind !== 'invoke' || op.target?.category !== 'file' || fileOps.has(key)) continue;
+    const statement = opStatements.get(key)?.[0],
+      ids = operationNodes.get(key) ?? [];
+    const location =
+      statement?.location ?? locations(op.header.origin).find((l) => l.file !== '<preprocessed>');
+    const site: Site = {
+      family: 'file',
+      id: 'file:' + key,
+      operation: key,
+      nodeIds: ids,
+      statement,
+      location,
+      raw: {
+        operation: op.header.id,
+        targetStatus: 'DEPENDENCIES_NOT_AVAILABLE',
+        targetKind: op.target.kind.toUpperCase(),
+        namespace: op.target.namespace,
+      },
+      title: statement?.title || sourceText(location, doc.sources, 1) || 'Acesso a arquivo',
+      command: String(op.action).toUpperCase(),
+      candidates: [],
+      sourceOnly: !ids.length,
+    };
+    fileSites.push(site);
+    ids.forEach((id) => nodeById.get(id)!.fileSiteIds.push(site.id));
   }
   if (nodes.some((n) => n.open))
     warnings.push(
@@ -556,6 +677,8 @@ export function buildModel(doc: Documents): Model {
     nodes,
     edges,
     sites,
+    fileSites,
+    fileDeclarations,
     entries,
     paragraphs,
     nodeById,

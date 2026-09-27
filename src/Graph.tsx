@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useRef, type RefObject } from 'react';
 import {
   ReactFlow,
   Background,
@@ -13,6 +13,7 @@ import {
   type EdgeProps,
   type Node,
   type Edge,
+  type Viewport,
   MarkerType,
 } from '@xyflow/react';
 import {
@@ -23,6 +24,7 @@ import {
   CircleStop,
   Focus,
   LoaderCircle,
+  FolderOpen,
 } from 'lucide-react';
 import ELK from 'elkjs/lib/elk-api.js';
 import elkWorkerUrl from 'elkjs/lib/elk-worker.min.js?url';
@@ -38,7 +40,7 @@ const icons: Record<string, typeof GitBranch> = {
 };
 const Card = memo(({ data, selected }: NodeProps) => {
   const n = data.node as GraphNode,
-    Icon = icons[n.kind] ?? CornerDownRight;
+    Icon = n.fileSiteIds.length ? FolderOpen : (icons[n.kind] ?? CornerDownRight);
   return (
     <div
       role="button"
@@ -50,19 +52,21 @@ const Card = memo(({ data, selected }: NodeProps) => {
           (data.onSelect as (id: string) => void)(n.id);
         }
       }}
-      className={`graph-card ${n.siteIds.length ? 'call-card' : ''} ${n.kind === 'BRANCH' ? 'branch-card' : ''} ${n.raw.kind === 'ENTRY' ? 'entry-card' : ''} ${selected ? 'is-selected' : ''} ${data.dim ? 'dim' : ''}`}
+      className={`graph-card ${n.fileSiteIds.length ? 'file-card' : n.siteIds.length ? 'call-card' : ''} ${n.kind === 'BRANCH' ? 'branch-card' : ''} ${n.raw.kind === 'ENTRY' ? 'entry-card' : ''} ${selected ? 'is-selected' : ''} ${data.dim ? 'dim' : ''}`}
     >
       <Handle type="target" position={Position.Top} />
       <div className="card-meta">
         <span>
           <Icon size={13} />
-          {n.siteIds.length
-            ? 'CHAMADA'
-            : n.kind === 'BRANCH'
-              ? 'DECISÃO'
-              : n.raw.kind === 'ENTRY'
-                ? 'ENTRADA'
-                : (data.paragraph as string) || 'FLUXO'}
+          {n.fileSiteIds.length
+            ? 'ARQUIVO'
+            : n.siteIds.length
+              ? 'CHAMADA'
+              : n.kind === 'BRANCH'
+                ? 'DECISÃO'
+                : n.raw.kind === 'ENTRY'
+                  ? 'ENTRADA'
+                  : (data.paragraph as string) || 'FLUXO'}
         </span>
         <span>{n.location ? `L${n.location.startLine}` : ''}</span>
       </div>
@@ -80,7 +84,13 @@ const Card = memo(({ data, selected }: NodeProps) => {
         {n.open ? (
           <span className="open-dot">controle aberto</span>
         ) : (
-          <span>{n.siteIds.length ? `${data.candidates ?? 0} candidatos` : '→'}</span>
+          <span>
+            {n.fileSiteIds.length
+              ? `${data.candidates ?? 0} valores possíveis`
+              : n.siteIds.length
+                ? `${data.candidates ?? 0} candidatos`
+                : '→'}
+          </span>
         )}
       </div>
       <Handle type="source" position={Position.Bottom} />
@@ -144,6 +154,9 @@ export function Graph({
   selected,
   onSelect,
   highlightCalls,
+  highlightFiles = false,
+  viewportRef,
+  restoreView,
   focusIds,
   witnessIds,
   onReady,
@@ -154,12 +167,41 @@ export function Graph({
   selected?: string;
   onSelect: (id: string) => void;
   highlightCalls: boolean;
+  highlightFiles?: boolean;
+  viewportRef?: RefObject<Viewport | undefined>;
+  restoreView?: { id: number; viewport: Viewport };
   focusIds?: Set<string>;
   witnessIds?: Set<string>;
   onReady?: () => void;
 }) {
   const flow = useReactFlow();
-  const [layout, setLayout] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null),
+  const surface = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = surface.current;
+    if (!element) return;
+    let previous = { width: element.clientWidth, height: element.clientHeight };
+    const observer = new ResizeObserver(([record]) => {
+      const { width, height } = record.contentRect;
+      if (previous.width && previous.height && width && height) {
+        const view = flow.getViewport();
+        void flow.setViewport(
+          {
+            ...view,
+            x: view.x + (width - previous.width) / 2,
+            y: view.y + (height - previous.height) / 2,
+          },
+          { duration: 0 },
+        );
+      }
+      previous = { width, height };
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [flow]);
+  const appliedRestore = useRef(0);
+  const [layout, setLayout] = useState<{ nodes: Node[]; edges: Edge[]; input: GraphNode[] } | null>(
+      null,
+    ),
     [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   useEffect(() => {
@@ -167,12 +209,12 @@ export function Graph({
     setError('');
     const elk = new ELK({ workerUrl: elkWorkerUrl });
     let active = true;
-    let timer: ReturnType<typeof setTimeout>;
     const ready = (data: { nodes: any[]; edges: any[] }) => {
       if (!active) return;
       const positions = new Map<string, any>(data.nodes.map((n: any) => [n.id, n])),
         routes = new Map<string, any>(data.edges.map((e: any) => [e.id, e]));
       setLayout({
+        input: visibleNodes,
         nodes: visibleNodes.map((n) => ({
           id: n.id,
           type: 'cobol',
@@ -181,8 +223,8 @@ export function Graph({
             node: n,
             onSelect,
             paragraph: model.paragraphs.find((p) => p.id === n.paragraph)?.title,
-            candidates: model.sites
-              .filter((s) => n.siteIds.includes(s.id))
+            candidates: [...model.sites, ...model.fileSites]
+              .filter((s) => n.siteIds.includes(s.id) || n.fileSiteIds.includes(s.id))
               .reduce((a, s) => a + s.candidates.length, 0),
           },
           width: 280,
@@ -218,17 +260,6 @@ export function Graph({
         })),
       });
       setBusy(false);
-      timer = setTimeout(() => {
-        if (selected && positions.has(selected)) {
-          const pt = positions.get(selected);
-          void flow.setCenter(pt.x + 140, pt.y + 66, { zoom: 0.85, duration: 0 });
-        } else if (visibleNodes.length > 30) {
-          const first = visibleNodes.find((n) => n.raw.kind === 'ENTRY') ?? visibleNodes[0];
-          const pt = positions.get(first?.id);
-          if (pt) void flow.setCenter(pt.x + 140, pt.y + 240, { zoom: 0.85, duration: 0 });
-        } else void flow.fitView({ padding: 0.15, minZoom: 0.3, maxZoom: 0.95 });
-        onReady?.();
-      }, 80);
     };
     elk
       .layout({
@@ -254,18 +285,33 @@ export function Graph({
     return () => {
       active = false;
       elk.terminateWorker();
-      clearTimeout(timer);
     };
   }, [model, visibleNodes, visibleEdges]);
   useEffect(() => {
-    if (!selected || busy || !layout) return;
-    const n = layout.nodes.find((n) => n.id === selected);
-    if (n)
-      void flow.setCenter(n.position.x + 140, n.position.y + 66, {
-        zoom: Math.max(0.75, flow.getZoom()),
-        duration: 250,
-      });
-  }, [selected, layout, busy]);
+    if (busy || !layout || layout.input !== visibleNodes) return;
+    const timer = setTimeout(() => {
+      if (restoreView && appliedRestore.current !== restoreView.id) {
+        appliedRestore.current = restoreView.id;
+        void flow.setViewport(restoreView.viewport, { duration: 0 });
+      } else {
+        const n = layout.nodes.find((n) => n.id === selected);
+        if (n)
+          void flow.setCenter(n.position.x + 140, n.position.y + 66, { zoom: 0.85, duration: 0 });
+        else if (visibleNodes.length > 30) {
+          const first =
+            layout.nodes.find((n) => (n.data.node as GraphNode).raw.kind === 'ENTRY') ??
+            layout.nodes[0];
+          if (first)
+            void flow.setCenter(first.position.x + 140, first.position.y + 240, {
+              zoom: 0.85,
+              duration: 0,
+            });
+        } else void flow.fitView({ padding: 0.15, minZoom: 0.3, maxZoom: 0.95 });
+      }
+      onReady?.();
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [selected, layout, busy, restoreView, visibleNodes]);
   const graphNodes = (layout?.nodes ?? []).map((n) => ({
     ...n,
     selected: n.id === selected,
@@ -273,6 +319,7 @@ export function Graph({
       ...n.data,
       dim:
         (highlightCalls && !(n.data.node as GraphNode).siteIds.length) ||
+        (highlightFiles && !(n.data.node as GraphNode).fileSiteIds.length) ||
         (focusIds && !focusIds.has(n.id)),
     },
   }));
@@ -287,6 +334,7 @@ export function Graph({
   }));
   return (
     <div
+      ref={surface}
       className="graph-surface"
       aria-label="Grafo de controle"
       data-testid="graph"
@@ -302,6 +350,12 @@ export function Graph({
         nodesConnectable={false}
         edgesFocusable={false}
         deleteKeyCode={null}
+        onMove={(_, viewport) => {
+          if (viewportRef) viewportRef.current = viewport;
+        }}
+        onInit={(instance) => {
+          if (viewportRef) viewportRef.current = instance.getViewport();
+        }}
         onNodeClick={(_, n) => onSelect(n.id)}
         minZoom={0.025}
         maxZoom={2}
@@ -312,7 +366,13 @@ export function Graph({
         <MiniMap
           pannable
           zoomable
-          nodeColor={(n) => ((n.data.node as GraphNode)?.siteIds.length ? '#6373d5' : '#b6c2d3')}
+          nodeColor={(n) =>
+            (n.data.node as GraphNode)?.fileSiteIds.length
+              ? '#238a83'
+              : (n.data.node as GraphNode)?.siteIds.length
+                ? '#6373d5'
+                : '#b6c2d3'
+          }
           maskColor="rgba(235,240,247,.72)"
         />
         <Controls showInteractive={false} />
@@ -342,6 +402,10 @@ export function Graph({
         <span>
           <i className="legend-call" />
           Chamada
+        </span>
+        <span>
+          <i className="legend-file" />
+          Arquivo
         </span>
         <span>
           <i className="legend-branch" />

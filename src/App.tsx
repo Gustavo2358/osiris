@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { ReactFlowProvider } from '@xyflow/react';
+import { ReactFlowProvider, type Viewport } from '@xyflow/react';
 import {
   Upload,
   Search,
@@ -16,11 +16,13 @@ import {
   Download,
   ScanSearch,
   Network,
+  FolderOpen,
 } from 'lucide-react';
 import { admitFiles, decodeBytes, MAX_BYTES } from './artifacts';
 import { buildModel, entryGraph, pathsTo, type Model, type Site, type GraphNode } from './model';
 import { Graph } from './Graph';
 import { Inspector } from './Inspector';
+import { SourcePane } from './SourcePane';
 interface Example {
   id: string;
   title: string;
@@ -29,6 +31,19 @@ interface Example {
   sites: number;
   url: string;
   format: string;
+}
+interface ViewState {
+  entry: string;
+  selected?: string;
+  selectedSite?: string;
+  query: string;
+  sidebar: string;
+  mode: string;
+  paragraph: string;
+  routeTargets: string[];
+  highlight: boolean;
+  witness: boolean;
+  viewport?: Viewport;
 }
 function App() {
   const [model, setModel] = useState<Model>(),
@@ -48,6 +63,62 @@ function App() {
     [error, setError] = useState(''),
     [help, setHelp] = useState(false),
     [warnings, setWarnings] = useState(false);
+  const [sourceOpen, setSourceOpen] = useState(false);
+  const [sourceRequest, setSourceRequest] = useState(0);
+  const [history, setHistory] = useState<ViewState[]>([]);
+  const graphViewport = useRef<Viewport | undefined>(undefined),
+    restoreSerial = useRef(0);
+  const [restoreView, setRestoreView] = useState<{ id: number; viewport: Viewport }>();
+  function rememberView() {
+    setHistory((h) => [
+      ...h.slice(-29),
+      {
+        entry,
+        selected,
+        selectedSite,
+        query,
+        sidebar,
+        mode,
+        paragraph,
+        routeTargets,
+        highlight,
+        witness,
+        viewport: graphViewport.current,
+      },
+    ]);
+  }
+  const goBack = useCallback(() => {
+    const previous = history.at(-1);
+    if (!previous) return;
+    setHistory((h) => h.slice(0, -1));
+    setEntry(previous.entry);
+    setSelected(previous.selected);
+    setSelectedSite(previous.selectedSite);
+    setQuery(previous.query);
+    setSidebar(previous.sidebar);
+    setMode(previous.mode);
+    setParagraph(previous.paragraph);
+    setRouteTargets(previous.routeTargets);
+    setHighlight(previous.highlight);
+    setWitness(previous.witness);
+    if (previous.viewport)
+      setRestoreView({ id: ++restoreSerial.current, viewport: previous.viewport });
+  }, [history]);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (
+        event.key !== 'Escape' ||
+        help ||
+        !history.length ||
+        (event.target as HTMLElement)?.matches('input, textarea, select, [contenteditable="true"]')
+      )
+        return;
+      event.preventDefault();
+      goBack();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [goBack, history.length, help]);
   const input = useRef<HTMLInputElement>(null),
     loadId = useRef(0);
   const install = useCallback(async (files: Record<string, string>, id: string, serial: number) => {
@@ -56,8 +127,14 @@ function App() {
     if (serial !== loadId.current) return;
     const firstSite =
       m.sites.find((s) => s.entry === m.entries[0]?.id && s.raw.targetKind === 'COMPUTED') ??
-      m.sites.find((s) => s.entry === m.entries[0]?.id);
+      m.sites.find((s) => s.entry === m.entries[0]?.id) ??
+      m.fileSites.find((s) => s.entry === m.entries[0]?.id);
     setModel(m);
+    setHistory([]);
+    setRouteTargets([]);
+    setRestoreView(undefined);
+    graphViewport.current = undefined;
+    setSidebar(firstSite?.family === 'file' ? 'files' : 'calls');
     setEntry(m.entries[0]?.id ?? '');
     setSelected(firstSite?.nodeIds[0]);
     setSelectedSite(firstSite?.id);
@@ -127,18 +204,18 @@ function App() {
     setSelectedSite(undefined);
   }
   function selectSite(site: Site) {
+    if (mode !== 'all') rememberView();
     if (site.entry) setEntry(site.entry);
     setSelectedSite(site.id);
     setSelected(site.nodeIds[0]);
     if (mode !== 'all') setMode('all');
     setParagraph('');
   }
+  const allSites = useMemo(() => (model ? [...model.sites, ...model.fileSites] : []), [model]);
   const node = model?.nodeById.get(selected ?? ''),
     site =
-      model?.sites.find((s) => s.id === selectedSite) ??
-      model?.sites.find(
-        (s) => s.nodeIds.includes(selected ?? '') && (!s.entry || s.entry === entry),
-      );
+      allSites.find((s) => s.id === selectedSite) ??
+      allSites.find((s) => s.nodeIds.includes(selected ?? '') && (!s.entry || s.entry === entry));
   const targetIds = useMemo(() => site?.nodeIds ?? (selected ? [selected] : []), [site, selected]);
   const reach = useMemo(
     () => (model && routeTargets.length ? pathsTo(model, entry, routeTargets) : undefined),
@@ -179,10 +256,10 @@ function App() {
     return base;
   }, [baseScope, model, mode, paragraph, selected, reach]);
   const shownSites =
-    model?.sites.filter(
+    (sidebar === 'files' ? model?.fileSites : model?.sites)?.filter(
       (s) =>
         (!s.entry || s.entry === entry) &&
-        `${s.title} ${s.command} ${s.candidates.map((c) => c.referenceName).join(' ')}`
+        `${s.title} ${s.command} ${s.candidates.map((c) => c.referenceName).join(' ')} ${s.declarations?.map((d) => `${d.logicalFile} ${d.name ?? ''}`).join(' ') ?? ''}`
           .toLocaleLowerCase()
           .includes(query.toLocaleLowerCase()),
     ) ?? [];
@@ -200,6 +277,7 @@ function App() {
         `${n.title} ${n.subtitle}`.toLowerCase().includes(query.toLowerCase()),
     ) ?? [];
   const pathAction = () => {
+    if (mode !== 'paths' || routeTargets.join() !== targetIds.join()) rememberView();
     setRouteTargets(targetIds);
     setMode('paths');
     setParagraph('');
@@ -252,6 +330,14 @@ function App() {
           <span className="local-badge">
             <ShieldCheck size={14} /> Local no browser
           </span>
+          <button
+            className={`source-toggle ${sourceOpen ? 'active' : ''}`}
+            aria-expanded={sourceOpen}
+            disabled={!model}
+            onClick={() => setSourceOpen(!sourceOpen)}
+          >
+            <FileCode2 size={16} /> Código fonte
+          </button>
           <button className="icon-button" aria-label="Ajuda" onClick={() => setHelp(true)}>
             <HelpCircle size={19} />
           </button>
@@ -322,6 +408,7 @@ function App() {
               aria-label="Entrada do programa"
               value={entry}
               onChange={(e) => {
+                rememberView();
                 setEntry(e.target.value);
                 setMode('all');
                 setSelected(undefined);
@@ -340,7 +427,11 @@ function App() {
             <input
               aria-label="Buscar no programa"
               placeholder={
-                sidebar === 'calls' ? 'Buscar chamada ou candidato…' : 'Buscar no programa…'
+                sidebar === 'calls'
+                  ? 'Buscar chamada ou candidato…'
+                  : sidebar === 'files'
+                    ? 'Buscar arquivo ou valor…'
+                    : 'Buscar no programa…'
               }
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -354,6 +445,7 @@ function App() {
           <div className="nav-tabs" role="tablist" aria-label="Navegar por">
             {[
               ['calls', 'Chamadas', PhoneOutgoing],
+              ['files', 'Arquivos', FolderOpen],
               ['paragraphs', 'Paragraphs', Layers3],
               ['statements', 'Trechos', FileCode2],
             ].map(([key, label, Icon]) => (
@@ -370,21 +462,23 @@ function App() {
           </div>
           <div className="nav-list">
             <div className="list-caption">
-              {sidebar === 'calls'
-                ? `${shownSites.length} CALL SITES`
+              {sidebar === 'calls' || sidebar === 'files'
+                ? `${shownSites.length} ${sidebar === 'files' ? 'ACESSOS A ARQUIVOS' : 'CALL SITES'}`
                 : sidebar === 'paragraphs'
                   ? `${shownParagraphs.length} REGIÕES`
                   : `${foundNodes.length} TRECHOS`}
             </div>
-            {sidebar === 'calls' &&
-              shownSites.map((s, i) => (
+            {(sidebar === 'calls' || sidebar === 'files') &&
+              shownSites.map((s) => (
                 <button
                   key={s.id}
                   className={`nav-item ${site?.id === s.id ? 'active' : ''}`}
                   onClick={() => selectSite(s)}
                 >
-                  <span className={`nav-kind ${s.command === 'CALL' ? '' : 'cics'}`}>
-                    <PhoneOutgoing size={15} />
+                  <span
+                    className={`nav-kind ${s.family === 'file' ? 'file-kind' : s.command === 'CALL' ? '' : 'cics'}`}
+                  >
+                    {s.family === 'file' ? <FolderOpen size={15} /> : <PhoneOutgoing size={15} />}
                   </span>
                   <span className="nav-item-body">
                     <strong>{s.title}</strong>
@@ -392,8 +486,11 @@ function App() {
                       {s.statement?.location ? `L${s.statement.location.startLine} · ` : ''}
                       {s.sourceOnly
                         ? 'Sem controle publicado'
-                        : `${s.candidates.length} candidatos`}
-                      {s.raw.effectiveUnknownRemainder ? ' · aberto' : ''}
+                        : `${s.candidates.length} ${s.family === 'file' ? 'valores possíveis' : 'candidatos'}`}
+                      {s.raw.effectiveUnknownRemainder || s.raw.unknownRemainder ? ' · aberto' : ''}
+                      {s.declarations?.length
+                        ? ` · ${s.declarations.map((d) => d.logicalFile).join(', ')}`
+                        : ''}
                     </span>
                   </span>
                   <ChevronRight size={13} />
@@ -405,6 +502,7 @@ function App() {
                   key={p.id}
                   className={`nav-item ${paragraph === p.id ? 'active' : ''}`}
                   onClick={() => {
+                    rememberView();
                     setParagraph(p.id);
                     setMode('paragraph');
                     setSelected(p.nodeIds[0]);
@@ -440,7 +538,7 @@ function App() {
                   </span>
                 </button>
               ))}
-            {((sidebar === 'calls' && !shownSites.length) ||
+            {(((sidebar === 'calls' || sidebar === 'files') && !shownSites.length) ||
               (sidebar === 'paragraphs' && !shownParagraphs.length) ||
               (sidebar === 'statements' && !foundNodes.length)) && (
               <p className="empty-note">
@@ -459,10 +557,19 @@ function App() {
         </aside>
         <main className="graph-panel">
           <div className="graph-toolbar">
+            <button
+              className="back-button"
+              disabled={!history.length}
+              onClick={goBack}
+              title="Voltar à visão anterior (Esc)"
+            >
+              <ArrowLeft size={15} /> Voltar
+            </button>
             <div className="view-switch">
               <button
                 className={mode === 'all' ? 'chosen' : ''}
                 onClick={() => {
+                  if (mode !== 'all') rememberView();
                   setMode('all');
                   setParagraph('');
                 }}
@@ -472,7 +579,10 @@ function App() {
               <button
                 className={mode === 'local' ? 'chosen' : ''}
                 disabled={!selected}
-                onClick={() => setMode('local')}
+                onClick={() => {
+                  if (mode !== 'local') rememberView();
+                  setMode('local');
+                }}
               >
                 <ScanSearch size={14} /> Vizinhança
               </button>
@@ -506,7 +616,7 @@ function App() {
                 checked={highlight}
                 onChange={(e) => setHighlight(e.target.checked)}
               />{' '}
-              Destacar chamadas
+              {sidebar === 'files' ? 'Destacar arquivos' : 'Destacar chamadas'}
             </label>
           </div>
           {mode === 'paths' && (
@@ -529,33 +639,47 @@ function App() {
                 />{' '}
                 Um caminho
               </label>
-              <button aria-label="Sair dos caminhos" onClick={() => setMode('all')}>
-                <X size={16} />
+              <button className="return-view" onClick={goBack}>
+                <ArrowLeft size={15} /> Voltar à visão anterior
               </button>
             </div>
           )}
-          {model ? (
-            <ReactFlowProvider>
-              <Graph
-                model={model}
-                visibleNodes={scope.nodes}
-                visibleEdges={scope.edges}
-                selected={selected}
-                onSelect={selectNode}
-                highlightCalls={highlight}
-                witnessIds={witness ? new Set(reach?.witness.map((e) => e.id)) : undefined}
+          <div className="graph-source-workspace">
+            {model ? (
+              <ReactFlowProvider>
+                <Graph
+                  model={model}
+                  visibleNodes={scope.nodes}
+                  visibleEdges={scope.edges}
+                  selected={selected}
+                  onSelect={selectNode}
+                  highlightCalls={highlight && sidebar !== 'files'}
+                  highlightFiles={highlight && sidebar === 'files'}
+                  viewportRef={graphViewport}
+                  restoreView={restoreView}
+                  witnessIds={witness ? new Set(reach?.witness.map((e) => e.id)) : undefined}
+                />
+              </ReactFlowProvider>
+            ) : (
+              <div className="start-state">
+                <Network size={40} />
+                <h2>Seu programa, em perspectiva.</h2>
+                <p>Abra um pacote de exemplo ou selecione AIR e CFG.</p>
+                <button className="primary-button" onClick={() => input.current?.click()}>
+                  Abrir artefatos
+                </button>
+              </div>
+            )}
+            {model && sourceOpen && (
+              <SourcePane
+                key={model.documents.cfg.publication.localId}
+                sources={model.documents.sources}
+                requestSerial={sourceRequest}
+                location={site?.statement?.location ?? site?.location ?? node?.location}
+                onClose={() => setSourceOpen(false)}
               />
-            </ReactFlowProvider>
-          ) : (
-            <div className="start-state">
-              <Network size={40} />
-              <h2>Seu programa, em perspectiva.</h2>
-              <p>Abra um pacote de exemplo ou selecione AIR e CFG.</p>
-              <button className="primary-button" onClick={() => input.current?.click()}>
-                Abrir artefatos
-              </button>
-            </div>
-          )}
+            )}
+          </div>
           <button className="coverage-bar" onClick={() => setWarnings(!warnings)}>
             <span className="coverage-tag">
               {model?.documents.cfg.sourceKnowledge?.publicationInventory ?? '—'}
@@ -589,6 +713,10 @@ function App() {
             node={node}
             site={site}
             onPaths={pathAction}
+            onSource={() => {
+              setSourceOpen(true);
+              setSourceRequest((n) => n + 1);
+            }}
             onOperation={(key) => {
               const ids = model.operationNodes.get(key);
               if (ids?.[0]) {
@@ -652,12 +780,14 @@ function App() {
               </li>
             </ol>
             <p>
-              Selecione uma chamada e use <strong>Caminhos até aqui</strong>. O recorte inclui o que
-              é alcançável a partir da entrada e consegue chegar à seleção pelas arestas publicadas.
+              Selecione uma chamada ou um acesso a arquivo e use <strong>Caminhos até aqui</strong>.
+              O recorte inclui o que é alcançável a partir da entrada e consegue chegar à seleção
+              pelas arestas publicadas.
             </p>
             <p>
-              Zoom: roda do mouse. Navegação: arraste o fundo ou o minimapa. Os nós também podem ser
-              selecionados pelo teclado e pela lista de trechos.
+              Use Voltar (Esc) para restaurar a visão anterior. Código fonte abre o arquivo completo
+              ao lado da exploração. Zoom: roda do mouse. Navegação: arraste o fundo ou o minimapa.
+              Os nós também podem ser selecionados pelo teclado e pela lista de trechos.
             </p>
             <div className="privacy-note">
               <ShieldCheck size={18} />

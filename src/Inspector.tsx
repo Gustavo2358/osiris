@@ -47,6 +47,7 @@ const remainderLabels: Record<string, string> = {
   openControlRemainder: 'Controle aberto',
   valueRemainder: 'Valores em aberto',
   interpretationRemainder: 'Interpretação em aberto',
+  unknownRemainder: 'Outros valores possíveis',
 };
 export function Inspector({
   model,
@@ -54,6 +55,7 @@ export function Inspector({
   site,
   entry,
   onPaths,
+  onSource,
   onOperation,
   onNode,
 }: {
@@ -62,11 +64,13 @@ export function Inspector({
   node?: GraphNode;
   site?: Site;
   onPaths: () => void;
+  onSource: () => void;
   onOperation: (key: string) => void;
   onNode: (id: string) => void;
 }) {
   const [tab, setTab] = useState('details');
-  const loc = site?.statement?.location ?? node?.location;
+  const loc = site?.statement?.location ?? site?.location ?? node?.location;
+  const isFile = site?.family === 'file';
   const op = node?.sequence?.terminator;
   const candidates = site?.candidates ?? [];
   const sourceEvidence =
@@ -76,8 +80,8 @@ export function Inspector({
       ),
     ) ?? [];
   const locations = uniqueLocations(
-    site?.raw.siteOrigin
-      ? model.locations(site.raw.siteOrigin)
+    site?.raw.siteOrigin || site?.raw.origin
+      ? model.locations(site.raw.siteOrigin ?? site.raw.origin)
       : op
         ? model.locations(op.header.origin)
         : [],
@@ -125,7 +129,16 @@ export function Inspector({
               {site ? site.command : node?.kind === 'BRANCH' ? 'DECISÃO' : 'TRECHO DO PROGRAMA'}
             </span>
             <h2>{site?.title ?? node?.title}</h2>
-            {loc && <LocationLabel loc={loc} />}
+            {loc && (
+              <button
+                className="source-location-link"
+                onClick={onSource}
+                title="Abrir no código fonte"
+              >
+                <LocationLabel loc={loc} />
+                <ArrowUpRight size={13} />
+              </button>
+            )}
             <div className="selection-tags">
               {site?.raw.targetKind && (
                 <span>
@@ -133,7 +146,9 @@ export function Inspector({
                     ? 'Alvo dinâmico'
                     : site.raw.targetKind === 'LITERAL'
                       ? 'Alvo literal'
-                      : site.raw.targetKind}
+                      : site.raw.targetKind === 'LOCAL'
+                        ? 'Recurso local'
+                        : site.raw.targetKind}
                 </span>
               )}
               {node && node.contexts > 1 && (
@@ -174,16 +189,19 @@ export function Inspector({
                 {site && (
                   <section>
                     <div className="section-title">
-                      <h3>Candidatos</h3>
+                      <h3>{isFile ? 'Valores possíveis' : 'Candidatos'}</h3>
                       <span>{candidates.length}</span>
                     </div>
                     {!candidates.length ? (
                       <p className="empty-note">
-                        {site.raw.targetStatus === 'UNREACHABLE_IN_MODEL'
+                        {site.raw.targetStatus === 'UNREACHABLE_IN_MODEL' ||
+                        site.raw.reachability === 'UNREACHABLE_IN_MODEL'
                           ? 'Site inalcançável no modelo selecionado.'
                           : site.raw.targetStatus === 'DEPENDENCIES_NOT_AVAILABLE'
                             ? 'Carregue dependencies.json para consultar os candidatos publicados.'
-                            : 'Nenhum candidato publicado. O alvo pode permanecer aberto.'}
+                            : site.raw.targetKind === 'LOCAL'
+                              ? 'Recurso local sem nome externo; não há valor de arquivo a resolver.'
+                              : 'Nenhum candidato publicado. O alvo pode permanecer aberto.'}
                       </p>
                     ) : (
                       candidates.map((c, i) => (
@@ -207,9 +225,13 @@ export function Inspector({
                                   <span className="support-kind">
                                     {support.kind === 'VALUE_PRODUCER'
                                       ? 'Produzido por'
-                                      : support.kind === 'CALL_LITERAL'
-                                        ? 'Literal da chamada'
-                                        : support.kind}
+                                      : support.kind === 'FILE_LITERAL'
+                                        ? 'Literal do arquivo'
+                                        : support.kind === 'CICS_LITERAL'
+                                          ? 'Literal CICS'
+                                          : support.kind === 'CALL_LITERAL'
+                                            ? 'Literal da chamada'
+                                            : support.kind}
                                   </span>
                                   {locs
                                     .filter((l) => l.file !== '<preprocessed>')
@@ -242,6 +264,105 @@ export function Inspector({
                           <Json label="Evidência completa do candidato" value={c} />
                         </div>
                       ))
+                    )}
+                  </section>
+                )}
+                {isFile && site && (
+                  <section className="file-facts">
+                    <h3>Arquivo e ponto de uso</h3>
+                    <div className="status-row">
+                      <span>Ação</span>
+                      <strong>{site.command}</strong>
+                    </div>
+                    <div className="status-row">
+                      <span>Domínio do nome</span>
+                      <strong>
+                        {site.raw.namespace === 'cics.file'
+                          ? 'Arquivo CICS'
+                          : site.raw.namespace === 'cobol.external-file-name'
+                            ? 'Nome externo COBOL'
+                            : (site.raw.namespace ?? 'Recurso local')}
+                      </strong>
+                    </div>
+                    {site.raw.valuePoint && (
+                      <p className="micro">
+                        Valores consultados antes deste comando ({site.raw.valuePoint.position}).
+                      </p>
+                    )}
+                    {site.declarations?.map((d) => (
+                      <div key={idKey(d.id, 'resource')} className="file-binding">
+                        <strong>{d.logicalFile}</strong>
+                        <span>{d.classification}</span>
+                        <p className="micro">
+                          Nome declarado: {d.name ?? 'Sem nome externo'}. A declaração não comprova
+                          um valor no ponto de uso.
+                        </p>
+                        <div className="selection-tags">
+                          {site.raw.bindings
+                            .filter(
+                              (b: Raw) =>
+                                idKey(b.declaration, 'resource') === idKey(d.id, 'resource'),
+                            )
+                            .map((b: Raw, i: number) => (
+                              <span key={i}>{b.role}</span>
+                            ))}
+                        </div>
+                        <Json label="Declaração e identidade" value={d} />
+                      </div>
+                    ))}
+                    {['effects', 'control'].map(
+                      (key) =>
+                        site.raw[key] && (
+                          <div className="status-row" key={key}>
+                            <span>{key === 'effects' ? 'Efeitos' : 'Controle'}</span>
+                            <strong>
+                              {(
+                                {
+                                  EXACT: 'Exato',
+                                  CONSERVATIVE: 'Conservador',
+                                  OPEN: 'Aberto',
+                                  UNAVAILABLE: 'Indisponível',
+                                  NOT_APPLICABLE: 'Não se aplica',
+                                } as Record<string, string>
+                              )[site.raw[key]] ?? site.raw[key]}
+                            </strong>
+                          </div>
+                        ),
+                    )}
+                    {site.raw.context && (
+                      <div className="file-context">
+                        <h3>Contexto CICS / SYSID</h3>
+                        <p className="micro">
+                          {site.raw.context.selection === 'DEFAULT'
+                            ? 'Seleção padrão publicada; não comprova sistema local.'
+                            : 'Seleção explícita no comando.'}
+                        </p>
+                        {(site.raw.context.candidates ?? []).map((c: Raw, i: number) => (
+                          <div className="candidate" key={i}>
+                            <strong>{c.referenceName}</strong>
+                            <code className="raw-value">{JSON.stringify(c.rawValue)}</code>
+                            {(c.supports ?? []).map((support: Raw, j: number) => (
+                              <button
+                                key={j}
+                                className="producer-link"
+                                disabled={
+                                  !model.operationNodes.has(idKey(support.producer, 'operation'))
+                                }
+                                onClick={() => onOperation(idKey(support.producer, 'operation'))}
+                              >
+                                Inspecionar produtor <ArrowUpRight size={13} />
+                              </button>
+                            ))}
+                            <Json label="Evidência do contexto" value={c} />
+                          </div>
+                        ))}
+                        <p className="micro">
+                          {site.raw.context.unknownRemainder
+                            ? 'Outros valores de SYSID permanecem possíveis.'
+                            : 'Sem valores adicionais publicados para SYSID.'}
+                        </p>
+                        <Json label="Contexto completo" value={site.raw.context} />
+                      </div>
                     )}
                   </section>
                 )}
@@ -324,8 +445,9 @@ export function Inspector({
                       <Json label={`${reasons.length} motivos / incertezas`} value={reasons} />
                     )}
                     <p className="micro">
-                      Candidatos representam possibilidades publicadas; não confirmam vínculo com um
-                      programa executável.
+                      {isFile
+                        ? 'Valores publicados identificam nomes no domínio do analisador; não comprovam alocação ou recurso físico.'
+                        : 'Candidatos representam possibilidades publicadas; não confirmam vínculo com um programa executável.'}
                     </p>
                   </section>
                 )}
@@ -359,7 +481,7 @@ export function Inspector({
                     ))}
                     <Json
                       label="Referências de provenance"
-                      value={site?.raw.provenance ?? op?.header.origin}
+                      value={site?.raw.provenance ?? site?.raw.origin ?? op?.header.origin}
                     />
                   </section>
                 )}
@@ -367,6 +489,9 @@ export function Inspector({
             )}
             {tab === 'source' && (
               <>
+                <button className="path-action" onClick={onSource}>
+                  <FileCode2 size={16} /> Abrir código completo <ArrowUpRight size={15} />
+                </button>
                 <p className="micro">
                   Texto fornecido com a publicação; localização usada somente para apresentação. Os
                   artefatos AIR podem não incluir hash do fonte.

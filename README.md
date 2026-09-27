@@ -12,7 +12,7 @@ npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:5173**. Doze exemplos reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
+Abra **http://127.0.0.1:5173**. Dezesseis pacotes reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
 
 Para servir o build estático:
 
@@ -26,6 +26,9 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 
 ## Explorar
 
+- **Voltar** (ou **Esc**) restaura o recorte, seleção, busca, destaques e zoom anteriores. No modo de caminhos, a ação também aparece como **Voltar à visão anterior**.
+- **Código fonte** abre um painel com o arquivo completo, números de linha e destaque da seleção. É possível trocar entre fonte original, copybooks e texto expandido, ampliar o painel ou desativar **Acompanhar seleção**. Clicar na localização do inspetor abre o trecho nesse painel.
+- **Arquivos** lista acessos FILE com busca por statement, nome lógico ou valor possível. Cada acesso oferece valores, suportes, contexto CICS/SYSID, declaração associada e caminhos de controle, como nas chamadas. **Destacar arquivos** realça esses nós.
 - Use a lista de **Chamadas** para buscar pelo statement ou por um candidato executável.
 - Selecione uma chamada para ver candidatos, valores brutos, produtores, provenance, premissas, reachability e remainders.
 - **Caminhos até aqui** mostra o subgrafo alcançável da entrada selecionada que consegue chegar ao alvo. **Um caminho** destaca um caminho estrutural mínimo.
@@ -54,7 +57,7 @@ Versões legadas listadas têm admissão explícita; a qualificação com a pipe
 
 Abra **uma publicação por vez**. AIR, CFG e dependencies devem ter a mesma PublicationId. Os links verificam SHA-256 dos bytes originais de SP e AIR. Não formate novamente esses arquivos após a exportação dos links. Dois artefatos com a mesma função são recusados.
 
-AIR + CFG funcionam sozinhos. Sem links, SP não é associado por nomes, linhas ou texto: a tela usa a provenance AIR e informa a ausência da correlação. Sem dependencies, nenhum candidato é inventado. Limite operacional: 128 MiB por seleção e por arquivo descomprimido, sem truncamento silencioso.
+AIR + CFG funcionam sozinhos. Sem links, SP não é associado por nomes, linhas ou texto: a tela usa a provenance AIR e informa a ausência da correlação. Sem dependencies, nenhum candidato é inventado. A categoria FILE publicada na AIR continua identificando acessos a arquivos; os valores exigem `fileDependencies` no produto de dependencies. Limite operacional: 128 MiB por seleção e por arquivo descomprimido, sem truncamento silencioso.
 
 Fontes individuais usam o nome do arquivo como nome lógico. Para nomes com diretórios ou `<preprocessed>`, use o empacotador com o nome explícito. Caminhos de provenance nunca são abertos automaticamente.
 
@@ -81,6 +84,8 @@ python3 scripts/analyze.py fixtures/CICS-ROUTER.cbl \
 Abra `.local/minha-execucao/bundle.json.gz` na aplicação. Esses parâmetros são os usados nos exemplos; selecione os perfis e estados adequados ao programa real. `--compilation` usa o SP de compilação para múltiplas units. `--copybooks DIRETORIO` pode ser repetido. O frontend corrente aceita formato fixo.
 
 O script usa apenas JARs já existentes em `~/.m2/repository`, sem baixar dependências durante a preparação. `MAVEN_REPO` permite outro diretório. A cache registra versões, SHAs Git, estado dos checkouts e hashes dos fontes e JARs. Os gates dos produtores não são substituídos por essa compilação para consumo.
+
+Para exercitar valores FILE calculados sobre storage físico, o script aceita a opção oficial `--experimental-physical`, repassada ao produtor de dependencies. Os novos exemplos `files-values` e `files-partial` usam essa opção, perfil IBM acima e logical-text desabilitado. Esse modo conserva os limites e razões publicados; a aplicação não executa uma análise adicional. O exemplo `files-unknown` conserva a execução do mesmo fonte em modo lógico, sem candidatos publicados.
 
 Para empacotar uma execução já existente:
 
@@ -111,7 +116,7 @@ npm run test:e2e          # browser real contra o build em :4173
 # ou npm run validate
 ```
 
-[`docs/VALIDATION.md`](docs/VALIDATION.md) registra casos, testes, hashes e limites observados. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) explica as correlações e a consulta de caminhos.
+[`docs/VALIDATION.md`](docs/VALIDATION.md) registra a validação inicial. [`docs/USABILITY.md`](docs/USABILITY.md) registra a ampliação de navegação, fonte e FILE, com testes e evidências atuais. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) explica as correlações e a consulta de caminhos.
 
 ## Limites reais
 

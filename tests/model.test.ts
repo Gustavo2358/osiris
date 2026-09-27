@@ -35,6 +35,10 @@ describe('Real analyzer artifacts', () => {
       expect(m.nodes).toHaveLength(ex.nodes);
       expect(m.edges).toHaveLength(ex.edges);
       expect(m.edges.map((e) => e.raw)).toEqual(m.documents.cfg.transitions);
+      expect(m.fileSites.map((s) => s.raw)).toEqual(
+        m.documents.dependencies!.fileDependencies?.sites ?? [],
+      );
+      expect(m.fileSites).toHaveLength(ex.fileSites ?? 0);
       expect(m.sites.filter((s) => !s.sourceOnly)).toHaveLength(ex.sites);
       for (const site of m.documents.dependencies!.sites) {
         const s = m.sites.find(
@@ -330,4 +334,72 @@ describe('Legacy wire versions from real producers', () => {
     delete d.cfg.nodes.find((n: any) => n.kind === 'SEQUENCE').terminator.openControlRemainder;
     expect(() => buildModel(d)).toThrow('openControlRemainder');
   });
+});
+
+describe('FILE projection from real analyzer runs', () => {
+  it('preserves FILE candidates, raw values, SYSID and typed operation joins', async () => {
+    const m = await model('files-values');
+    expect(m.sites).toHaveLength(0);
+    expect(m.fileSites).toHaveLength(1);
+    const site = m.fileSites[0];
+    expect(site.candidates.map((c) => c.referenceName)).toEqual(['ACCOUNTS', 'CUSTOMER']);
+    expect(site.raw.context.candidates.map((c: any) => c.referenceName)).toEqual(['R001']);
+    expect(site.raw).toEqual(m.documents.dependencies!.fileDependencies.sites[0]);
+    expect(site.raw.valuePoint.position).toBe('BEFORE');
+    expect(site.statement?.raw.variant).toBe('CICS_FILE_CONTROL');
+    expect(site.nodeIds.length).toBeGreaterThan(0);
+    const paths = pathsTo(m, site.entry!, site.nodeIds);
+    expect(paths.reachable).toBe(true);
+    expect(paths.edges.some((e) => e.kind === 'BRANCH_TRUE')).toBe(true);
+    expect(paths.edges.some((e) => e.kind === 'BRANCH_FALSE')).toBe(true);
+    for (const c of site.candidates)
+      for (const support of c.supports) {
+        expect(m.operationNodes.has(idKey(support.producer, 'operation'))).toBe(true);
+        expect(m.locations(support.origin).some((l) => l.file === 'computed-closed.cbl')).toBe(
+          true,
+        );
+      }
+  });
+  it('keeps known-plus-open and fully unknown results distinct', async () => {
+    const partial = (await model('files-partial')).fileSites[0];
+    const unknown = (await model('files-unknown')).fileSites[0];
+    expect(partial.candidates.map((c) => c.referenceName)).toEqual(['ACCOUNTS']);
+    expect(partial.raw.unknownRemainder).toBe(true);
+    expect(unknown.candidates).toEqual([]);
+    expect(unknown.raw.unknownRemainder).toBe(true);
+  });
+  it('keeps bindings and declarations distinct from values at unreachable uses', async () => {
+    const m = await model('files-native');
+    expect(m.fileDeclarations.map((d) => d.logicalFile).sort()).toEqual(['F', 'G']);
+    expect(m.fileSites).toHaveLength(4);
+    expect(m.sites).toHaveLength(0);
+    for (const s of m.fileSites) {
+      expect(s.declarations).toHaveLength(1);
+      const name = s.declarations![0].name;
+      expect(['CLIENTDD', 'OTHERDD']).toContain(name);
+      if (s.raw.reachability === 'UNREACHABLE_IN_MODEL') {
+        expect(s.candidates).toEqual([]);
+        expect(pathsTo(m, s.entry!, s.nodeIds).reachable).toBe(false);
+      } else expect(s.candidates.map((c) => c.referenceName)).toEqual([name]);
+    }
+  });
+  it('AIR+CFG still identifies FILE without fabricating candidates or CALLs', async () => {
+    const d = await docs('files-values');
+    delete d.dependencies;
+    const m = buildModel(d);
+    expect(m.fileSites).toHaveLength(1);
+    expect(m.fileSites[0].candidates).toEqual([]);
+    expect(m.fileSites[0].raw.targetStatus).toBe('DEPENDENCIES_NOT_AVAILABLE');
+    expect(m.sites).toHaveLength(0);
+  });
+  it.each(['operation', 'sequence', 'entry', 'owner', 'binding'])(
+    'rejects a broken FILE %s identity rather than matching by text',
+    async (field) => {
+      const d = await docs('files-native');
+      const s = d.dependencies!.fileDependencies.sites[0];
+      if (field === 'binding') s.bindings[0].declaration.localId = 'absent';
+      else s[field].localId = 'absent';
+      expect(() => buildModel(d)).toThrow(/FILE/);
+    },
+  );
 });
