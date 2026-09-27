@@ -1,6 +1,7 @@
 import { CanvasTexture, LinearFilter, SRGBColorSpace } from 'three';
 import type { NodeObject, LinkObject } from '3d-force-graph';
 import type { GraphNode, GraphEdge } from './model';
+export { CARD_WIDTH, CARD_HEIGHT } from './graph-dimensions';
 
 export type Point3D = { x: number; y: number; z: number };
 export type GraphViewport = { position: Point3D; target: Point3D; up: Point3D };
@@ -12,9 +13,7 @@ export type SceneNode = NodeObject &
     candidates: number;
     paragraph: string;
   };
-export type SceneLink = LinkObject<SceneNode> & { id: string; edge: GraphEdge; rotation: number };
-export const CARD_WIDTH = 180;
-export const CARD_HEIGHT = 88;
+export type SceneLink = LinkObject<SceneNode> & { id: string; edge: GraphEdge; points: Point3D[] };
 export const DETAIL_LIMIT = 128;
 export const colors: Record<string, string> = {
   FLUXO: '#cbd6e5',

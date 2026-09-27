@@ -1,0 +1,244 @@
+{
+  "config": {
+    "argv": [
+      "/home/gustavo/.nvm/versions/node/v24.19.0/bin/node",
+      "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/node_modules/.bin/playwright",
+      "test",
+      "e2e/carddemo.spec.ts",
+      "e2e/graph3d.spec.ts",
+      "-g",
+      "real COACTUPC|WebGL draws"
+    ],
+    "configFile": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/playwright.config.ts",
+    "rootDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview -- --port 4173 --strictPort",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true,
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "carddemo.spec.ts",
+      "file": "carddemo.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragraphs",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13971,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m50\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m50\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/carddemo.spec.ts:40:48",
+                    "location": {
+                      "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/carddemo.spec.ts",
+                      "column": 48,
+                      "line": 40
+                    },
+                    "snippet": "  38 |   // A layered 3,048-node program also needs to remain visible beyond the default far plane.\n  39 |   await page.getByRole('button', { name: 'Enquadrar recorte' }).click();\n> 40 |   expect((await visibleBoxPixels(page)).light).toBeGreaterThan(50);\n     |                                                ^\n  41 |   await page.screenshot({ path: 'test-results/planar-carddemo-overview.png', fullPage: true });\n  42 |   await page.getByRole('button', { name: 'Ler seleção de perto' }).click();\n  43 |   await expect(page.locator('.graph-node-target.is-selected')).toBeVisible();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/carddemo.spec.ts",
+                        "column": 48,
+                        "line": 40
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m50\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  38 |   // A layered 3,048-node program also needs to remain visible beyond the default far plane.\n  39 |   await page.getByRole('button', { name: 'Enquadrar recorte' }).click();\n> 40 |   expect((await visibleBoxPixels(page)).light).toBeGreaterThan(50);\n     |                                                ^\n  41 |   await page.screenshot({ path: 'test-results/planar-carddemo-overview.png', fullPage: true });\n  42 |   await page.getByRole('button', { name: 'Ler seleção de perto' }).click();\n  43 |   await expect(page.locator('.graph-node-target.is-selected')).toBeVisible();\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/carddemo.spec.ts:40:48"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T17:26:34.181Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/carddemo-real-COACTUPC-gra-a1ab7-limits-paths-and-paragraphs/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/carddemo-real-COACTUPC-gra-a1ab7-limits-paths-and-paragraphs/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/carddemo-real-COACTUPC-gra-a1ab7-limits-paths-and-paragraphs/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/carddemo.spec.ts",
+                    "column": 48,
+                    "line": 40
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2d695ca9980836fed408-2f62e310e16d1d7010c8",
+          "file": "carddemo.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "graph3d.spec.ts",
+      "file": "graph3d.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "WebGL draws bright boxes with COBOL content on a dark scene: files-values",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1159,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T17:26:48.853Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-f919ad23de9f9e3d99bf",
+          "file": "graph3d.spec.ts",
+          "line": 13,
+          "column": 3
+        },
+        {
+          "title": "WebGL draws bright boxes with COBOL content on a dark scene: order-router",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1050,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T17:26:50.094Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-31317375b485d312ca9f",
+          "file": "graph3d.spec.ts",
+          "line": 13,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-27T17:26:33.241Z",
+    "duration": 17963.614999999998,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

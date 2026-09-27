@@ -26,13 +26,16 @@ export async function visibleBoxPixels(page: Page) {
     canvas.height = image.height;
     const ctx = canvas.getContext('2d')!;
     ctx.drawImage(image, 0, 0);
-    const pixels = ctx.getImageData(0, 0, image.width, image.height).data;
+    // Locator screenshots include overlapping DOM controls; exclude toolbar, footer and borders.
+    const pixels = ctx.getImageData(4, 70, image.width - 8, image.height - 110).data;
     let light = 0,
+      visible = 0,
       dark = 0;
     for (let i = 0; i < pixels.length; i += 4) {
+      if (pixels[i] > 75 && pixels[i + 1] > 90 && pixels[i + 2] > 100) visible++;
       if (pixels[i] > 210 && pixels[i + 1] > 210 && pixels[i + 2] > 210) light++;
       if (pixels[i] < 40 && pixels[i + 1] < 50 && pixels[i + 2] < 65) dark++;
     }
-    return { light, dark, total: image.width * image.height };
+    return { light, visible, dark, total: pixels.length / 4 };
   }, png.toString('base64'));
 }

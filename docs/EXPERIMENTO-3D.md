@@ -2,7 +2,7 @@
 
 27/09/2026 · branch `experiment/3d-force-graph` · base `main` em `8e7ec83d5db315169b4361747bbbf8e4dc2d24ef`.
 
-O renderer foi substituído por **3d-force-graph 1.80.0**, **Three.js 0.186.1** e **d3-force-3d 3.0.6**. A versão 2D permanece na `main`. O repositório continua local, sem remote; nenhum projeto do analisador foi alterado.
+A visualização usa **3d-force-graph 1.80.0**, **Three.js 0.186.1** e **elkjs 0.11.1**. O diagrama fica organizado num plano, com câmera 3D. A versão 2D permanece na `main`. O repositório continua local, sem remote; nenhum projeto do analisador foi alterado.
 
 ## Experimentar
 
@@ -12,44 +12,50 @@ npm run dev
 # http://127.0.0.1:5173/?example=carddemo-coactupc
 ```
 
-- Arraste para orbitar; botão direito desloca; roda aproxima ou afasta.
-- Clique numa caixa para selecionar seu trecho e aproximar a câmera. Caixas são cartões voltados para a câmera, com statement, categoria, linha e contexto/valores. A caixa selecionada aparece em primeiro plano.
-- **Enquadrar recorte** mostra todos os nós do recorte; **Ler seleção de perto** recupera a escala de leitura. **Centralizar seleção** conserva o zoom, e **Vista frontal** recupera a orientação.
-- **Pausar partículas** interrompe o movimento, mantendo as setas. As partículas percorrem source → target. Verde indica `BRANCH_TRUE`, âmbar indica `BRANCH_FALSE`; o tooltip da aresta informa o tipo e as pontas.
-- Navegação lateral, candidatos, provenance, FILE/possible values, caminhos, histórico e painel de código continuam disponíveis. **Voltar** restaura posição, alvo e orientação da câmera, além do recorte e da seleção.
-- **Modo de visualização** mantém o grafo à esquerda e código à direita, com divisória ajustável e cabeçalho mínimo.
-- Com foco no canvas: setas giram, +/− ajustam zoom, Home enquadra, F centraliza e Espaço alterna partículas. As caixas próximas têm controles equivalentes acessíveis por teclado. A preferência por movimento reduzido inicia as partículas pausadas e desativa o voo da câmera.
+- Arraste para orbitar; botão direito desloca; roda aproxima ou afasta. A inclinação é limitada para manter visível a frente das caixas.
+- Clique numa caixa para selecionar seu trecho e acompanhar o código. O clique mantém posição, zoom e centro de rotação da câmera. A caixa permanece no plano, com a mesma profundidade das demais.
+- **Enquadrar recorte** mostra caixas e conexões do conjunto; **Ler seleção de perto** aproxima para leitura. **Centralizar seleção** conserva o zoom, e **Vista frontal** recupera a orientação de um diagrama 2D.
+- **Pausar partículas** interrompe o movimento, mantendo as setas. As partículas percorrem as linhas e seus cantos no sentido source → target. Verde indica `BRANCH_TRUE`, âmbar indica `BRANCH_FALSE`; o tooltip informa o tipo e as pontas.
+- Navegação lateral, candidatos, provenance, FILE/possible values, caminhos, histórico e painel de código continuam disponíveis. A barra lateral localiza o trecho conservando o zoom. **Voltar** restaura posição, alvo e orientação da câmera, além do recorte e seleção.
+- **Modo de visualização** mantém grafo à esquerda e código à direita, com divisória ajustável e cabeçalho mínimo.
+- Com foco no canvas: setas giram, +/− ajustam zoom, Home enquadra, F centraliza e Espaço alterna partículas. Caixas próximas têm controles equivalentes por teclado. Movimento reduzido inicia as partículas pausadas e desativa os voos de câmera.
 
-## Autoridade e apresentação
+## Organização e autoridade
 
-O modelo e a admissão de artefatos não foram alterados. Os mesmos SP/AIR/CFG/dependencies, sidecar de identidades e fontes continuam aceitos. Não há nova correlação por texto/linha.
+ELK calcula um layout em camadas de cima para baixo, com caixas separadas e conexões ortogonais. Todos os nós ficam em z=0. A força física foi desativada; clicar e navegar com a câmera não altera posições. Selecionar outro nó no mesmo recorte também não recalcula o layout.
 
-Cada nó e aresta do recorte conserva sua identidade original. O renderer recebe cópias das estruturas de apresentação, pois a biblioteca substitui endpoints por objetos durante a simulação. Arestas paralelas conservam seus IDs e usam curvas em planos diferentes. Ciclos são permitidos. Nenhuma ligação é criada para aproximar componentes desconexos.
+O modelo e a admissão de artefatos permanecem os mesmos: SP/AIR/CFG/dependencies, sidecar de identidades e fontes. Não há nova correlação por texto/linha.
 
-A distribuição é espacial: posição e proximidade não representam ordem de execução, pertencimento a paragraph ou alcançabilidade. Partículas indicam direção estrutural; sua velocidade e quantidade não representam frequência, tempo ou uma execução real. Os recortes de caminhos continuam sendo calculados exclusivamente sobre o CFG publicado.
+Cada nó e aresta conserva sua identidade original. Ciclos, alternativas paralelas e componentes desconexos são preservados. Rotas de retorno podem subir ou contornar caixas: a disposição visual não prova ordem de execução ou alcançabilidade. Nenhuma ligação é criada para aproximar componentes.
+
+A cena recebe cópias das estruturas de apresentação. Partículas, setas e linhas usam a mesma rota, identificada pela aresta original; os cantos não introduzem nós ou transições no modelo. As partículas indicam direção estrutural. Sua velocidade e quantidade não representam frequência, tempo ou uma execução real. Caminhos continuam sendo calculados exclusivamente sobre o CFG publicado.
 
 ## Escala e limites
 
-- O layout roda em Web Worker por 180 iterações e depois fica fixo. Cada recorte recebe uma distribuição própria, evitando carregar os espaços de um programa grande para um paragraph pequeno. Os últimos 16 layouts são mantidos em cache; a simulação determinística permite regeneração.
-- Todos os nós e arestas do recorte permanecem na cena. Até 128 caixas próximas e suficientemente grandes na tela recebem texturas detalhadas; as demais compartilham cartões por categoria. O texto integral continua disponível por hover, seleção e inspetor.
-- Acima de 500 nós, as partículas ficam nas arestas incidentes nas caixas detalhadas. As demais transições mantêm linhas e setas. Aproximar a câmera ativa o detalhe da região.
-- Há sobreposição em perspectiva. Zoom, rotação, busca, paragraphs, vizinhança e caminhos ajudam a isolar regiões. Este experimento não oferece o minimapa 2D; o botão de enquadramento recupera a visão geral.
-- Requer WebGL2. Falhas de inicialização/contexto e de worker são informadas. A cena pausa quando a aba fica oculta; texturas descartadas e cenas desmontadas liberam seus recursos.
-- Validação funcional em Chromium e no browser integrado. Não foi realizado benchmark de FPS nem qualificação em todos os navegadores/GPUs. O build avisa sobre o chunk principal de aproximadamente 1,71 MB (477 kB gzip), incluindo Three.js.
-- O pacote COACTUPC existente foi reutilizado: 3.048 nós e 3.887 transições. Seus componentes desconexos e limites publicados continuam presentes. A troca de renderer não altera a análise; veja a [investigação do rerun com copybooks IBM](COACTUPC-IBM-RERUN.md).
+- O layout roda no Web Worker oficial de ELK, servido localmente. Cada recorte recebe uma distribuição própria e determinística; os últimos 16 layouts por publicação ficam em cache.
+- Todos os nós e arestas permanecem na cena. Até 128 caixas próximas e suficientemente grandes recebem texturas detalhadas; as demais compartilham cartões por categoria. O texto integral continua disponível por hover, seleção e inspetor.
+- Acima de 500 nós, as partículas ficam nas arestas incidentes nas caixas detalhadas. As demais transições mantêm linhas e setas. Aproximar ativa o detalhe da região.
+- Programas extensos produzem diagramas altos. A visão geral mostra a estrutura; para ler, use zoom, busca, paragraphs, vizinhança ou caminhos. A inclinação comprime as caixas em perspectiva; **Vista frontal** retorna à leitura plana. Este experimento não oferece minimapa.
+- O enquadramento inclui rotas de retorno e o alcance da câmera comporta a visão geral do COACTUPC. WebGL2 é necessário. Falhas de inicialização/contexto e de worker são informadas. A cena pausa em abas ocultas; texturas, geometrias e cenas desmontadas liberam recursos.
+- Validação funcional em Chromium e no browser integrado. Não foi realizado benchmark de FPS nem qualificação em todos os navegadores/GPUs. O build avisa sobre o chunk principal de aproximadamente 1,72 MB (480 kB gzip); o worker de ELK tem 1,59 MB.
+- O pacote COACTUPC existente foi reutilizado: 3.048 nós e 3.887 transições. Seus componentes desconexos e limites publicados continuam presentes; veja a [investigação do rerun com copybooks IBM](COACTUPC-IBM-RERUN.md).
 
-## Validação
+## Validação da revisão plana
 
-- `npm test`: **54 testes passaram**, incluindo contratos, identidade, preservação dos produtos e consultas sobre os pacotes reais.
-- `npm run build`: **PASS**, TypeScript e build estático. [Log](../evidence/3d-build.log).
-- `npm run test:e2e`: **32 testes passaram**. [Log](../evidence/3d-browser.log) e [resultado bruto](../evidence/3d-browser-results.json).
+- `npm test`: **60 testes passaram**. Os seis novos verificam identidades, cartões sem sobreposição, rotas ortogonais, endpoints direcionados, ciclos, arestas paralelas, determinismo e partículas percorrendo os cantos. Usam pacotes reais de branches, PERFORM, CICS e GO TO. [Log](../evidence/planar-model.log).
+- `npm run build`: **PASS**, TypeScript e build estático. [Log](../evidence/planar-build.log).
+- `npm run test:e2e`: **34 testes passaram**. [Log](../evidence/planar-browser.log) e [resultado bruto](../evidence/planar-browser-results.json).
 - `npm run format:check` e `git diff --check`: **PASS**.
-- Cenários exercitados: CALL literal/dinâmico, CICS, valores FILE, COPY, programas aninhados, ciclo com GO TO, busca, caminhos, witness, fonte e modo de visualização. O caso de 503 nós e o COACTUPC completo continuam navegáveis.
-- Verificações 3D: pixels claros do canvas WebGL contra fundo escuro; escala inicial de leitura; clique por raycast; seleção por teclado; rotação, pan e zoom; restauração da câmera após pan; aproximação desde a visão geral; partículas alterando o raster e sua pausa; movimento reduzido; troca de exemplos; erro de worker sem carregamento infinito.
-- Inspeção visual adicional do COACTUPC, visão geral, paragraph `9000-READ-ACCT` e código lado a lado no browser integrado.
+- Os testes de navegador cobrem fonte, valores FILE, provenance, busca, recortes, witness, histórico, modo de visualização, divisória e teclado. A seleção por clique real mantém câmera, centro de rotação e posições tanto no programa inteiro quanto no recorte de caminhos.
+- COACTUPC completo e o exemplo de 503 nós foram exercitados. A visão geral do COACTUPC tem verificação do raster WebGL para detectar desaparecimento por limite de distância da câmera. A medição exclui controles HTML sobrepostos e distingue caixas legíveis de perto das conexões visíveis na visão geral; a [revisão do detector](../evidence/planar-overview-regression/README.md) registra o ajuste. Partículas, pausa, raycast, pan, rotação, zoom, retorno de câmera, movimento reduzido e falha de worker também são verificados.
+- As falhas preliminares de clique rápido e retorno durante layout foram corrigidas; o [log preliminar](../evidence/planar-browser-preliminary.log) permanece preservado.
 
-Evidências visuais: [COACTUPC e inspetor](../evidence/3d-carddemo.png), [COACTUPC e código](../evidence/3d-carddemo-viewing.png), [CICS com caminhos](../evidence/3d-cics-paths.png).
+Evidências: [CICS plano](../evidence/planar-all.png), [recorte de caminhos](../evidence/planar-paths.png), [COACTUPC inteiro](../evidence/planar-carddemo-overview.png), [COACTUPC com fonte](../evidence/planar-carddemo-viewing.png).
+
+A validação inicial com distribuição espacial está preservada em [3d-browser.log](../evidence/3d-browser.log), [resultado bruto](../evidence/3d-browser-results.json) e nas imagens `3d-*` em `evidence/` (54 testes de modelo e 32 de navegador naquela revisão).
 
 ## Referências
 
-[Demo de grafo grande](https://vasturiano.github.io/3d-force-graph/example/large-graph/) e [API oficial](https://github.com/vasturiano/3d-force-graph#api-reference): `nodeThreeObject`, `linkDirectionalParticles`, `linkCurveRotation`, `cameraPosition`, `controls` e eventos de seleção. As três bibliotecas de visualização/distribuição usam licença MIT; versões exatas estão no lockfile.
+- [API oficial de 3d-force-graph](https://github.com/vasturiano/3d-force-graph#api-reference): objetos Three.js próprios, atualização de posições de arestas e câmera.
+- [ELK Layered](https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html) e [elkjs](https://github.com/kieler/elkjs): layout em camadas, rotas ortogonais e integração com Web Worker.
+- 3d-force-graph e Three.js usam MIT; elkjs usa EPL-2.0. Versões exatas estão no lockfile.

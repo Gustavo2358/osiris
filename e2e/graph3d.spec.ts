@@ -151,8 +151,49 @@ test('reading action approaches the selected box from an overview', async ({ pag
 });
 
 test('layout worker failure ends loading and exposes an actionable error', async ({ page }) => {
-  await page.route('**/force-layout.worker-*.js', (route) => route.abort());
+  await page.route('**/elk-worker.min-*.js', (route) => route.abort());
   await page.goto('/?example=files-values');
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
   await expect(page.getByRole('alert')).toContainText('Falha ao distribuir');
 });
+
+for (const scope of ['all', 'paths']) {
+  test(`selecting a box keeps camera, pivot and diagram positions unchanged in ${scope}`, async ({
+    page,
+  }) => {
+    await open(page, 'cics');
+    if (scope === 'paths') {
+      await page.getByRole('button', { name: 'Caminhos até aqui' }).click();
+      await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
+    }
+    await page.getByRole('button', { name: 'Enquadrar recorte' }).click();
+    await page.getByRole('button', { name: 'Pausar partículas' }).click();
+    const before = (await camera(page))!;
+    const target = page.locator('.graph-node-target:not(.is-selected)').first();
+    const id = await target.getAttribute('data-node-id');
+    const position = await target.getAttribute('data-position');
+    expect(JSON.parse(position!).z).toBe(0);
+    const box = (await target.boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(page.locator('.graph-node-target.is-selected')).toHaveAttribute(
+      'data-node-id',
+      id!,
+    );
+    // The old click initiated a 550 ms flight. Check the full interval, not only its first frame.
+    await page.waitForTimeout(650);
+    await expectCamera(page, before);
+    await expect(page.locator('.graph-node-target.is-selected')).toHaveAttribute(
+      'data-position',
+      position!,
+    );
+    await canvas(page).press('ArrowRight');
+    const tilted = JSON.parse((await camera(page))!);
+    expect(tilted.target).toEqual(JSON.parse(before).target);
+    await expect(page.locator('.graph-node-target.is-selected')).toHaveAttribute(
+      'data-position',
+      position!,
+    );
+    await page.getByRole('button', { name: 'Vista frontal' }).click();
+    await page.screenshot({ path: `test-results/planar-${scope}.png`, fullPage: true });
+  });
+}

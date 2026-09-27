@@ -1,0 +1,19 @@
+
+> cobol-graph-explorer@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /home/gustavo/workspace/teste-e2e/cobol-graph-explorer
+
+ ✓ tests/planar-layout.test.ts (6 tests) 281ms
+ ✓ tests/model.test.ts (54 tests) 4807ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: large  425ms
+   ✓ Real analyzer artifacts > preserves all published nodes, edges, links and candidates: carddemo-coactupc  1913ms
+   ✓ Real analyzer artifacts > large graph query finishes without enumerating exponentially many paths  319ms
+   ✓ COACTUPC keeps source candidates separate from unreachable control sites  1784ms
+
+ Test Files  2 passed (2)
+      Tests  60 passed (60)
+   Start at  14:11:59
+   Duration  5.20s (transform 108ms, setup 0ms, collect 276ms, tests 5.09s, environment 0ms, prepare 119ms)
+

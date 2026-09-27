@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { visibleBoxPixels } from './graph-helpers';
 
 test('real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragraphs', async ({
   page,
@@ -13,27 +14,17 @@ test('real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragr
   await expect(page.locator('.graph-context')).toContainText('3887 transições');
   expect(await page.locator('.graph-node-target').count()).toBeLessThan(3048);
   // Check the actual WebGL raster; nearby boxes must remain visible against the dark scene.
-  const overview = await page.locator('.graph3d-canvas canvas').screenshot();
   expect(Number(await page.getByTestId('graph').getAttribute('data-textures'))).toBeLessThanOrEqual(
     128,
   );
-  const visiblePixels = await page.evaluate(async (png) => {
-    const image = new Image();
-    image.src = `data:image/png;base64,${png}`;
-    await image.decode();
-    const canvas = document.createElement('canvas');
-    canvas.width = image.width;
-    canvas.height = image.height;
-    const context = canvas.getContext('2d')!;
-    context.drawImage(image, 0, 0);
-    const { data } = context.getImageData(3, 3, image.width - 6, image.height - 6);
-    let visible = 0;
-    for (let i = 0; i < data.length; i += 4) {
-      if (data[i] > 100 && data[i + 1] > 120 && data[i + 2] > 130) visible++;
-    }
-    return visible;
-  }, overview.toString('base64'));
-  expect(visiblePixels).toBeGreaterThan(50);
+  expect((await visibleBoxPixels(page)).light).toBeGreaterThan(15000);
+  // A layered 3,048-node program also needs to remain visible beyond the default far plane.
+  await page.getByRole('button', { name: 'Enquadrar recorte' }).click();
+  // Individual boxes are subpixel here; check the rendered diagram, excluding overlay controls.
+  expect((await visibleBoxPixels(page)).visible).toBeGreaterThan(200);
+  await page.screenshot({ path: 'test-results/planar-carddemo-overview.png', fullPage: true });
+  await page.getByRole('button', { name: 'Ler seleção de perto' }).click();
+  await expect(page.locator('.graph-node-target.is-selected')).toBeVisible();
   const nav = page.getByRole('complementary', { name: 'Navegação do programa' });
   const inspector = page.getByRole('complementary', { name: 'Inspetor' });
   await expect(nav.locator('.nav-item')).toHaveCount(5); // Four control contexts and one source-only XCTL.
