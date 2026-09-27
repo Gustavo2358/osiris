@@ -1,10 +1,11 @@
+import { expectCamera } from './graph-helpers';
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 async function ready(page: any, example = 'order-router') {
   await page.goto('/?example=' + example);
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false', { timeout: 30000 });
-  await expect(page.locator('.graph-card').first()).toBeVisible();
+  await expect(page.locator('.graph-node-target').first()).toBeVisible();
   await expect(page.getByRole('alert')).toHaveCount(0);
 }
 test('call navigation, provenance, candidates, paths, witness, source and debug', async ({
@@ -26,7 +27,9 @@ test('call navigation, provenance, candidates, paths, witness, source and debug'
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
   await expect(page.locator('.path-banner')).toContainText('caminhos conhecidos');
   await page.getByLabel('Um caminho', { exact: true }).check();
-  await expect(page.locator('.react-flow__edge-path[style*="stroke-width: 3"]')).not.toHaveCount(0);
+  await expect
+    .poll(async () => Number(await page.getByTestId('graph').getAttribute('data-witness-edges')))
+    .toBeGreaterThan(0);
   await inspector.getByRole('tab', { name: 'Fonte', exact: true }).click();
   await expect(inspector.locator('.source-code')).toContainText('LINK PROGRAM(WS-PGM)');
   await inspector.getByRole('tab', { name: 'Internos', exact: true }).click();
@@ -56,7 +59,7 @@ test('search, paragraph navigation and local neighborhood', async ({ page }) => 
 test('503 node graph stays navigable and limits DOM to viewport', async ({ page }) => {
   await ready(page, 'large');
   await expect(page.locator('.graph-context')).toContainText('503 de 503');
-  expect(await page.locator('.graph-card').count()).toBeLessThan(503);
+  expect(await page.locator('.graph-node-target').count()).toBeLessThan(503);
   await page.getByLabel('Buscar no programa').fill('SRV099');
   const nav = page.getByRole('complementary', { name: 'Navegação do programa' });
   await expect(nav.locator('.nav-item')).toHaveCount(1);
@@ -66,7 +69,7 @@ test('503 node graph stays navigable and limits DOM to viewport', async ({ page 
   await expect(page.locator('.path-banner')).toContainText('caminhos conhecidos');
   await page.getByRole('button', { name: 'Vizinhança', exact: true }).click();
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
-  expect(await page.locator('.graph-card').count()).toBeLessThan(30);
+  expect(await page.locator('.graph-node-target').count()).toBeLessThan(30);
 });
 test('nested program entry switches exact identity scopes', async ({ page }) => {
   await ready(page, 'nested');
@@ -142,9 +145,9 @@ test('Back restores paragraph, selection and exact viewport after highlighting p
   // Zoom is part of the user's previous view, not just the node filter.
   await page.getByRole('button', { name: 'Diminuir zoom', exact: true }).click();
   await expect
-    .poll(() => page.locator('.react-flow__viewport').getAttribute('style'))
-    .toContain('transform');
-  const viewport = await page.locator('.react-flow__viewport').getAttribute('style');
+    .poll(() => page.getByTestId('graph').getAttribute('data-camera'))
+    .toContain('position');
+  const viewport = await page.getByTestId('graph').getAttribute('data-camera');
   await inspector.getByRole('button', { name: 'Caminhos até aqui' }).click();
   await page.getByLabel('Um caminho', { exact: true }).check();
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
@@ -152,7 +155,7 @@ test('Back restores paragraph, selection and exact viewport after highlighting p
   await expect(page.locator('.path-banner')).toHaveCount(0);
   await expect(page.locator('.graph-context')).toHaveText(context);
   await expect(inspector.getByRole('heading', { level: 2 })).toHaveText(selection);
-  await expect(page.locator('.react-flow__viewport')).toHaveAttribute('style', viewport!);
+  await expectCamera(page, viewport!);
   await page.getByRole('button', { name: 'Caminhos', exact: true }).click();
   await page.keyboard.press('Escape');
   await expect(page.locator('.graph-context')).toHaveText(context);
@@ -168,7 +171,7 @@ test('full source pane follows selection, supports COPY and closes without chang
   await expect(pane).toBeVisible();
   await expect
     .poll(async () => {
-      const card = await page.locator('.graph-card.is-selected').boundingBox();
+      const card = await page.locator('.graph-node-target.is-selected').boundingBox();
       const graph = await page.getByTestId('graph').boundingBox();
       return (
         !!card &&

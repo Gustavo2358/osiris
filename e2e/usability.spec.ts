@@ -1,17 +1,16 @@
+import { expectCamera } from './graph-helpers';
 import { test, expect, type Page } from '@playwright/test';
 
 async function open(page: Page, example = 'files-values') {
   await page.goto('/?example=' + example);
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
-  await expect(page.locator('.graph-card').first()).toBeVisible();
+  await expect(page.locator('.graph-node-target').first()).toBeVisible();
 }
 const inspector = (page: Page) => page.getByRole('complementary', { name: 'Inspetor' });
 const navigator = (page: Page) =>
   page.getByRole('complementary', { name: 'Navegação do programa' });
 const zoom = (page: Page) =>
-  page
-    .locator('.react-flow__viewport')
-    .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
+  page.getByTestId('graph').evaluate((el) => Number(el.getAttribute('data-distance')));
 
 test('UX-01 producer and flow navigation preserve the investigation and Back restores it', async ({
   page,
@@ -20,7 +19,7 @@ test('UX-01 producer and flow navigation preserve the investigation and Back res
   await inspector(page).getByRole('button', { name: 'Caminhos até aqui' }).click();
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
   const context = await page.locator('.graph-context').innerText();
-  const viewport = await page.locator('.react-flow__viewport').getAttribute('style');
+  const viewport = await page.getByTestId('graph').getAttribute('data-camera');
   await inspector(page).locator('.candidate-supports .producer-link').first().click();
   await expect(inspector(page).getByRole('heading', { level: 2 })).toContainText("MOVE 'ACCOUNTS'");
   await expect(page.locator('.path-banner')).toBeVisible();
@@ -28,7 +27,7 @@ test('UX-01 producer and flow navigation preserve the investigation and Back res
   await page.getByRole('button', { name: 'Voltar', exact: true }).click();
   await expect(inspector(page).getByRole('heading', { level: 2 })).toContainText('ENDBR');
   await expect(page.locator('.path-banner')).toBeVisible();
-  await expect(page.locator('.react-flow__viewport')).toHaveAttribute('style', viewport!);
+  await expectCamera(page, viewport!);
   await inspector(page)
     .getByRole('button', { name: /→ GOBACK/ })
     .click();
@@ -48,7 +47,7 @@ test('UX-02 selecting another statement preserves user zoom and exposes recenter
   await expect.poll(() => zoom(page)).toBeCloseTo(previous, 5);
   await page.getByRole('button', { name: 'Centralizar seleção', exact: true }).click();
   await expect.poll(() => zoom(page)).toBeCloseTo(previous, 5);
-  const card = await page.locator('.graph-card.is-selected').boundingBox();
+  const card = await page.locator('.graph-node-target.is-selected').boundingBox();
   const graph = await page.getByTestId('graph').boundingBox();
   expect(card!.x).toBeGreaterThanOrEqual(graph!.x);
   expect(card!.x + card!.width).toBeLessThanOrEqual(graph!.x + graph!.width);
@@ -199,7 +198,7 @@ test('UX-09 paths and source remain fully accessible in a short laptop window', 
       area = await workspace.boundingBox();
     expect(box!.y + box!.height).toBeLessThanOrEqual(area!.y + area!.height + 1);
     const graph = await page.getByTestId('graph').boundingBox();
-    for (const button of await page.locator('.react-flow__controls button').all()) {
+    for (const button of await page.locator('.graph3d-controls button').all()) {
       const control = await button.boundingBox();
       expect(control!.y).toBeGreaterThanOrEqual(graph!.y);
       expect(control!.y + control!.height).toBeLessThanOrEqual(graph!.y + graph!.height - 30);

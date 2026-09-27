@@ -1,173 +1,37 @@
-import { memo, useEffect, useState, useRef, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
+import ForceGraph3D, { type ForceGraph3DInstance } from '3d-force-graph';
+import { Sprite, SpriteMaterial, Vector3, PerspectiveCamera, type CanvasTexture } from 'three';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {
-  ReactFlow,
-  Background,
-  MiniMap,
-  Controls,
-  ControlButton,
-  Handle,
-  Position,
-  BaseEdge,
-  EdgeLabelRenderer,
-  useReactFlow,
-  type NodeProps,
-  type EdgeProps,
-  type Node,
-  type Edge,
-  type Viewport,
-  MarkerType,
-} from '@xyflow/react';
-import {
-  GitBranch,
-  PhoneOutgoing,
-  CornerDownRight,
-  Play,
-  CircleStop,
+  Plus,
+  Minus,
   Focus,
+  Scan,
+  Pause,
+  Play,
+  RotateCcw,
+  Box,
   LoaderCircle,
-  FolderOpen,
+  BookOpen,
 } from 'lucide-react';
-import ELK from 'elkjs/lib/elk-api.js';
-import elkWorkerUrl from 'elkjs/lib/elk-worker.min.js?url';
 import type { GraphNode, GraphEdge, Model } from './model';
-import '@xyflow/react/dist/style.css';
-const icons: Record<string, typeof GitBranch> = {
-  BRANCH: GitBranch,
-  INVOKE: PhoneOutgoing,
-  ENTRY: Play,
-  NORMAL_EXIT: CircleStop,
-  HALT: CircleStop,
-  RETURN: CornerDownRight,
-};
-const minimapNodeColor = (n: Node) =>
-  (n.data.node as GraphNode)?.fileSiteIds.length
-    ? '#73e0c9'
-    : (n.data.node as GraphNode)?.siteIds.length
-      ? '#b7b0ff'
-      : '#d4deed';
-const Card = memo(({ data, selected }: NodeProps) => {
-  const n = data.node as GraphNode,
-    Icon = n.fileSiteIds.length ? FolderOpen : (icons[n.kind] ?? CornerDownRight);
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      aria-label={n.title}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          (data.onSelect as (id: string) => void)(n.id);
-        }
-      }}
-      className={`graph-card ${n.fileSiteIds.length ? 'file-card' : n.siteIds.length ? 'call-card' : ''} ${n.kind === 'BRANCH' ? 'branch-card' : ''} ${n.raw.kind === 'ENTRY' ? 'entry-card' : ''} ${selected ? 'is-selected' : ''} ${data.dim ? 'dim' : ''}`}
-    >
-      <Handle type="target" position={Position.Top} />
-      <div className="card-meta">
-        <span>
-          <Icon size={13} />
-          {n.fileSiteIds.length
-            ? 'ARQUIVO'
-            : n.siteIds.length
-              ? 'CHAMADA'
-              : n.kind === 'BRANCH'
-                ? 'DECISÃO'
-                : n.raw.kind === 'ENTRY'
-                  ? 'ENTRADA'
-                  : (data.paragraph as string) || 'FLUXO'}
-        </span>
-        <span>{n.location ? `L${n.location.startLine}` : ''}</span>
-      </div>
-      <div className="card-title" title={n.title}>
-        {n.title}
-      </div>
-      <div className="card-footer">
-        <span>
-          {n.contexts > 1
-            ? `Contexto ${n.contextIndex}/${n.contexts}`
-            : n.statements.length > 1
-              ? `${n.statements.length} statements`
-              : 'COBOL'}
-        </span>
-        {n.open ? (
-          <span className="open-dot">controle aberto</span>
-        ) : (
-          <span>
-            {n.fileSiteIds.length
-              ? `${data.candidates ?? 0} valores possíveis`
-              : n.siteIds.length
-                ? `${data.candidates ?? 0} candidatos`
-                : '→'}
-          </span>
-        )}
-      </div>
-      <Handle type="source" position={Position.Bottom} />
-    </div>
-  );
-});
-function RoutedEdge({
-  id,
-  data,
-  markerEnd,
-  style,
-  label,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-}: EdgeProps) {
-  const sections = (data?.sections ?? []) as any[];
-  const path = sections.length
-    ? sections
-        .map((s) => {
-          const points = [s.startPoint, ...(s.bendPoints ?? []), s.endPoint];
-          return points.map((p: any, i: number) => `${i ? 'L' : 'M'} ${p.x},${p.y}`).join(' ');
-        })
-        .join(' ')
-    : `M${sourceX},${sourceY} L${targetX},${targetY}`;
-  const section = sections[0];
-  const point = section?.bendPoints?.[0] ?? section?.startPoint ?? { x: sourceX, y: sourceY };
-  return (
-    <>
-      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} />
-      {label && (
-        <EdgeLabelRenderer>
-          <span
-            className="edge-label"
-            style={{
-              transform: `translate(-50%, -50%) translate(${point.x}px,${point.y + 22}px)`,
-              color: style?.stroke,
-            }}
-          >
-            {label}
-          </span>
-        </EdgeLabelRenderer>
-      )}
-    </>
-  );
-}
-const nodeTypes = { cobol: Card },
-  edgeTypes = { routed: RoutedEdge };
-const labels: Record<string, string> = {
-  BRANCH_TRUE: 'Sim',
-  BRANCH_FALSE: 'Não',
-  INVOKE_NORMAL: 'retorno',
-  OPAQUE_JUMP: 'conhecido',
-  RETURN: 'retorno',
-};
-export function Graph({
-  model,
-  visibleNodes,
-  visibleEdges,
-  selected,
-  onSelect,
-  highlightCalls,
-  highlightFiles = false,
-  viewportRef,
-  restoreView,
-  focusIds,
-  witnessIds,
-  onReady,
-}: {
+import {
+  CARD_WIDTH,
+  CARD_HEIGHT,
+  DETAIL_LIMIT,
+  cardTexture,
+  category,
+  edgeColor,
+  edgeDescription,
+  type SceneNode,
+  type SceneLink,
+  type Point3D,
+  type GraphViewport,
+} from './graph3d';
+import './graph3d.css';
+
+export type { GraphViewport } from './graph3d';
+type Props = {
   model: Model;
   visibleNodes: GraphNode[];
   visibleEdges: GraphEdge[];
@@ -175,250 +39,654 @@ export function Graph({
   onSelect: (id: string) => void;
   highlightCalls: boolean;
   highlightFiles?: boolean;
-  viewportRef?: RefObject<Viewport | undefined>;
-  restoreView?: { id: number; viewport: Viewport };
+  viewportRef?: RefObject<GraphViewport | undefined>;
+  restoreView?: { id: number; viewport: GraphViewport };
   focusIds?: Set<string>;
   witnessIds?: Set<string>;
   onReady?: () => void;
-}) {
-  const flow = useReactFlow();
-  const surface = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const element = surface.current;
-    if (!element) return;
-    let previous = { width: element.clientWidth, height: element.clientHeight };
-    const observer = new ResizeObserver(([record]) => {
-      const { width, height } = record.contentRect;
-      if (previous.width && previous.height && width && height) {
-        const view = flow.getViewport();
-        void flow.setViewport(
-          {
-            ...view,
-            x: view.x + (width - previous.width) / 2,
-            y: view.y + (height - previous.height) / 2,
-          },
-          { duration: 0 },
-        );
-      }
-      previous = { width, height };
-    });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [flow]);
-  const appliedRestore = useRef(0);
-  const initializedModel = useRef<Model | undefined>(undefined);
-  const [viewportReady, setViewportReady] = useState(false);
-  const [layout, setLayout] = useState<{ nodes: Node[]; edges: Edge[]; input: GraphNode[] } | null>(
-      null,
-    ),
+};
+type Target = {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  depth: number;
+};
+type Instance = ForceGraph3DInstance<SceneNode, SceneLink>;
+const point = (v: Vector3): Point3D => ({ x: v.x, y: v.y, z: v.z });
+
+export function Graph(props: Props) {
+  const live = useRef(props);
+  live.current = props;
+  const surface = useRef<HTMLDivElement>(null),
+    host = useRef<HTMLDivElement>(null);
+  const graph = useRef<Instance | null>(null);
+  const nodes = useRef<SceneNode[]>([]);
+  const sprites = useRef(new Map<string, Sprite>());
+  const textures = useRef(new Map<string, CanvasTexture>());
+  const shared = useRef(new Map<string, CanvasTexture>());
+  const layouts = useRef(new Map<string, (Point3D & { id: string })[]>());
+  const cachedModel = useRef<Model | undefined>(undefined);
+  const layoutPending = useRef(true);
+  const pointer = useRef<{ clientX: number; clientY: number } | undefined>(undefined);
+  const appliedSelection = useRef<string | undefined>(undefined);
+  const restored = useRef(0),
+    initialized = useRef(false);
+  const refresh = useRef<() => void>(() => {});
+  const [instanceReady, setInstanceReady] = useState(false);
+  const [busy, setBusy] = useState(true),
     [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  useEffect(() => {
-    setBusy(true);
-    setViewportReady(false);
-    setError('');
-    const elk = new ELK({ workerUrl: elkWorkerUrl });
-    let active = true;
-    const ready = (data: { nodes: any[]; edges: any[] }) => {
-      if (!active) return;
-      const positions = new Map<string, any>(data.nodes.map((n: any) => [n.id, n])),
-        routes = new Map<string, any>(data.edges.map((e: any) => [e.id, e]));
-      setLayout({
-        input: visibleNodes,
-        nodes: visibleNodes.map((n) => ({
-          id: n.id,
-          type: 'cobol',
-          position: { x: positions.get(n.id)?.x ?? 0, y: positions.get(n.id)?.y ?? 0 },
-          data: {
-            node: n,
-            onSelect,
-            paragraph: model.paragraphs.find((p) => p.id === n.paragraph)?.title,
-            candidates: [...model.sites, ...model.fileSites]
-              .filter((s) => n.siteIds.includes(s.id) || n.fileSiteIds.includes(s.id))
-              .reduce((a, s) => a + s.candidates.length, 0),
-          },
-          width: 280,
-          height: 132,
-          ariaLabel: n.title,
-        })),
-        edges: visibleEdges.map((e) => ({
-          id: e.id,
-          source: e.source,
-          target: e.target,
-          type: 'routed',
-          data: { ...routes.get(e.id) },
-          label: labels[e.kind],
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color:
-              e.kind === 'BRANCH_TRUE'
-                ? '#65d9b4'
-                : e.kind === 'BRANCH_FALSE'
-                  ? '#ffc578'
-                  : '#a6b8d1',
-          },
-          style: {
-            stroke:
-              e.kind === 'BRANCH_TRUE'
-                ? '#65d9b4'
-                : e.kind === 'BRANCH_FALSE'
-                  ? '#ffc578'
-                  : '#a6b8d1',
-            strokeWidth: 1.5,
-            strokeDasharray: e.kind === 'OPAQUE_JUMP' ? '5 4' : undefined,
-          },
-        })),
-      });
-      setBusy(false);
+  const [targets, setTargets] = useState<Target[]>([]);
+  const [motion, setMotion] = useState(
+    () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+  const motionRef = useRef(motion);
+  motionRef.current = motion;
+  const detailIds = useRef(new Set<string>());
+  const [hover, setHover] = useState('');
+
+  // Selected cards draw in front for readability; hit testing uses the same foreground rule.
+  function selectedAt(event = pointer.current) {
+    if (!event) return undefined;
+    const card = surface.current
+      ?.querySelector('.graph-node-target.is-selected')
+      ?.getBoundingClientRect();
+    if (
+      card &&
+      event.clientX >= card.left &&
+      event.clientX <= card.right &&
+      event.clientY >= card.top &&
+      event.clientY <= card.bottom
+    )
+      return nodes.current.find((n) => n.id === live.current.selected);
+  }
+  function selectInScene(node: SceneNode) {
+    live.current.onSelect(node.id);
+    appliedSelection.current = node.id;
+    focus(node.id, true, true);
+  }
+  function capture() {
+    const g = graph.current;
+    if (!g) return;
+    const camera = g.camera(),
+      controls = g.controls() as OrbitControls;
+    const view = {
+      position: point(camera.position),
+      target: point(controls.target),
+      up: point(camera.up),
     };
-    elk
-      .layout({
-        id: 'root',
-        layoutOptions: {
-          'elk.algorithm': 'layered',
-          'elk.direction': 'DOWN',
-          'elk.spacing.nodeNode': '60',
-          'elk.layered.spacing.nodeNodeBetweenLayers': '70',
-          'elk.edgeRouting': 'ORTHOGONAL',
-          'elk.layered.considerModelOrder.strategy': 'NODES_AND_EDGES',
-        },
-        children: visibleNodes.map((n) => ({ id: n.id, width: 280, height: 132 })),
-        edges: visibleEdges.map((e) => ({ id: e.id, sources: [e.source], targets: [e.target] })),
-      })
-      .then((graph) => ready({ nodes: graph.children ?? [], edges: graph.edges ?? [] }))
-      .catch((e) => {
-        if (active) {
-          setError(`Falha no layout: ${e.message}`);
+    if (live.current.viewportRef) live.current.viewportRef.current = view;
+    surface.current?.setAttribute('data-camera', JSON.stringify(view));
+    surface.current?.setAttribute(
+      'data-distance',
+      String(camera.position.distanceTo(controls.target)),
+    );
+  }
+  function move(position: Point3D, target: Point3D) {
+    const g = graph.current;
+    if (!g) return;
+    // Immediate moves keep history exact; direct selection flights use the library transition below.
+    g.cameraPosition(position, target, 0);
+    (g.controls() as OrbitControls).update();
+    capture();
+    refresh.current();
+  }
+  function focus(id: string | undefined, animate = false, first = false) {
+    const g = graph.current,
+      node = nodes.current.find((n) => n.id === id);
+    if (!g || !node) return;
+    const controls = g.controls() as OrbitControls;
+    const offset = g.camera().position.clone().sub(controls.target);
+    const camera = g.camera() as PerspectiveCamera;
+    const readableWidth = Math.min(300, g.width() * 0.7);
+    const readingDistance =
+      (CARD_WIDTH * g.height()) / (2 * Math.tan((camera.fov * Math.PI) / 360) * readableWidth);
+    const distance = first ? readingDistance : Math.max(150, offset.length());
+    if (offset.lengthSq() < 1) offset.set(0.3, 0.15, 1);
+    offset.normalize().multiplyScalar(distance);
+    const position = point(offset.add(new Vector3(node.x, node.y, node.z)));
+    if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      g.cameraPosition(position, node, 550);
+    } else move(position, node);
+  }
+  function fit() {
+    const g = graph.current;
+    if (!g || !nodes.current.length) return;
+    const min = new Vector3(Infinity, Infinity, Infinity),
+      max = min.clone().negate();
+    nodes.current.forEach((n) => {
+      const p = new Vector3(n.x, n.y, n.z);
+      min.min(p);
+      max.max(p);
+    });
+    const target = min.clone().add(max).multiplyScalar(0.5);
+    const camera = g.camera() as PerspectiveCamera;
+    const direction = new Vector3(0.25, 0.12, 1).normalize();
+    const right = new Vector3(0, 1, 0).cross(direction).normalize();
+    const up = direction.clone().cross(right).normalize();
+    const tan = Math.tan((camera.fov * Math.PI) / 360);
+    let distance = 150;
+    for (const n of nodes.current) {
+      const p = new Vector3(n.x, n.y, n.z).sub(target);
+      distance = Math.max(
+        distance,
+        direction.dot(p) + (Math.abs(right.dot(p)) + CARD_WIDTH / 2) / (tan * camera.aspect * 0.88),
+        direction.dot(p) + (Math.abs(up.dot(p)) + CARD_HEIGHT / 2) / (tan * 0.76),
+      );
+    }
+    move(point(direction.multiplyScalar(distance).add(target)), point(target));
+  }
+
+  function zoom(factor: number) {
+    const g = graph.current;
+    if (!g) return;
+    const target = (g.controls() as OrbitControls).target;
+    const offset = g.camera().position.clone().sub(target);
+    offset.setLength(Math.max(150, Math.min(100000, offset.length() * factor)));
+    move(point(offset.add(target)), point(target));
+  }
+  function rotate(horizontal: number, vertical = 0) {
+    const g = graph.current;
+    if (!g) return;
+    const target = (g.controls() as OrbitControls).target;
+    const offset = g.camera().position.clone().sub(target);
+    offset.applyAxisAngle(new Vector3(0, 1, 0), horizontal);
+    offset.applyAxisAngle(new Vector3(1, 0, 0), vertical);
+    move(point(offset.add(target)), point(target));
+  }
+  function clearCards() {
+    sprites.current.forEach((s) => s.material.dispose());
+    sprites.current.clear();
+    textures.current.forEach((t) => t.dispose());
+    textures.current.clear();
+    detailIds.current.clear();
+    setTargets([]);
+  }
+
+  useEffect(() => {
+    const el = host.current!;
+    let g: Instance;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let active = true;
+    try {
+      g = new ForceGraph3D(el, {
+        controlType: 'orbit',
+        rendererConfig: { antialias: true, alpha: false },
+      }) as unknown as Instance;
+      graph.current = g;
+      g.backgroundColor('#111c2c')
+        .showNavInfo(false)
+        .enableNodeDrag(false)
+        .cooldownTicks(0)
+        .nodeThreeObjectExtend(false)
+        .linkOpacity(0.65)
+        .nodeThreeObject((n) => {
+          if (!shared.current.has(n.category))
+            shared.current.set(n.category, cardTexture(n.category));
+          const sprite = new Sprite(
+            new SpriteMaterial({
+              map: shared.current.get(n.category),
+              depthWrite: true,
+              alphaTest: 0.2,
+            }),
+          );
+          sprite.scale.set(CARD_WIDTH, CARD_HEIGHT, 1);
+          sprites.current.set(n.id, sprite);
+          return sprite;
+        })
+        .nodeLabel((n) => {
+          const label = document.createElement('div');
+          label.textContent = (selectedAt() ?? n).node.title;
+          return label;
+        })
+        .linkLabel((l) => {
+          const label = document.createElement('div');
+          label.textContent = `${edgeDescription(l.edge)}: ${live.current.model.nodeById.get(l.edge.source)?.title} → ${live.current.model.nodeById.get(l.edge.target)?.title}`;
+          return label;
+        })
+        .linkColor((l) => edgeColor(l.edge, live.current.witnessIds))
+        .linkWidth((l) => (live.current.witnessIds?.has(l.id) ? 1.7 : 0))
+        .linkCurvature((l) => (l.edge.source === l.edge.target ? 0.6 : 0.12))
+        .linkCurveRotation((l) => l.rotation)
+        .linkDirectionalArrowLength(12)
+        .linkDirectionalArrowRelPos(0.65)
+        .linkDirectionalArrowResolution(4)
+        .linkDirectionalArrowColor((l) => edgeColor(l.edge, live.current.witnessIds))
+        .linkDirectionalParticleWidth(3)
+        .linkDirectionalParticleSpeed(0.004)
+        .linkDirectionalParticleResolution(3)
+        .linkDirectionalParticleColor((l) => edgeColor(l.edge, live.current.witnessIds))
+        .onNodeClick((n, event) => selectInScene(selectedAt(event) ?? n))
+        .onNodeHover((n) => setHover(n ? (selectedAt() ?? n).node.title : ''))
+        .onLinkClick((l, event) => {
+          const target = selectedAt(event) ?? nodes.current.find((n) => n.id === l.edge.target);
+          if (target) selectInScene(target);
+        });
+      const renderer = g.renderer();
+      renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio));
+      const canvas = renderer.domElement;
+      canvas.tabIndex = 0;
+      canvas.setAttribute(
+        'aria-label',
+        'Grafo 3D: arraste para girar; botão direito desloca; roda aproxima. Setas giram, Home enquadra e F centraliza a seleção.',
+      );
+      const controls = g.controls() as OrbitControls;
+      controls.enableDamping = false;
+      controls.minDistance = 150;
+      controls.maxDistance = 100000;
+      const update = () => {
+        if (!active) return;
+        capture();
+        const camera = g.camera() as PerspectiveCamera;
+        camera.updateMatrixWorld();
+        const width = el.clientWidth,
+          height = el.clientHeight;
+        const projected: Target[] = [];
+        for (const n of nodes.current) {
+          const view = new Vector3(n.x, n.y, n.z).applyMatrix4(camera.matrixWorldInverse);
+          if (view.z >= -1) continue;
+          const scale = height / (2 * Math.tan((camera.fov * Math.PI) / 360) * -view.z);
+          const w = CARD_WIDTH * scale,
+            h = CARD_HEIGHT * scale;
+          const p = g.graph2ScreenCoords(n.x, n.y, n.z);
+          if (
+            w < 46 ||
+            p.x + w / 2 < 0 ||
+            p.x - w / 2 > width ||
+            p.y + h / 2 < 0 ||
+            p.y - h / 2 > height
+          )
+            continue;
+          projected.push({
+            id: n.id,
+            label: n.node.title,
+            x: p.x - w / 2,
+            y: p.y - h / 2,
+            width: w,
+            height: h,
+            depth: -view.z,
+          });
+        }
+        projected.sort((a, b) =>
+          a.id === live.current.selected
+            ? -1
+            : b.id === live.current.selected
+              ? 1
+              : a.depth - b.depth,
+        );
+        const visible = projected.slice(0, DETAIL_LIMIT),
+          ids = new Set(visible.map((p) => p.id));
+        const particleChanges =
+          ids.size !== detailIds.current.size || [...ids].some((id) => !detailIds.current.has(id));
+        detailIds.current = ids;
+        for (const n of nodes.current) {
+          const sprite = sprites.current.get(n.id);
+          if (!sprite) continue;
+          const key = n.id + (n.id === live.current.selected ? '/selected' : '');
+          if (ids.has(n.id)) {
+            if (!textures.current.has(key))
+              textures.current.set(key, cardTexture(n, n.id === live.current.selected));
+            sprite.material.map = textures.current.get(key)!;
+          } else sprite.material.map = shared.current.get(n.category)!;
+          sprite.renderOrder = n.id === live.current.selected ? 100 : 0;
+          sprite.material.depthTest = n.id !== live.current.selected;
+          sprite.material.opacity =
+            n.id !== live.current.selected &&
+            ((live.current.highlightCalls && !n.node.siteIds.length) ||
+              (live.current.highlightFiles && !n.node.fileSiteIds.length) ||
+              (live.current.focusIds && !live.current.focusIds.has(n.id)))
+              ? 0.25
+              : 1;
+        }
+        const used = new Set(
+          visible.map((t) => t.id + (t.id === live.current.selected ? '/selected' : '')),
+        );
+        textures.current.forEach((t, key) => {
+          if (!used.has(key)) {
+            t.dispose();
+            textures.current.delete(key);
+          }
+        });
+        if (particleChanges) updateParticles();
+        setTargets(visible);
+        surface.current?.setAttribute('data-textures', String(textures.current.size));
+      };
+      const schedule = () => {
+        capture();
+        if (!timer)
+          timer = setTimeout(() => {
+            timer = undefined;
+            update();
+          }, 80);
+      };
+      refresh.current = update;
+      controls.addEventListener('change', schedule);
+      const resize = new ResizeObserver(([entry]) => {
+        if (!entry.contentRect.width || !entry.contentRect.height) return;
+        g.width(entry.contentRect.width).height(entry.contentRect.height);
+        schedule();
+      });
+      resize.observe(el);
+      const lost = (event: Event) => {
+        event.preventDefault();
+        setError('O contexto WebGL foi perdido. Recarregue a página para retomar o experimento.');
+      };
+      canvas.addEventListener('webglcontextlost', lost);
+      const visibility = () => {
+        if (document.hidden) g.pauseAnimation();
+        else g.resumeAnimation();
+      };
+      document.addEventListener('visibilitychange', visibility);
+      setInstanceReady(true);
+      return () => {
+        active = false;
+        if (timer) clearTimeout(timer);
+        resize.disconnect();
+        controls.removeEventListener('change', schedule);
+        document.removeEventListener('visibilitychange', visibility);
+        canvas.removeEventListener('webglcontextlost', lost);
+        clearCards();
+        shared.current.forEach((t) => t.dispose());
+        shared.current.clear();
+        g._destructor();
+        renderer.dispose();
+        renderer.forceContextLoss();
+        el.replaceChildren();
+        graph.current = null;
+      };
+    } catch (e) {
+      setError(`Não foi possível iniciar WebGL: ${e instanceof Error ? e.message : String(e)}`);
+      setBusy(false);
+    }
+  }, []);
+
+  function updateParticles() {
+    graph.current?.linkDirectionalParticles((l) =>
+      motionRef.current &&
+      (nodes.current.length <= 500 ||
+        detailIds.current.has(l.edge.source) ||
+        detailIds.current.has(l.edge.target))
+        ? 2
+        : 0,
+    );
+  }
+  useEffect(() => {
+    updateParticles();
+  }, [motion]);
+  useEffect(() => {
+    if (!instanceReady) return;
+    let cancelled = false;
+    let worker: Worker | undefined;
+    let frame = 0;
+    layoutPending.current = true;
+    setBusy(true);
+    setError('');
+    if (cachedModel.current !== props.model) {
+      layouts.current.clear();
+      cachedModel.current = props.model;
+      initialized.current = false;
+      restored.current = 0;
+    }
+    const layoutKey = JSON.stringify([
+      props.visibleNodes.map((n) => n.id),
+      props.visibleEdges.map((e) => e.id),
+    ]);
+    const install = (points: { id: string; x: number; y: number; z: number }[]) => {
+      if (cancelled) return;
+      layouts.current.delete(layoutKey);
+      layouts.current.set(layoutKey, points);
+      if (layouts.current.size > 16) layouts.current.delete(layouts.current.keys().next().value!);
+      const positions = new Map(points.map((p) => [p.id, p]));
+      clearCards();
+      const paragraphs = new Map(props.model.paragraphs.map((p) => [p.id, p.title]));
+      const candidates = new Map(
+        [...props.model.sites, ...props.model.fileSites].map((s) => [s.id, s.candidates.length]),
+      );
+      nodes.current = props.visibleNodes.map((node) => {
+        const p = positions.get(node.id)!;
+        return {
+          id: node.id,
+          node,
+          category: category(node),
+          paragraph: paragraphs.get(node.paragraph ?? '') ?? '',
+          candidates: [...node.siteIds, ...node.fileSiteIds].reduce(
+            (sum, id) => sum + (candidates.get(id) ?? 0),
+            0,
+          ),
+          x: p.x,
+          y: p.y,
+          z: p.z,
+          fx: p.x,
+          fy: p.y,
+          fz: p.z,
+        };
+      });
+      const groups = new Map<string, GraphEdge[]>();
+      for (const edge of props.visibleEdges) {
+        const key = JSON.stringify([edge.source, edge.target]);
+        groups.set(key, [...(groups.get(key) ?? []), edge]);
+      }
+      const links: SceneLink[] = [...groups.values()].flatMap((edges) =>
+        edges.map((edge, index) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          edge,
+          rotation: (2 * Math.PI * index) / edges.length,
+        })),
+      );
+
+      graph.current!.graphData({ nodes: nodes.current, links });
+      frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => {
+          if (cancelled) return;
+          const restore = live.current.restoreView;
+          if (restore && restore.id !== restored.current) {
+            restored.current = restore.id;
+            graph
+              .current!.camera()
+              .up.set(restore.viewport.up.x, restore.viewport.up.y, restore.viewport.up.z);
+            move(restore.viewport.position, restore.viewport.target);
+          } else if (
+            live.current.selected &&
+            nodes.current.some((n) => n.id === live.current.selected)
+          )
+            focus(live.current.selected, false, !initialized.current);
+          else fit();
+          initialized.current = true;
+          appliedSelection.current = live.current.selected;
+          layoutPending.current = false;
+          setBusy(false);
+          updateParticles();
+          refresh.current();
+          live.current.onReady?.();
+        });
+      });
+    };
+    const cached = layouts.current.get(layoutKey);
+    if (cached) install(cached);
+    else if (!props.visibleNodes.length) install([]);
+    else {
+      worker = new Worker(new URL('./force-layout.worker.js', import.meta.url), { type: 'module' });
+      worker.onmessage = ({ data }) => {
+        if (cancelled) return;
+        if (data.error) {
+          setError(`Falha no layout 3D: ${data.error}`);
+          setBusy(false);
+        } else install(data.nodes);
+        worker?.terminate();
+      };
+      worker.onerror = () => {
+        if (!cancelled) {
+          setError(
+            'Falha ao distribuir as caixas no espaço 3D. Recarregue a página para tentar novamente.',
+          );
           setBusy(false);
         }
+      };
+      worker.postMessage({
+        nodes: props.visibleNodes.map((n) => n.id),
+        links: props.visibleEdges.map((e) => ({ source: e.source, target: e.target })),
       });
+    }
     return () => {
-      active = false;
-      elk.terminateWorker();
+      cancelled = true;
+      worker?.terminate();
+      cancelAnimationFrame(frame);
     };
-  }, [model, visibleNodes, visibleEdges]);
+  }, [props.model, props.visibleNodes, props.visibleEdges, instanceReady]);
+
   useEffect(() => {
-    if (busy || !layout || layout.input !== visibleNodes) return;
-    const timer = setTimeout(() => {
-      const firstView = initializedModel.current !== model;
-      initializedModel.current = model;
-      if (restoreView && appliedRestore.current !== restoreView.id) {
-        appliedRestore.current = restoreView.id;
-        void flow.setViewport(restoreView.viewport, { duration: 0 });
-      } else {
-        const n = layout.nodes.find((n) => n.id === selected);
-        if (n)
-          void flow.setCenter(n.position.x + 140, n.position.y + 66, {
-            zoom: firstView ? 0.85 : flow.getZoom(),
-            duration: 0,
-          });
-        else if (visibleNodes.length > 30) {
-          const first =
-            layout.nodes.find((n) => (n.data.node as GraphNode).raw.kind === 'ENTRY') ??
-            layout.nodes[0];
-          if (first)
-            void flow.setCenter(first.position.x + 140, first.position.y + 240, {
-              zoom: 0.85,
-              duration: 0,
-            });
-        } else void flow.fitView({ padding: 0.15, minZoom: 0.3, maxZoom: 0.95 });
-      }
-      setViewportReady(true);
-      onReady?.();
-    }, 80);
-    return () => clearTimeout(timer);
-  }, [selected, layout, busy, restoreView, visibleNodes]);
-  const currentLayout = layout?.input === visibleNodes ? layout : null;
-  const graphNodes = (currentLayout?.nodes ?? []).map((n) => ({
-    ...n,
-    selected: n.id === selected,
-    data: {
-      ...n.data,
-      onSelect,
-      dim:
-        (highlightCalls && !(n.data.node as GraphNode).siteIds.length) ||
-        (highlightFiles && !(n.data.node as GraphNode).fileSiteIds.length) ||
-        (focusIds && !focusIds.has(n.id)),
-    },
-  }));
-  const graphEdges = (currentLayout?.edges ?? []).map((e) => ({
-    ...e,
-    style: {
-      ...e.style,
-      strokeWidth: witnessIds?.has(e.id) ? 3 : e.style?.strokeWidth,
-      stroke: witnessIds?.has(e.id) ? '#b6acff' : e.style?.stroke,
-      opacity: witnessIds?.size && !witnessIds.has(e.id) ? 0.25 : 1,
-    },
-  }));
+    if (layoutPending.current || busy || !instanceReady) return;
+    if (props.restoreView && props.restoreView.id !== restored.current) {
+      restored.current = props.restoreView.id;
+      graph
+        .current!.camera()
+        .up.set(
+          props.restoreView.viewport.up.x,
+          props.restoreView.viewport.up.y,
+          props.restoreView.viewport.up.z,
+        );
+      move(props.restoreView.viewport.position, props.restoreView.viewport.target);
+    } else if (props.selected !== appliedSelection.current) focus(props.selected);
+    appliedSelection.current = props.selected;
+    refresh.current();
+  }, [props.selected, props.restoreView, busy, instanceReady]);
+  useEffect(() => {
+    refresh.current();
+    graph.current
+      ?.linkColor((l) => edgeColor(l.edge, props.witnessIds))
+      .linkWidth((l) => (props.witnessIds?.has(l.id) ? 1.7 : 0));
+  }, [props.highlightCalls, props.highlightFiles, props.focusIds, props.witnessIds]);
+
   return (
     <div
       ref={surface}
-      className="graph-surface"
-      aria-label="Grafo de controle"
+      className="graph-surface graph3d"
       data-testid="graph"
-      aria-busy={busy || !viewportReady || !currentLayout}
+      aria-label="Grafo de controle 3D"
+      aria-busy={busy}
+      data-nodes={props.visibleNodes.length}
+      data-edges={props.visibleEdges.length}
+      data-witness-edges={props.witnessIds?.size ?? 0}
+      data-motion={motion ? 'on' : 'off'}
+      onPointerMove={(e) => {
+        pointer.current = { clientX: e.clientX, clientY: e.clientY };
+      }}
+      onPointerLeave={() => {
+        pointer.current = undefined;
+      }}
+      onKeyDown={(e) => {
+        if (e.target !== host.current?.querySelector('canvas')) return;
+        if (
+          [
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowUp',
+            'ArrowDown',
+            '+',
+            '-',
+            'Home',
+            'f',
+            'F',
+            ' ',
+          ].includes(e.key)
+        )
+          e.preventDefault();
+        if (e.key === 'ArrowLeft') rotate(-0.12);
+        if (e.key === 'ArrowRight') rotate(0.12);
+        if (e.key === 'ArrowUp') rotate(0, -0.12);
+        if (e.key === 'ArrowDown') rotate(0, 0.12);
+        if (e.key === '+') zoom(0.8);
+        if (e.key === '-') zoom(1.25);
+        if (e.key === 'Home') fit();
+        if (e.key.toLowerCase() === 'f') focus(props.selected);
+        if (e.key === ' ') setMotion((m) => !m);
+      }}
     >
-      <ReactFlow
-        nodes={graphNodes}
-        edges={graphEdges}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        nodesFocusable={false}
-        nodesDraggable={false}
-        nodesConnectable={false}
-        edgesFocusable={false}
-        deleteKeyCode={null}
-        onMove={(_, viewport) => {
-          if (viewportRef) viewportRef.current = viewport;
-        }}
-        onInit={(instance) => {
-          if (viewportRef) viewportRef.current = instance.getViewport();
-        }}
-        onNodeClick={(_, n) => onSelect(n.id)}
-        minZoom={0.025}
-        maxZoom={2}
-        onlyRenderVisibleElements
-        fitView={false}
-        ariaLabelConfig={{
-          'controls.zoomIn.ariaLabel': 'Aumentar zoom',
-          'controls.zoomOut.ariaLabel': 'Diminuir zoom',
-          'controls.fitView.ariaLabel': 'Enquadrar recorte',
-          'controls.ariaLabel': 'Navegação do grafo',
-          'minimap.ariaLabel': 'Minimapa do programa',
-        }}
-      >
-        <Background color="#344255" gap={24} size={1} />
-        <MiniMap
-          pannable
-          zoomable
-          nodeColor={minimapNodeColor}
-          nodeStrokeColor={minimapNodeColor}
-          nodeStrokeWidth={1}
-          maskColor="rgba(12,22,37,.16)"
-          maskStrokeColor="#f4c76a"
-          maskStrokeWidth={2}
-        />
-        <Controls showInteractive={false}>
-          <ControlButton
-            aria-label="Centralizar seleção"
-            title="Centralizar seleção"
-            disabled={!selected || !currentLayout?.nodes.some((n) => n.id === selected)}
+      <div ref={host} className="graph3d-canvas" />
+      <div className="graph3d-targets" aria-label="Caixas visíveis no espaço 3D">
+        {targets.map((t) => (
+          <button
+            key={t.id}
+            className={`graph-node-target ${props.selected === t.id ? 'is-selected' : ''}`}
+            aria-label={t.label}
+            aria-pressed={props.selected === t.id}
+            data-node-id={t.id}
+            style={{ left: t.x, top: t.y, width: t.width, height: t.height }}
             onClick={() => {
-              const n = currentLayout?.nodes.find((n) => n.id === selected);
-              if (n)
-                void flow.setCenter(n.position.x + 140, n.position.y + 66, {
-                  zoom: flow.getZoom(),
-                  duration: 0,
-                });
+              props.onSelect(t.id);
+              appliedSelection.current = t.id;
+              focus(t.id, true, true);
             }}
           >
-            <Focus size={16} />
-          </ControlButton>
-        </Controls>
-      </ReactFlow>
+            <span className="sr-only">{t.label}</span>
+          </button>
+        ))}
+      </div>
+      <div className="graph3d-controls" role="group" aria-label="Navegação do grafo 3D">
+        <span title="Experimento 3D">
+          <Box size={15} />
+          <b>3D</b>
+        </span>
+        <button aria-label="Aumentar zoom" title="Aproximar (+)" onClick={() => zoom(0.8)}>
+          <Plus size={16} />
+        </button>
+        <button aria-label="Diminuir zoom" title="Afastar (-)" onClick={() => zoom(1.25)}>
+          <Minus size={16} />
+        </button>
+        <button aria-label="Enquadrar recorte" title="Enquadrar recorte (Home)" onClick={fit}>
+          <Scan size={16} />
+        </button>
+        <button
+          aria-label="Centralizar seleção"
+          title="Centralizar seleção (F)"
+          disabled={!props.selected || !nodes.current.some((n) => n.id === props.selected)}
+          onClick={() => focus(props.selected)}
+        >
+          <Focus size={16} />
+        </button>
+        <button
+          aria-label="Ler seleção de perto"
+          title="Aproximar para ler a seleção"
+          disabled={!props.selected || !nodes.current.some((n) => n.id === props.selected)}
+          onClick={() => focus(props.selected, true, true)}
+        >
+          <BookOpen size={16} />
+        </button>
+        <button
+          aria-label="Vista frontal"
+          title="Voltar à orientação frontal"
+          onClick={() => {
+            const g = graph.current;
+            if (g) {
+              const c = g.controls() as OrbitControls;
+              move(
+                point(
+                  c.target.clone().add(new Vector3(0, 0, g.camera().position.distanceTo(c.target))),
+                ),
+                point(c.target),
+              );
+            }
+          }}
+        >
+          <RotateCcw size={16} />
+        </button>
+        <button
+          aria-label={motion ? 'Pausar partículas' : 'Animar partículas'}
+          title="Partículas indicam o sentido das transições"
+          aria-pressed={motion}
+          onClick={() => setMotion((m) => !m)}
+        >
+          {motion ? <Pause size={16} /> : <Play size={16} />}
+        </button>
+      </div>
       {busy && (
         <div className="layout-status" role="status">
-          <LoaderCircle className="spin" size={16} /> Organizando {visibleNodes.length} trechos…
+          <LoaderCircle className="spin" size={16} /> Distribuindo {props.visibleNodes.length}{' '}
+          caixas em 3D…
         </div>
       )}
       {error && (
@@ -426,31 +694,21 @@ export function Graph({
           {error}
         </div>
       )}
-      {!busy && !visibleNodes.length && (
+      {!busy && !props.visibleNodes.length && (
         <div className="graph-empty">
           <Focus />
           <h3>Nenhum caminho conhecido</h3>
           <p>O CFG não publica um caminho desta entrada até a seleção.</p>
         </div>
       )}
-      <div className="graph-legend">
+      <div
+        className="graph3d-caption"
+        title="Arraste para girar · botão direito desloca · roda aproxima. Partículas indicam a direção do CFG."
+      >
+        <span>{hover || 'Arraste para girar · roda para aproximar'}</span>
         <span>
-          <i className="legend-flow" />
-          Fluxo
+          {props.visibleNodes.length} caixas · {props.visibleEdges.length} transições
         </span>
-        <span>
-          <i className="legend-call" />
-          Chamada
-        </span>
-        <span>
-          <i className="legend-file" />
-          Arquivo
-        </span>
-        <span>
-          <i className="legend-branch" />
-          Decisão
-        </span>
-        <span>Arraste para navegar · role para ampliar</span>
       </div>
     </div>
   );

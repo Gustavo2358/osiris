@@ -2,6 +2,10 @@
 
 Aplicação local para navegar pelo controle que o analisador publicou, com statements e paragraphs COBOL, chamadas, candidatos e suas evidências.
 
+## Experimento 3D
+
+Esta branch, **`experiment/3d-force-graph`**, troca o renderer por `3d-force-graph` + Three.js/WebGL. Os nós continuam sendo caixas com conteúdo COBOL, voltadas para a câmera; partículas percorrem as arestas no sentido publicado. Veja [decisões, validação e limites do experimento](docs/EXPERIMENTO-3D.md).
+
 ## Rodar
 
 Requer Node.js 22.12+ (validado em 24.19). Java só é necessário para gerar novos exemplos.
@@ -27,7 +31,7 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 ## Explorar
 
 - **Exemplos reais** fica no cabeçalho, também no modo de visualização. O grafo começa logo abaixo das ferramentas, sem a antiga faixa de apresentação do programa.
-- **Voltar** (ou **Esc**) restaura o recorte, seleção, busca, destaques e zoom anteriores. No modo de caminhos, a ação também aparece como **Voltar à visão anterior**.
+- **Voltar** (ou **Esc**) restaura o recorte, seleção, busca, destaques e câmera 3D anterior (posição, orientação e zoom). No modo de caminhos, a ação também aparece como **Voltar à visão anterior**.
 - **Código fonte** abre um painel com o arquivo completo, números de linha e destaque da seleção. É possível trocar entre fonte original, copybooks e texto expandido, ampliar o painel ou desativar **Acompanhar seleção**. Clicar na localização do inspetor abre o trecho nesse painel. Chamadas, arquivos, paragraphs e trechos na barra lateral também acompanham a seleção, inclusive ao clicar novamente na mesma referência.
 - **Modo de visualização** mostra apenas o grafo e o código, com cabeçalho compacto. **Sair da visualização** ou **Esc** restaura as ferramentas, mantendo seleção, recorte e zoom.
 - **Divisória ajustável:** grafo à esquerda e código à direita; arraste a barra vertical para redistribuir o espaço. Duplo clique ou Enter restaura a proporção inicial. Com a barra focada, ←/→ ajustam o tamanho e Home/End levam aos limites. A proporção é mantida durante a sessão. O grafo usa fundo escuro para destacar os nós e as arestas.
@@ -36,7 +40,9 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 - Selecione uma chamada para ver candidatos, valores brutos, produtores, provenance, premissas, reachability e remainders.
 - **Caminhos até aqui** mostra o subgrafo alcançável da entrada selecionada que consegue chegar ao alvo. **Um caminho** destaca um caminho estrutural mínimo. O destino permanece identificado no banner enquanto você inspeciona outros trechos; clique nele para retornar. Saltos para produtores e vizinhos entram no histórico, preservando o recorte quando possível.
 - **Paragraphs** abre um recorte da região. **Vizinhança** mostra até dois passos ao redor da seleção. O contador mostra o tamanho do recorte; **Programa inteiro** restaura os nós da unit selecionada.
-- Arraste o fundo, use a roda, controles de zoom e minimapa. O minimapa usa nós claros e um contorno âmbar para indicar a área visível. Selecionar outro trecho preserva o zoom. **Centralizar seleção** reencontra o trecho e **Enquadrar recorte** mostra o conjunto visível. A visão geral pode exigir zoom para ler os textos.
+- No **grafo 3D**, arraste para girar, use o botão direito para deslocar e a roda para aproximar. Clicar numa caixa seleciona o trecho e aproxima a câmera para leitura; a navegação pela barra lateral conserva o zoom. **Centralizar seleção** mantém a distância, **Ler seleção de perto** aproxima e **Enquadrar recorte** mostra o conjunto. **Vista frontal** recupera a orientação inicial. Textos aparecem conforme você se aproxima.
+- **Pausar partículas** interrompe a animação; a câmera continua navegável. Elas mostram somente direção das transições, sem simular execução, frequência ou tempo. Verde indica ramo Sim, âmbar indica Não; passe o mouse numa aresta para inspecionar seu tipo e suas pontas. Preferência do sistema por movimento reduzido inicia as partículas pausadas e elimina os voos de câmera.
+- Com foco no canvas, use setas para girar, +/− para zoom, Home para enquadrar, F para centralizar e Espaço para alternar as partículas. As caixas próximas também são selecionáveis por teclado.
 - Nas abas, use as setas, Home e End. Esc fecha a ajuda e devolve o foco ao botão que a abriu; fora da ajuda e de campos de edição, Esc aciona **Voltar**.
 - **Fonte** mostra o trecho associado; **Internos** abre os fatos originais, links, catálogos e o documento de dependencies completo.
 - O botão de download exporta o recorte com os nós/transições originais, entrada, seleção e cobertura. É uma seleção para inspeção, não um novo artefato do analisador.
@@ -133,7 +139,7 @@ npm run test:e2e          # browser real contra o build em :4173
 - Os nomes de paragraphs usam regiões tipadas do SP e seus spans. Sem essa informação, a navegação por paragraphs fica indisponível.
 - Os artefatos AIR podem não conter digest do fonte. O texto fornecido é uma anotação visual; os links SP/AIR são verificados, mas isso não autentica uma cópia de fonte escolhida pelo usuário.
 - O CFG JSON legado não representa todos os resultados `PARTIAL_ANALYSIS`. Falhas do produtor ou ausência de CFG não são substituídas por fluxo reconstruído do SP.
-- Escala exercitada: 503 nós / 602 transições / 100 sites. Grafos maiores são aceitos dentro do limite de bytes, mas não foram qualificados nesta entrega.
+- Escala exercitada nesta branch: COACTUPC com 3.048 nós / 3.887 transições, além do exemplo de 503 nós / 602 transições / 100 sites. WebGL2 é necessário. Em regiões densas há sobreposição em perspectiva; use zoom e os recortes. Detalhes e partículas têm limites visuais para reduzir o uso de GPU, descritos no documento do experimento.
 - Um fixture upstream de captura de dados entre programas aninhados falhou no lower; os detalhes para revisão estão em [VALIDATION.md](docs/VALIDATION.md#limitações-encontradas).
 
 Repositório Git independente, sem remote. Caches, builds e dependências não são versionados.

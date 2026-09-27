@@ -11,10 +11,12 @@ test('real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragr
   await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false', { timeout: 60000 });
   await expect(page.locator('.graph-context')).toContainText('3048 de 3048');
   await expect(page.locator('.graph-context')).toContainText('3887 transições');
-  expect(await page.locator('.graph-card').count()).toBeLessThan(3048);
-  // The overview must remain visible when 3,048 nodes shrink below a screen pixel.
-  // Read the actual raster, including the mask and antialiasing; exclude the frame.
-  const overview = await page.locator('.react-flow__minimap').screenshot();
+  expect(await page.locator('.graph-node-target').count()).toBeLessThan(3048);
+  // Check the actual WebGL raster; nearby boxes must remain visible against the dark scene.
+  const overview = await page.locator('.graph3d-canvas canvas').screenshot();
+  expect(Number(await page.getByTestId('graph').getAttribute('data-textures'))).toBeLessThanOrEqual(
+    128,
+  );
   const visiblePixels = await page.evaluate(async (png) => {
     const image = new Image();
     image.src = `data:image/png;base64,${png}`;

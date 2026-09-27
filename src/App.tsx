@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { ReactFlowProvider, type Viewport } from '@xyflow/react';
 import {
   Upload,
   Search,
@@ -30,7 +29,7 @@ import {
   type GraphNode,
   type Location,
 } from './model';
-import { Graph } from './Graph';
+import { Graph, type GraphViewport } from './Graph';
 import { Inspector } from './Inspector';
 import { SourcePane } from './SourcePane';
 import { SplitWorkspace } from './SplitWorkspace';
@@ -59,7 +58,7 @@ interface ViewState {
   routeSite?: string;
   highlight: boolean;
   witness: boolean;
-  viewport?: Viewport;
+  viewport?: GraphViewport;
 }
 function App() {
   const [model, setModel] = useState<Model>(),
@@ -91,9 +90,9 @@ function App() {
   const [selectionSerial, setSelectionSerial] = useState(0);
   const [sourceRequest, setSourceRequest] = useState(0);
   const [history, setHistory] = useState<ViewState[]>([]);
-  const graphViewport = useRef<Viewport | undefined>(undefined),
+  const graphViewport = useRef<GraphViewport | undefined>(undefined),
     restoreSerial = useRef(0);
-  const [restoreView, setRestoreView] = useState<{ id: number; viewport: Viewport }>();
+  const [restoreView, setRestoreView] = useState<{ id: number; viewport: GraphViewport }>();
   function rememberView() {
     setHistory((h) => [
       ...h.slice(-29),
@@ -819,20 +818,18 @@ function App() {
             }
           >
             {model ? (
-              <ReactFlowProvider>
-                <Graph
-                  model={model}
-                  visibleNodes={scope.nodes}
-                  visibleEdges={scope.edges}
-                  selected={selected}
-                  onSelect={selectNode}
-                  highlightCalls={highlight && sidebar !== 'files'}
-                  highlightFiles={highlight && sidebar === 'files'}
-                  viewportRef={graphViewport}
-                  restoreView={restoreView}
-                  witnessIds={witness ? new Set(reach?.witness.map((e) => e.id)) : undefined}
-                />
-              </ReactFlowProvider>
+              <Graph
+                model={model}
+                visibleNodes={scope.nodes}
+                visibleEdges={scope.edges}
+                selected={selected}
+                onSelect={selectNode}
+                highlightCalls={highlight && sidebar !== 'files'}
+                highlightFiles={highlight && sidebar === 'files'}
+                viewportRef={graphViewport}
+                restoreView={restoreView}
+                witnessIds={witness ? new Set(reach?.witness.map((e) => e.id)) : undefined}
+              />
             ) : (
               <div className="start-state">
                 <Network size={40} />
@@ -940,10 +937,13 @@ function App() {
           </p>
           <p>
             Use Voltar (Esc) para restaurar a visão anterior. Código fonte abre o arquivo completo
-            ao lado da exploração. Zoom: roda do mouse. Navegação: arraste o fundo ou o minimapa.
-            Centralizar seleção reencontra o trecho sem alterar o zoom; Enquadrar recorte mostra o
-            grafo visível. Nas abas, use as setas, Home e End; Enter ou Espaço selecionam um trecho.
-            Esc fecha esta ajuda.
+            ao lado da exploração. No grafo 3D, arraste para girar, use o botão direito para
+            deslocar e a roda para aproximar. As caixas ficam voltadas para você. Centralizar
+            seleção reencontra o trecho sem alterar o zoom; Enquadrar recorte mostra o grafo
+            visível. Nas abas, use as setas, Home e End; Enter ou Espaço selecionam um trecho. Com
+            foco no grafo, as setas giram a câmera, Home enquadra, F centraliza e Espaço pausa as
+            partículas. Elas indicam o sentido das arestas, sem representar uma execução do
+            programa. Esc fecha esta ajuda.
           </p>
           <p>
             Modo de visualização mostra apenas grafo e código; Esc retorna à exploração. Arraste a

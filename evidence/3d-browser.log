@@ -1,0 +1,45 @@
+
+> cobol-graph-explorer@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:1113958) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 32 tests using 1 worker
+
+(node:1113976) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 e2e/carddemo.spec.ts:3:1 › real COACTUPC: graph, COPY, source evidence, FILE limits, paths and paragraphs (18.8s)
+  ✓   2 e2e/explorer.spec.ts:11:1 › call navigation, provenance, candidates, paths, witness, source and debug (1.8s)
+  ✓   3 e2e/explorer.spec.ts:42:1 › search, paragraph navigation and local neighborhood (1.8s)
+  ✓   4 e2e/explorer.spec.ts:59:1 › 503 node graph stays navigable and limits DOM to viewport (5.5s)
+  ✓   5 e2e/explorer.spec.ts:74:1 › nested program entry switches exact identity scopes (930ms)
+  ✓   6 e2e/explorer.spec.ts:85:1 › import real bundle; malformed and mismatched files preserve the current program (1.2s)
+  ✓   7 e2e/explorer.spec.ts:110:1 › local files remain local; no unexpected network destination (738ms)
+  ✓   8 e2e/explorer.spec.ts:119:1 › keyboard selection and tablet width keep program tools available (996ms)
+  ✓   9 e2e/explorer.spec.ts:134:1 › Back restores paragraph, selection and exact viewport after highlighting paths (1.8s)
+  ✓  10 e2e/explorer.spec.ts:165:1 › full source pane follows selection, supports COPY and closes without changing the graph (1.3s)
+  ✓  11 e2e/explorer.spec.ts:200:1 › FILE values, producer navigation, SYSID, source pane and control paths (1.8s)
+  ✓  12 e2e/explorer.spec.ts:231:1 › source pane fits a tablet and reports a missing original instead of substituting expanded text (1.3s)
+  ✓  13 e2e/graph3d.spec.ts:13:3 › WebGL draws bright boxes with COBOL content on a dark scene: files-values (1.0s)
+  ✓  14 e2e/graph3d.spec.ts:13:3 › WebGL draws bright boxes with COBOL content on a dark scene: order-router (989ms)
+  ✓  15 e2e/graph3d.spec.ts:34:1 › orbit, pan, zoom, keyboard, framing and Back preserve an explored 3D camera (1.9s)
+  ✓  16 e2e/graph3d.spec.ts:69:1 › raycast on a real WebGL box selects its COBOL statement and follows source (1.1s)
+  ✓  17 e2e/graph3d.spec.ts:94:1 › particles animate transitions and can be paused without locking the camera (1.7s)
+  ✓  18 e2e/graph3d.spec.ts:120:1 › reduced motion starts paused and repeated program switches release scenes (1.8s)
+  ✓  19 e2e/graph3d.spec.ts:138:1 › reading action approaches the selected box from an overview (4.1s)
+  ✓  20 e2e/graph3d.spec.ts:153:1 › layout worker failure ends loading and exposes an actionable error (605ms)
+  ✓  21 e2e/usability.spec.ts:15:1 › UX-01 producer and flow navigation preserve the investigation and Back restores it (2.0s)
+  ✓  22 e2e/usability.spec.ts:39:1 › UX-02 selecting another statement preserves user zoom and exposes recenter (1.1s)
+  ✓  23 e2e/usability.spec.ts:56:1 › UX-03 category searches are independent and empty results can recover (1.1s)
+  ✓  24 e2e/usability.spec.ts:72:1 › UX-04 list previews distinguish sites and provenance shows precise spans (982ms)
+  ✓  25 e2e/usability.spec.ts:89:1 › UX-05 both tab groups follow keyboard and panel semantics (1.1s)
+  ✓  26 e2e/usability.spec.ts:108:1 › UX-06 help traps focus, Escape closes it and restores the trigger without going Back (1.3s)
+  ✓  27 e2e/usability.spec.ts:126:1 › UX-07 readable metadata and usable clear action at desktop and tablet sizes (1.1s)
+  ✓  28 e2e/usability.spec.ts:171:1 › UX-08 active entry counts and path destination remain unambiguous (2.1s)
+  ✓  29 e2e/usability.spec.ts:187:1 › UX-09 paths and source remain fully accessible in a short laptop window (1.6s)
+  ✓  30 e2e/viewing.spec.ts:22:1 › sidebar references recenter source on repeat, and paragraphs use their own provenance (2.2s)
+  ✓  31 e2e/viewing.spec.ts:60:1 › viewing mode keeps only graph and source, preserves scope and zoom, Escape restores tools (1.4s)
+  ✓  32 e2e/viewing.spec.ts:87:1 › mouse and keyboard resize both panes with bounds, reset and retained size (2.8s)
+
+  32 passed (1.2m)

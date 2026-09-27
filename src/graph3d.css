@@ -1,0 +1,96 @@
+.graph3d {
+  overflow: hidden;
+  background: #111c2c;
+}
+.graph3d-canvas {
+  position: absolute;
+  inset: 0;
+}
+.graph3d-canvas canvas {
+  display: block;
+}
+.graph3d-canvas canvas:focus-visible {
+  outline: 2px solid #a5b4fc;
+  outline-offset: -3px;
+}
+.graph3d-targets {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.graph-node-target {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+  border-radius: 8px;
+}
+.graph-node-target:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+.graph3d-controls {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: calc(100% - 20px);
+  padding: 4px;
+  gap: 2px;
+  background: #f8fafcf5;
+  border: 1px solid #b8c6dc;
+  border-radius: 8px;
+  box-shadow: 0 4px 18px #03071240;
+}
+.graph3d-controls > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 5px;
+  color: #475569;
+  font-size: 11px;
+}
+.graph3d-controls button {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 4px;
+}
+.graph3d-controls button[aria-pressed='true'] {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+.graph3d .layout-status {
+  top: 58px;
+}
+.graph3d-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 9px 12px;
+  display: flex;
+  gap: 12px;
+  background: #172438ed;
+  border-top: 1px solid #34465e;
+  font-size: 10px;
+  color: #c5d3e7;
+  pointer-events: none;
+}
+.graph3d-caption span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.graph3d-caption span:first-child {
+  flex: 1;
+}
+.graph3d-caption span:last-child {
+  flex-shrink: 0;
+}

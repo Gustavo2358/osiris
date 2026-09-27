@@ -2,7 +2,7 @@
 
 ## Fronteiras
 
-Aplicação React + TypeScript servida estaticamente por Vite. React Flow cuida de zoom, viewport, minimapa e seleção; ELK calcula apenas a geometria, em Web Worker. A geometria não muda o modelo de controle.
+Aplicação React + TypeScript servida estaticamente por Vite. Nesta branch experimental, `3d-force-graph` e Three.js cuidam da cena WebGL, câmera orbital e seleção. `d3-force-3d` calcula somente a geometria em Web Worker. A geometria não muda o modelo de controle.
 
 ```mermaid
 flowchart LR
@@ -23,7 +23,8 @@ flowchart LR
 
 - `src/artifacts.ts`: reconhecimento por contrato, descompressão, rejeição de versões/publicações incompatíveis e SHA-256 do sidecar.
 - `src/model.ts`: índices de identidades, joins explícitos, projeção de apresentação e consultas sobre arestas publicadas.
-- `src/Graph.tsx`: geometria ELK, cancelamento de layouts antigos, renderização do viewport e seleção. Os nós não são editáveis.
+- `src/Graph.tsx`: cena 3D, câmera, histórico, recortes, seleção e descarte de recursos. Os nós não são editáveis.
+- `src/graph3d.ts`: cartões em texturas Canvas, cores e tipos da cena; `src/force-layout.worker.js`: distribuição espacial de cópias dos IDs e arestas.
 - `src/SourcePane.tsx`: fonte integral, troca explícita de arquivo, destaque por span e acompanhamento opcional da seleção. Não reconstrói relações do grafo a partir de linhas.
 - `src/Inspector.tsx`: fatos de COBOL, candidatos/suportes, fonte, limites e detalhes brutos carregados visualmente sob demanda.
 - `bridge/ExportLinks.java`: adapter externo ao analisador; usa `FileLowering`, `CobolLowerer`, `AirFileOutput` e o `LoweringResult` retornado pela mesma API de produção.
@@ -77,10 +78,12 @@ O painel de fonte usa somente `documents.sources[nomeLógico]`. Original, copybo
 ## Escala e segurança local
 
 - Layout fora da thread principal e workers encerrados quando o recorte muda.
-- Renderização limitada ao viewport. Busca e consultas não dependem da presença de um nó no DOM.
+- A cena contém todos os nós e arestas do recorte. Até 128 caixas próximas recebem textura detalhada e equivalente acessível no DOM; as restantes compartilham texturas por categoria. Busca e consultas não dependem da presença no DOM. Partículas em grafos com mais de 500 nós ficam restritas às arestas incidentes nas caixas detalhadas.
+- Cada recorte recebe uma distribuição própria, fixa após 180 iterações, com cache dos últimos 16 layouts por publicação. Regenerações usam a simulação determinística do D3, preservando a geometria ao voltar. Arrays da biblioteca são cópias de apresentação: a substituição de source/target por objetos não altera o modelo. Arestas paralelas recebem curvas em planos diferentes.
+- A caixa selecionada é desenhada à frente para manter o texto legível; seleção pelo mouse respeita essa mesma prioridade. Texturas descartadas saem da GPU e a cena é destruída ao desmontar. A animação é suspensa enquanto a aba fica oculta.
 - JSON interno é formatado somente quando seu painel é aberto.
 - Importação é atômica para a sessão: erro preserva o programa anterior. Resultados assíncronos de uma importação anterior não substituem uma seleção mais recente.
-- Fontes e textos importados são renderizados como texto React, nunca HTML executável.
+- Fontes e textos importados são renderizados como texto React, Canvas ou `textContent` nos tooltips, nunca HTML executável.
 - Nenhum path/URL de provenance é aberto. Nomes lógicos não dão acesso ao filesystem nem à rede.
 - Limites de bytes são operacionais, com rejeição explícita e sem descarte de fatos.
 
@@ -95,4 +98,4 @@ Contratos e implementações locais fixados nos SHAs de `VALIDATION.md`:
 - `analysis-cfg/docs/architecture/analysis-dependency-result-v1.md`
 - `analysis-cfg/.../CfgJsonWriter.java`
 
-Integração visual conforme a documentação oficial de [desempenho do React Flow](https://reactflow.dev/learn/advanced-use/performance) e [layout com ELK](https://reactflow.dev/examples/layout/elkjs).
+Integração visual conforme a [API oficial de 3d-force-graph](https://github.com/vasturiano/3d-force-graph#api-reference), especialmente `nodeThreeObject`, câmera e partículas direcionais. Ver [experimento 3D](EXPERIMENTO-3D.md). A versão 2D está preservada na branch `main`.

@@ -9,9 +9,7 @@ const nav = (page: Page) => page.getByRole('complementary', { name: 'Navegação
 const separator = (page: Page) =>
   page.getByRole('separator', { name: 'Ajustar tamanho do grafo e do código' });
 const zoom = (page: Page) =>
-  page
-    .locator('.react-flow__viewport')
-    .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
+  page.getByTestId('graph').evaluate((el) => Number(el.getAttribute('data-distance')));
 
 async function dragDivider(page: Page, delta: number) {
   const box = (await separator(page).boundingBox())!;
@@ -19,65 +17,6 @@ async function dragDivider(page: Page, delta: number) {
   await page.mouse.down();
   await page.mouse.move(box.x + box.width / 2 + delta, box.y + box.height / 2, { steps: 8 });
   await page.mouse.up();
-}
-
-for (const example of ['files-values', 'order-router']) {
-  test(`dark canvas and minimap keep nodes visible inside and outside the viewport: ${example}`, async ({
-    page,
-  }) => {
-    await open(page, example);
-    const contrast = await page.getByTestId('graph').evaluate((root) => {
-      const rgb = (s: string) => (s.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
-      const lum = (s: string) =>
-        rgb(s)
-          .map((v) => {
-            v /= 255;
-            return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-          })
-          .reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0);
-      const ratio = (a: string, b: string) =>
-        (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
-      const bg = getComputedStyle(root).backgroundColor;
-      const minimap = root.querySelector('.react-flow__minimap')!;
-      const minimapBg = getComputedStyle(minimap).backgroundColor;
-      const mask = getComputedStyle(minimap.querySelector('.react-flow__minimap-mask')!);
-      // Check the rendered result of the mask, not just each node's unmasked fill.
-      const maskChannels = (mask.fill.match(/[\d.]+/g) ?? []).map(Number);
-      const masked = (color: string) => {
-        const alpha = maskChannels[3] ?? 1;
-        return `rgb(${rgb(color)
-          .map((v, i) => v * (1 - alpha) + maskChannels[i] * alpha)
-          .join(',')})`;
-      };
-      const nodes = [...minimap.querySelectorAll('.react-flow__minimap-node')];
-      return {
-        minimapNodes: nodes.map((el) => ({
-          inside: ratio(getComputedStyle(el).fill, minimapBg),
-          outside: ratio(masked(getComputedStyle(el).fill), masked(minimapBg)),
-        })),
-        minimapViewport: ratio(mask.stroke, minimapBg),
-        luminance: lum(bg),
-        cards: [...root.querySelectorAll('.graph-card')].map((el) =>
-          ratio(getComputedStyle(el).backgroundColor, bg),
-        ),
-        edges: [...root.querySelectorAll('.react-flow__edge-path')].map((el) =>
-          ratio(getComputedStyle(el).stroke, bg),
-        ),
-        labels: [...root.querySelectorAll('.edge-label')].map((el) =>
-          ratio(getComputedStyle(el).color, bg),
-        ),
-      };
-    });
-    expect(contrast.minimapNodes.length).toBeGreaterThan(0);
-    expect(contrast.minimapNodes.every((v) => v.inside >= 3 && v.outside >= 3)).toBe(true);
-    expect(contrast.minimapViewport).toBeGreaterThanOrEqual(3);
-    expect(contrast.luminance).toBeLessThan(0.04);
-    expect(contrast.cards.length).toBeGreaterThan(0);
-    expect(contrast.edges.length).toBeGreaterThan(0);
-    expect(contrast.cards.every((v) => v >= 7)).toBe(true);
-    expect(contrast.edges.every((v) => v >= 3)).toBe(true);
-    expect(contrast.labels.every((v) => v >= 4.5)).toBe(true);
-  });
 }
 
 test('sidebar references recenter source on repeat, and paragraphs use their own provenance', async ({
@@ -136,7 +75,7 @@ test('viewing mode keeps only graph and source, preserves scope and zoom, Escape
   await expect(page.locator('.viewing-context')).toContainText('Caminhos');
   expect((await page.locator('.app-header').boundingBox())!.height).toBeLessThanOrEqual(50);
   await expect.poll(() => zoom(page)).toBeCloseTo(before, 5);
-  await expect(page.locator('.graph-card.is-selected')).toBeVisible();
+  await expect(page.locator('.graph-node-target.is-selected')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(nav(page)).toBeVisible();
   await expect(page.locator('.graph-context')).toHaveText(context);
