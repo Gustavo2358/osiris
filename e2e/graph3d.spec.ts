@@ -197,3 +197,46 @@ for (const scope of ['all', 'paths']) {
     await page.screenshot({ path: `test-results/planar-${scope}.png`, fullPage: true });
   });
 }
+
+for (const example of ['cics', 'order-router']) {
+  test(`billboards stay readable and selectable through both sides of the layout plane: ${example}`, async ({
+    page,
+  }) => {
+    await open(page, example);
+    await page.getByRole('button', { name: 'Código fonte', exact: true }).click();
+    await page.getByRole('button', { name: 'Vista frontal', exact: true }).click();
+    const selected = page.locator('.graph-node-target.is-selected');
+    const id = await selected.getAttribute('data-node-id');
+    const position = await selected.getAttribute('data-position');
+    const frontal = (await selected.boundingBox())!;
+    const pivot = JSON.parse((await camera(page))!).target;
+    // 83 degrees almost edge-on, then 172 degrees through the other side of the plane.
+    for (const steps of [12, 13]) {
+      for (let i = 0; i < steps; i++) await canvas(page).press('ArrowRight');
+      const view = (await camera(page))!;
+      const box = (await selected.boundingBox())!;
+      expect(box.width).toBeCloseTo(frontal.width, 0);
+      expect(box.height).toBeCloseTo(frontal.height, 0);
+      await expect(selected).toHaveAttribute('data-position', position!);
+      const source = page.getByRole('region', { name: 'Código fonte original' });
+      await source.locator('.source-document').focus();
+      await page.keyboard.press('Control+End');
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await expect(selected).toHaveAttribute('data-node-id', id!);
+      await expect(source.locator('.selected-line').first()).toBeInViewport();
+      await expectCamera(page, view);
+      // Actual WebGL geometry stays visible, beyond the DOM accessibility target.
+      expect((await visibleBoxPixels(page)).light).toBeGreaterThan(15000);
+    }
+    const back = JSON.parse((await camera(page))!);
+    expect(back.position.z).toBeLessThan(pivot.z);
+    expect(back.target).toEqual(pivot);
+    await page.screenshot({ path: `test-results/billboard-${example}-back.png`, fullPage: true });
+    await page.getByRole('button', { name: 'Caminhos até aqui', exact: true }).click();
+    await expect(page.getByTestId('graph')).toHaveAttribute('aria-busy', 'false');
+    await page.getByRole('button', { name: 'Voltar', exact: true }).click();
+    await expectCamera(page, JSON.stringify(back));
+    await page.getByRole('button', { name: 'Vista frontal', exact: true }).click();
+    expect(JSON.parse((await camera(page))!).position.z).toBeGreaterThan(pivot.z);
+  });
+}

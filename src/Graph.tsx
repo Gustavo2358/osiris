@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import ForceGraph3D, { type ForceGraph3DInstance } from '3d-force-graph';
 import {
-  Mesh,
-  MeshBasicMaterial,
-  PlaneGeometry,
+  Sprite,
+  SpriteMaterial,
   Vector3,
   Vector2,
   Raycaster,
@@ -78,7 +77,7 @@ export function Graph(props: Props) {
     host = useRef<HTMLDivElement>(null);
   const graph = useRef<Instance | null>(null);
   const nodes = useRef<SceneNode[]>([]);
-  const cards = useRef(new Map<string, Mesh<PlaneGeometry, MeshBasicMaterial>>());
+  const cards = useRef(new Map<string, Sprite>());
   const routes = useRef(new Map<string, RoutedLink>());
   const textures = useRef(new Map<string, CanvasTexture>());
   const shared = useRef(new Map<string, CanvasTexture>());
@@ -144,7 +143,7 @@ export function Graph(props: Props) {
     const readingDistance =
       (CARD_WIDTH * g.height()) / (2 * Math.tan((camera.fov * Math.PI) / 360) * readableWidth);
     const distance = first ? readingDistance : Math.max(150, offset.length());
-    if (offset.lengthSq() < 1) offset.set(0.3, 0.15, 1);
+    if (!initialized.current || offset.lengthSq() < 1) offset.set(0.4, 0.25, 1);
     offset.normalize().multiplyScalar(distance);
     const position = point(offset.add(new Vector3(node.x, node.y, node.z)));
     if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -198,7 +197,7 @@ export function Graph(props: Props) {
   }
   function clearCards() {
     cards.current.forEach((s) => {
-      s.geometry.dispose();
+      // Three.js shares geometry between sprites; only the material belongs to this card.
       s.material.dispose();
     });
     cards.current.clear();
@@ -232,15 +231,18 @@ export function Graph(props: Props) {
         .nodeThreeObject((n) => {
           if (!shared.current.has(n.category))
             shared.current.set(n.category, cardTexture(n.category));
-          const card = new Mesh(
-            new PlaneGeometry(CARD_WIDTH, CARD_HEIGHT),
-            new MeshBasicMaterial({
+          const card = new Sprite(
+            new SpriteMaterial({
               map: shared.current.get(n.category),
-              depthWrite: true,
+              // Cards are annotations: keep planar routes from crossing their text at oblique angles.
+              depthTest: false,
+              depthWrite: false,
               transparent: true,
               alphaTest: 0.2,
             }),
           );
+          card.scale.set(CARD_WIDTH, CARD_HEIGHT, 1);
+          card.renderOrder = 1; // Same layer for every card; distance determines mutual occlusion.
           card.userData.sceneNode = n;
           cards.current.set(n.id, card);
           return card;
@@ -262,7 +264,11 @@ export function Graph(props: Props) {
           routes.current.set(l.id, route);
           return route;
         })
-        .linkPositionUpdate(() => true)
+        .linkPositionUpdate((object) => {
+          // The library assigns custom link groups to layer 10; keep all routes below labels.
+          object.renderOrder = 0;
+          return true;
+        })
         .linkDirectionalParticles(0)
         .linkDirectionalArrowLength(0)
         .onNodeHover((n) => setHover(n?.node.title ?? ''));
@@ -310,10 +316,10 @@ export function Graph(props: Props) {
           ),
           g.camera(),
         );
-        const hit = raycaster.intersectObjects(
-          [...cards.current.values(), ...routes.current.values()],
-          true,
-        )[0];
+        // Match the annotation layer: nearest card first, then exposed routes.
+        const hit =
+          raycaster.intersectObjects([...cards.current.values()], false)[0] ??
+          raycaster.intersectObjects([...routes.current.values()], true)[0];
         let object: Object3D | undefined = hit?.object;
         while (object) {
           if (object.userData.sceneNode) {
@@ -335,11 +341,11 @@ export function Graph(props: Props) {
       controls.enableDamping = false;
       controls.minDistance = 150;
       controls.maxDistance = 1000000;
-      // Keep the front of the diagram readable, even when viewing it obliquely.
-      controls.minAzimuthAngle = -Math.PI / 3;
-      controls.maxAzimuthAngle = Math.PI / 3;
-      controls.minPolarAngle = Math.PI / 6;
-      controls.maxPolarAngle = (5 * Math.PI) / 6;
+      // Centers and routes stay in the layout plane; billboards remain readable from either side.
+      controls.minAzimuthAngle = -Infinity;
+      controls.maxAzimuthAngle = Infinity;
+      controls.minPolarAngle = 0;
+      controls.maxPolarAngle = Math.PI;
       const update = () => {
         if (!active) return;
         capture();
@@ -351,18 +357,13 @@ export function Graph(props: Props) {
         for (const n of nodes.current) {
           const view = new Vector3(n.x, n.y, n.z).applyMatrix4(camera.matrixWorldInverse);
           if (view.z >= -1) continue;
-          const corners = [
-            [-1, -1],
-            [-1, 1],
-            [1, -1],
-            [1, 1],
-          ].map(([x, y]) =>
-            g.graph2ScreenCoords(n.x + (x * CARD_WIDTH) / 2, n.y + (y * CARD_HEIGHT) / 2, n.z),
-          );
-          const left = Math.min(...corners.map((p) => p.x)),
-            right = Math.max(...corners.map((p) => p.x));
-          const top = Math.min(...corners.map((p) => p.y)),
-            bottom = Math.max(...corners.map((p) => p.y));
+          // Sprite dimensions are in camera space, not the fixed layout plane.
+          const center = g.graph2ScreenCoords(n.x, n.y, n.z);
+          const scale = height / (2 * -view.z * Math.tan((camera.fov * Math.PI) / 360));
+          const left = center.x - (CARD_WIDTH * scale) / 2,
+            right = center.x + (CARD_WIDTH * scale) / 2;
+          const top = center.y - (CARD_HEIGHT * scale) / 2,
+            bottom = center.y + (CARD_HEIGHT * scale) / 2;
           if (right - left < 46 || right < 0 || left > width || bottom < 0 || top > height)
             continue;
           projected.push({

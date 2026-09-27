@@ -938,12 +938,13 @@ function App() {
           <p>
             Use Voltar (Esc) para restaurar a visão anterior. Código fonte abre o arquivo completo
             ao lado da exploração. No grafo 3D, arraste para girar, use o botão direito para
-            deslocar e a roda para aproximar. As caixas ficam alinhadas em um plano. Clicar
-            seleciona e acompanha o código sem mover a câmera. Centralizar seleção reencontra o
-            trecho sem alterar o zoom; Enquadrar recorte mostra o grafo visível. Nas abas, use as
-            setas, Home e End; Enter ou Espaço selecionam um trecho. Com foco no grafo, as setas
-            giram a câmera, Home enquadra, F centraliza e Espaço pausa as partículas. Elas indicam o
-            sentido das arestas, sem representar uma execução do programa. Esc fecha esta ajuda.
+            deslocar e a roda para aproximar. Os centros das caixas e as conexões ficam em um plano;
+            os textos acompanham a câmera, inclusive ao girar para o outro lado. Clicar seleciona e
+            acompanha o código sem mover a câmera. Centralizar seleção reencontra o trecho sem
+            alterar o zoom; Enquadrar recorte mostra o grafo visível. Nas abas, use as setas, Home e
+            End; Enter ou Espaço selecionam um trecho. Com foco no grafo, as setas giram a câmera,
+            Home enquadra, F centraliza e Espaço pausa as partículas. Elas indicam o sentido das
+            arestas, sem representar uma execução do programa. Esc fecha esta ajuda.
           </p>
           <p>
             Modo de visualização mostra apenas grafo e código; Esc retorna à exploração. Arraste a

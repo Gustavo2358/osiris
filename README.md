@@ -4,7 +4,7 @@ Aplicação local para navegar pelo controle que o analisador publicou, com stat
 
 ## Experimento 3D
 
-Esta branch, **`experiment/3d-force-graph`**, troca o renderer por `3d-force-graph` + Three.js/WebGL. Os nós são caixas com conteúdo COBOL, alinhadas num plano por ELK, com navegação 3D. Partículas percorrem conexões ortogonais no sentido publicado. Veja [decisões, validação e limites do experimento](docs/EXPERIMENTO-3D.md).
+Esta branch, **`experiment/3d-force-graph`**, troca o renderer por `3d-force-graph` + Three.js/WebGL. Os centros dos nós e as conexões ficam num plano organizado por ELK. As caixas com conteúdo COBOL se voltam para a câmera, com órbita 3D livre pelos dois lados do plano. Partículas percorrem conexões ortogonais no sentido publicado. Veja [decisões, validação e limites do experimento](docs/EXPERIMENTO-3D.md).
 
 ## Rodar
 
@@ -40,7 +40,7 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 - Selecione uma chamada para ver candidatos, valores brutos, produtores, provenance, premissas, reachability e remainders.
 - **Caminhos até aqui** mostra o subgrafo alcançável da entrada selecionada que consegue chegar ao alvo. **Um caminho** destaca um caminho estrutural mínimo. O destino permanece identificado no banner enquanto você inspeciona outros trechos; clique nele para retornar. Saltos para produtores e vizinhos entram no histórico, preservando o recorte quando possível.
 - **Paragraphs** abre um recorte da região. **Vizinhança** mostra até dois passos ao redor da seleção. O contador mostra o tamanho do recorte; **Programa inteiro** restaura os nós da unit selecionada.
-- No **grafo 3D**, arraste para girar, use o botão direito para deslocar e a roda para aproximar. Clicar numa caixa seleciona o trecho e acompanha o código sem mover a câmera ou o centro de rotação. A navegação pela barra lateral localiza o trecho conservando o zoom. **Centralizar seleção** mantém a distância, **Ler seleção de perto** aproxima e **Enquadrar recorte** mostra o conjunto. **Vista frontal** recupera a orientação inicial. Textos aparecem conforme você se aproxima.
+- No **grafo 3D**, arraste para girar livremente pelos dois lados do plano; os textos das caixas acompanham a câmera. Use o botão direito para deslocar e a roda para aproximar. Clicar numa caixa seleciona o trecho e acompanha o código sem mover a câmera ou o centro de rotação. A navegação pela barra lateral localiza o trecho conservando o zoom. **Centralizar seleção** mantém a distância, **Ler seleção de perto** aproxima e **Enquadrar recorte** mostra o conjunto. **Vista frontal** volta à vista perpendicular ao plano. Textos aparecem conforme você se aproxima.
 - **Pausar partículas** interrompe a animação; a câmera continua navegável. Elas mostram somente direção das transições, sem simular execução, frequência ou tempo. Verde indica ramo Sim, âmbar indica Não; passe o mouse numa aresta para inspecionar seu tipo e suas pontas. Preferência do sistema por movimento reduzido inicia as partículas pausadas e elimina os voos de câmera.
 - Com foco no canvas, use setas para girar, +/− para zoom, Home para enquadrar, F para centralizar e Espaço para alternar as partículas. As caixas próximas também são selecionáveis por teclado.
 - Nas abas, use as setas, Home e End. Esc fecha a ajuda e devolve o foco ao botão que a abriu; fora da ajuda e de campos de edição, Esc aciona **Voltar**.
@@ -139,7 +139,7 @@ npm run test:e2e          # browser real contra o build em :4173
 - Os nomes de paragraphs usam regiões tipadas do SP e seus spans. Sem essa informação, a navegação por paragraphs fica indisponível.
 - Os artefatos AIR podem não conter digest do fonte. O texto fornecido é uma anotação visual; os links SP/AIR são verificados, mas isso não autentica uma cópia de fonte escolhida pelo usuário.
 - O CFG JSON legado não representa todos os resultados `PARTIAL_ANALYSIS`. Falhas do produtor ou ausência de CFG não são substituídas por fluxo reconstruído do SP.
-- Escala exercitada nesta branch: COACTUPC com 3.048 nós / 3.887 transições, além do exemplo de 503 nós / 602 transições / 100 sites. WebGL2 é necessário. As caixas ficam separadas no plano; a inclinação da câmera comprime o diagrama em perspectiva. Use Vista frontal, zoom e os recortes para leitura. Detalhes e partículas têm limites visuais para reduzir o uso de GPU, descritos no documento do experimento.
+- Escala exercitada nesta branch: COACTUPC com 3.048 nós / 3.887 transições, além do exemplo de 503 nós / 602 transições / 100 sites. WebGL2 é necessário. Os centros das caixas ficam separados no plano; em ângulos rasantes, as caixas podem se sobrepor em perspectiva. Use Vista frontal, zoom e os recortes para leitura. Detalhes e partículas têm limites visuais para reduzir o uso de GPU, descritos no documento do experimento.
 - Um fixture upstream de captura de dados entre programas aninhados falhou no lower; os detalhes para revisão estão em [VALIDATION.md](docs/VALIDATION.md#limitações-encontradas).
 
 Repositório Git independente, sem remote. Caches, builds e dependências não são versionados.
