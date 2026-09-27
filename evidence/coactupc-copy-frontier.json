@@ -1,0 +1,2437 @@
+{
+  "status": "DIAGNOSIS_CONFIRMED",
+  "baseline": {
+    "provenance": {
+      "directory": ".local/carddemo-coactupc-20260927T112652Z/pipeline",
+      "execution": {
+        "build": {
+          "repos": {
+            "proleap-poc": {
+              "sha": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+              "status": ""
+            },
+            "cobol-lower": {
+              "sha": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+              "status": ""
+            },
+            "air-java": {
+              "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+              "status": ""
+            },
+            "analysis-cfg": {
+              "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+              "status": ""
+            },
+            "analysis-ir": {
+              "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+              "status": ""
+            }
+          },
+          "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+          "sourceCount": 461,
+          "sourcesSha256": "c895d33d952b5bb659653cb3032773d4bade5c774e9fde146183b575f3837cce",
+          "libraries": {
+            "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+            "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+            "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+            "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+            "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+            "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+            "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+            "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+          }
+        },
+        "source": "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+        "sourceSha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+        "executions": [
+          {
+            "phase": "frontend",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+              "--source",
+              "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cbl/COACTUPC.cbl",
+              "--output",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp",
+              "--copybooks",
+              "/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy,/home/gustavo/workspace/teste-e2e/proleap-poc/corpus/carddemo/cpy-bms",
+              "--storage-profile",
+              "ibm-enterprise-6.4-fixed-display-1047@1",
+              "--entry-storage-state",
+              "initial",
+              "--cics-entry-mode",
+              "new-logical-level",
+              "--logical-text",
+              "disabled"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "lower",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "ExportLinks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/sp/cobol-semantic-product.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/links.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "cfg",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/cfg.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "dependencies",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/dependencies.json",
+              "--source-evidence",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/carddemo-coactupc-20260927T112652Z/pipeline/source-evidence.json",
+              "--experimental-physical"
+            ],
+            "exitCode": 0
+          }
+        ]
+      },
+      "sha256": {
+        "sp/cobol-semantic-product.json": "fbfbe0fa2ac4f6f16f61904e91a4eb0dec89b31cdd6a324d1d1288c831f946c6",
+        "air.json": "37ae9615fe43e454a8ff9de7a9cb0a634ec27de90cd39cdb0e698d0329654f6a",
+        "cfg.json": "911879b23f5dab26969c229666749a94da08fa1f04409d8c4fc9b1eb9851b612",
+        "links.json": "1ae6559eccb9f1467188401812b0bb5ecd410292e4312fa03a89fb661f338ad6",
+        "dependencies.json": "c823fdbbc325363b28ab2bf140cf9f2bdca989a56b4645bf0fd273132e9c0883"
+      }
+    },
+    "nodes": 3048,
+    "reachedFromEntry": 966,
+    "receiveStatement": {
+      "variant": "CICS_COMMAND",
+      "commandKind": "RECEIVE_MAP",
+      "gapCodes": [
+        "CICS_COMMAND_EFFECTS_NOT_MODELED"
+      ],
+      "header": {
+        "containment": {
+          "branch": "ROOT",
+          "parent": null
+        },
+        "coverage": "PARTIAL",
+        "id": "statement:888",
+        "programPoint": 59,
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 191,
+            "endLine": 3430,
+            "file": "<preprocessed>",
+            "startColumn": 4,
+            "startLine": 3430
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 1045,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 1040
+          }
+        },
+        "readiness": {
+          "cfg": {
+            "scope": "control in ControlTopology",
+            "status": "PARTIAL"
+          },
+          "effectsDataflow": {
+            "scope": "command effects not modeled",
+            "status": "BLOCKED"
+          },
+          "lowering": {
+            "scope": "typed CICS command",
+            "status": "PARTIAL"
+          }
+        }
+      },
+      "hostEffects": {
+        "literalOptions": []
+      },
+      "options": [
+        {
+          "end": 45,
+          "name": "MAP",
+          "operand": "LIT-THISMAP",
+          "reference": {
+            "binding": {
+              "candidates": [
+                {
+                  "canonicalName": "LIT-THISMAP",
+                  "id": "data:194"
+                }
+              ],
+              "reason": "UNIQUE_VISIBLE_DECLARATION",
+              "selected": "data:194",
+              "status": "RESOLVED"
+            },
+            "id": "operand:888:0",
+            "logicalWholeItem": "data:194",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 47,
+                "endLine": 3430,
+                "file": "<preprocessed>",
+                "startColumn": 37,
+                "startLine": 3430
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 1045,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 1040
+              }
+            },
+            "regionalAccess": null,
+            "regionalAlternatives": [],
+            "role": "READ",
+            "wholeItemAccess": null
+          },
+          "start": 29
+        },
+        {
+          "end": 82,
+          "name": "MAPSET",
+          "operand": "LIT-THISMAPSET",
+          "reference": {
+            "binding": {
+              "candidates": [
+                {
+                  "canonicalName": "LIT-THISMAPSET",
+                  "id": "data:193"
+                }
+              ],
+              "reason": "UNIQUE_VISIBLE_DECLARATION",
+              "selected": "data:193",
+              "status": "RESOLVED"
+            },
+            "id": "operand:888:1",
+            "logicalWholeItem": "data:193",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 84,
+                "endLine": 3430,
+                "file": "<preprocessed>",
+                "startColumn": 71,
+                "startLine": 3430
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 1045,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 1040
+              }
+            },
+            "regionalAccess": null,
+            "regionalAlternatives": [],
+            "role": "READ",
+            "wholeItemAccess": null
+          },
+          "start": 60
+        },
+        {
+          "end": 111,
+          "name": "INTO",
+          "operand": "CACTUPAI",
+          "reference": {
+            "binding": {
+              "candidates": [
+                {
+                  "canonicalName": "CACTUPAI",
+                  "id": "data:250"
+                }
+              ],
+              "reason": "UNIQUE_VISIBLE_DECLARATION",
+              "selected": "data:250",
+              "status": "RESOLVED"
+            },
+            "id": "operand:888:2",
+            "logicalWholeItem": "data:250",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 113,
+                "endLine": 3430,
+                "file": "<preprocessed>",
+                "startColumn": 106,
+                "startLine": 3430
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 1045,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 1040
+              }
+            },
+            "regionalAccess": null,
+            "regionalAlternatives": [],
+            "role": "WRITE",
+            "wholeItemAccess": null
+          },
+          "start": 97
+        },
+        {
+          "end": 142,
+          "name": "RESP",
+          "operand": "WS-RESP-CD",
+          "reference": {
+            "binding": {
+              "candidates": [
+                {
+                  "canonicalName": "WS-RESP-CD",
+                  "id": "data:2"
+                }
+              ],
+              "reason": "UNIQUE_VISIBLE_DECLARATION",
+              "selected": "data:2",
+              "status": "RESOLVED"
+            },
+            "id": "operand:888:3",
+            "logicalWholeItem": "data:2",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 144,
+                "endLine": 3430,
+                "file": "<preprocessed>",
+                "startColumn": 135,
+                "startLine": 3430
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 1045,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 1040
+              }
+            },
+            "regionalAccess": null,
+            "regionalAlternatives": [],
+            "role": "WRITE",
+            "wholeItemAccess": null
+          },
+          "start": 126
+        },
+        {
+          "end": 174,
+          "name": "RESP2",
+          "operand": "WS-REAS-CD",
+          "reference": {
+            "binding": {
+              "candidates": [
+                {
+                  "canonicalName": "WS-REAS-CD",
+                  "id": "data:3"
+                }
+              ],
+              "reason": "UNIQUE_VISIBLE_DECLARATION",
+              "selected": "data:3",
+              "status": "RESOLVED"
+            },
+            "id": "operand:888:4",
+            "logicalWholeItem": "data:3",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 176,
+                "endLine": 3430,
+                "file": "<preprocessed>",
+                "startColumn": 167,
+                "startLine": 3430
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 1045,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 1040
+              }
+            },
+            "regionalAccess": null,
+            "regionalAlternatives": [],
+            "role": "WRITE",
+            "wholeItemAccess": null
+          },
+          "start": 157
+        }
+      ],
+      "rawText": "*>EXECCICS EXEC CICS RECEIVE MAP(LIT-THISMAP)               MAPSET(LIT-THISMAPSET)               INTO(CACTUPAI)               RESP(WS-RESP-CD)               RESP2(WS-REAS-CD)     END-EXEC",
+      "syntaxStatus": "SUPPORTED"
+    },
+    "receiveNode": {
+      "id": {
+        "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+        "ordinal": "586"
+      },
+      "kind": "SEQUENCE",
+      "label": {
+        "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+        "unit": "unit",
+        "localId": "355d09b10cb051c41a8e425130e4e012"
+      },
+      "terminator": {
+        "kind": "OPAQUE",
+        "operation": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "unit": "unit",
+          "localId": "34801631f379dccf43d3a2ac64a7f805"
+        },
+        "openControlRemainder": true
+      }
+    },
+    "receiveTerminator": {
+      "envelope": {
+        "control": {
+          "known": [],
+          "remainder": {
+            "kind": "within",
+            "scope": {
+              "kind": "labels",
+              "labels": []
+            }
+          }
+        },
+        "dependencies": {
+          "known": [],
+          "remainder": {
+            "kind": "none"
+          }
+        },
+        "memory": {
+          "knownReads": [],
+          "knownWrites": [],
+          "mustOverwrite": [],
+          "otherReads": {
+            "kind": "none"
+          },
+          "otherWrites": {
+            "kind": "none"
+          }
+        }
+      },
+      "header": {
+        "coverage": "UNSUPPORTED",
+        "id": {
+          "domain": "operation",
+          "localId": "34801631f379dccf43d3a2ac64a7f805",
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "unit": "unit"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "f6edbedf88984f9f9098a4152c2e461c",
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+        },
+        "precision": {
+          "control": {
+            "reasons": [
+              {
+                "domain": "uncertainty",
+                "localId": "0e40f8f3e6227ce69f6ced7f871ad49a",
+                "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+              }
+            ],
+            "scope": {
+              "entities": [
+                {
+                  "domain": "operation",
+                  "localId": "34801631f379dccf43d3a2ac64a7f805",
+                  "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+                  "unit": "unit"
+                }
+              ],
+              "kind": "entities"
+            },
+            "status": "UNAVAILABLE"
+          },
+          "dependencies": {
+            "reasons": [],
+            "scope": {
+              "entities": [
+                {
+                  "domain": "operation",
+                  "localId": "34801631f379dccf43d3a2ac64a7f805",
+                  "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+                  "unit": "unit"
+                }
+              ],
+              "kind": "entities"
+            },
+            "status": "EXACT"
+          },
+          "effects": {
+            "reasons": [
+              {
+                "domain": "uncertainty",
+                "localId": "0e40f8f3e6227ce69f6ced7f871ad49a",
+                "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+              }
+            ],
+            "scope": {
+              "entities": [
+                {
+                  "domain": "operation",
+                  "localId": "34801631f379dccf43d3a2ac64a7f805",
+                  "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+                  "unit": "unit"
+                }
+              ],
+              "kind": "entities"
+            },
+            "status": "UNAVAILABLE"
+          },
+          "storage": {
+            "reasons": [],
+            "scope": {
+              "entities": [
+                {
+                  "domain": "operation",
+                  "localId": "34801631f379dccf43d3a2ac64a7f805",
+                  "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+                  "unit": "unit"
+                }
+              ],
+              "kind": "entities"
+            },
+            "status": "EXACT"
+          },
+          "values": {
+            "reasons": [
+              {
+                "domain": "uncertainty",
+                "localId": "ac396aa64d11565126a81f92c4be806a",
+                "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+              }
+            ],
+            "scope": {
+              "entities": [
+                {
+                  "domain": "operation",
+                  "localId": "34801631f379dccf43d3a2ac64a7f805",
+                  "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+                  "unit": "unit"
+                }
+              ],
+              "kind": "entities"
+            },
+            "status": "OPEN"
+          }
+        },
+        "uncertainties": [
+          {
+            "domain": "uncertainty",
+            "localId": "ac396aa64d11565126a81f92c4be806a",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          {
+            "domain": "uncertainty",
+            "localId": "0e40f8f3e6227ce69f6ced7f871ad49a",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          }
+        ]
+      },
+      "kind": "opaque",
+      "knownOperands": [],
+      "observedKind": "CicsCommandFact",
+      "valueResults": []
+    },
+    "receiveUncertainties": [
+      {
+        "code": "cobol-lower:EXECUTABLE_CAPABILITY_NOT_READY",
+        "dimensions": [
+          "CONTROL",
+          "EFFECTS",
+          "VALUES",
+          "DEPENDENCIES"
+        ],
+        "id": {
+          "domain": "uncertainty",
+          "localId": "ac396aa64d11565126a81f92c4be806a",
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "43c5ea0dd9ed4c91118bf7d9981ed6c7",
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+        },
+        "reason": "Source region retains published operands and only proved control",
+        "scope": {
+          "entities": [
+            {
+              "domain": "operation",
+              "localId": "34801631f379dccf43d3a2ac64a7f805",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            }
+          ],
+          "kind": "entities"
+        }
+      },
+      {
+        "code": "EXECUTABLE_CAPABILITY_NOT_READY",
+        "dimensions": [
+          "CONTROL"
+        ],
+        "id": {
+          "domain": "uncertainty",
+          "localId": "0e40f8f3e6227ce69f6ced7f871ad49a",
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+        },
+        "origin": {
+          "domain": "origin",
+          "localId": "9ebb3a18977fcfe9ee02fedfabd5edcf",
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+        },
+        "reason": "Typed CICS_COMMAND retained at statement:888; executable projection stops here. Source topology is retained in input; no source termination is claimed.",
+        "scope": {
+          "entities": [
+            {
+              "domain": "operation",
+              "localId": "34801631f379dccf43d3a2ac64a7f805",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            }
+          ],
+          "kind": "entities"
+        }
+      }
+    ],
+    "receiveIntoAdmission": {
+      "reference": {
+        "binding": {
+          "candidates": [
+            {
+              "canonicalName": "CACTUPAI",
+              "id": "data:250"
+            }
+          ],
+          "reason": "UNIQUE_VISIBLE_DECLARATION",
+          "selected": "data:250",
+          "status": "RESOLVED"
+        },
+        "id": "operand:888:2",
+        "logicalWholeItem": "data:250",
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 113,
+            "endLine": 3430,
+            "file": "<preprocessed>",
+            "startColumn": 106,
+            "startLine": 3430
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 1045,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 1040
+          }
+        },
+        "regionalAccess": null,
+        "regionalAlternatives": [],
+        "role": "WRITE",
+        "wholeItemAccess": null
+      },
+      "storageNode": "storage-node:1127",
+      "binding": {
+        "cells": [],
+        "dependencies": [
+          "LOCAL_ALLOCATION/storage-base:1127"
+        ],
+        "exactCell": "",
+        "node": "storage-node:1127",
+        "region": "storage-base:1127",
+        "regions": []
+      },
+      "bindingAvailable": false,
+      "proofs": [
+        {
+          "dependencies": [
+            "REGION_CONTEXT/storage-base:1127",
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "LOCAL_ALLOCATION/storage-base:1127",
+          "inputs": [],
+          "kind": "LOCAL_ALLOCATION",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/LOCAL_ALLOCATION",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "REGION_CONTEXT/storage-base:1127",
+          "inputs": [
+            "input:0",
+            "input:1"
+          ],
+          "kind": "REGION_CONTEXT",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/REGION_CONTEXT",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [],
+          "id": "SOURCE_SYNTAX/storage-base:1127",
+          "inputs": [],
+          "kind": "SOURCE_SYNTAX",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/SOURCE_SYNTAX",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": true
+        }
+      ],
+      "inputs": [
+        {
+          "available": false,
+          "id": "input:0",
+          "kind": "MISSING_COPY",
+          "provenance": {
+            "exact": false,
+            "expanded": {
+              "endColumn": 27,
+              "endLine": 2068,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2068
+            },
+            "includeChain": [],
+            "original": {
+              "endColumn": 20,
+              "endLine": 615,
+              "file": "COACTUPC.cbl",
+              "startColumn": 7,
+              "startLine": 615
+            }
+          }
+        },
+        {
+          "available": false,
+          "id": "input:1",
+          "kind": "MISSING_COPY",
+          "provenance": {
+            "exact": false,
+            "expanded": {
+              "endColumn": 25,
+              "endLine": 2070,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2070
+            },
+            "includeChain": [],
+            "original": {
+              "endColumn": 18,
+              "endLine": 616,
+              "file": "COACTUPC.cbl",
+              "startColumn": 7,
+              "startLine": 616
+            }
+          }
+        }
+      ]
+    },
+    "sendFromAdmission": {
+      "reference": {
+        "binding": {
+          "candidates": [
+            {
+              "canonicalName": "CACTUPAO",
+              "id": "data:467"
+            }
+          ],
+          "reason": "UNIQUE_VISIBLE_DECLARATION",
+          "selected": "data:467",
+          "status": "RESOLVED"
+        },
+        "id": "operand:1206:2",
+        "logicalWholeItem": "data:467",
+        "provenance": {
+          "exact": false,
+          "expanded": {
+            "endColumn": 126,
+            "endLine": 7033,
+            "file": "<preprocessed>",
+            "startColumn": 119,
+            "startLine": 7033
+          },
+          "includeChain": [],
+          "original": {
+            "endColumn": 18,
+            "endLine": 3601,
+            "file": "COACTUPC.cbl",
+            "startColumn": 11,
+            "startLine": 3594
+          }
+        },
+        "regionalAccess": null,
+        "regionalAlternatives": [],
+        "role": "READ",
+        "wholeItemAccess": null
+      },
+      "storageNode": "storage-node:1886",
+      "binding": {
+        "cells": [],
+        "dependencies": [
+          "LOCAL_ALLOCATION/storage-base:1127"
+        ],
+        "exactCell": "",
+        "node": "storage-node:1886",
+        "region": "storage-base:1127",
+        "regions": []
+      },
+      "bindingAvailable": false,
+      "proofs": [
+        {
+          "dependencies": [
+            "REGION_CONTEXT/storage-base:1127",
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "LOCAL_ALLOCATION/storage-base:1127",
+          "inputs": [],
+          "kind": "LOCAL_ALLOCATION",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/LOCAL_ALLOCATION",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [
+            "SOURCE_SYNTAX/storage-base:1127"
+          ],
+          "id": "REGION_CONTEXT/storage-base:1127",
+          "inputs": [
+            "input:0",
+            "input:1"
+          ],
+          "kind": "REGION_CONTEXT",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/REGION_CONTEXT",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": false
+        },
+        {
+          "dependencies": [],
+          "id": "SOURCE_SYNTAX/storage-base:1127",
+          "inputs": [],
+          "kind": "SOURCE_SYNTAX",
+          "localPremise": true,
+          "provenance": {
+            "exact": true,
+            "expanded": {
+              "endColumn": 3,
+              "endLine": 2122,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2121
+            },
+            "includeChain": [
+              {
+                "includeLine": 623,
+                "includedFile": "COACTUP.CPY",
+                "includingFile": "COACTUPC.cbl",
+                "requestedName": "COACTUP"
+              }
+            ],
+            "original": {
+              "endColumn": 10,
+              "endLine": 18,
+              "file": "COACTUP.CPY",
+              "startColumn": 7,
+              "startLine": 17
+            }
+          },
+          "rule": "IBM6.4/R2/SOURCE_SYNTAX",
+          "scope": "storage-base:1127",
+          "subject": "storage-base:1127",
+          "evaluatedAvailable": true
+        }
+      ],
+      "inputs": [
+        {
+          "available": false,
+          "id": "input:0",
+          "kind": "MISSING_COPY",
+          "provenance": {
+            "exact": false,
+            "expanded": {
+              "endColumn": 27,
+              "endLine": 2068,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2068
+            },
+            "includeChain": [],
+            "original": {
+              "endColumn": 20,
+              "endLine": 615,
+              "file": "COACTUPC.cbl",
+              "startColumn": 7,
+              "startLine": 615
+            }
+          }
+        },
+        {
+          "available": false,
+          "id": "input:1",
+          "kind": "MISSING_COPY",
+          "provenance": {
+            "exact": false,
+            "expanded": {
+              "endColumn": 25,
+              "endLine": 2070,
+              "file": "<preprocessed>",
+              "startColumn": 0,
+              "startLine": 2070
+            },
+            "includeChain": [],
+            "original": {
+              "endColumn": 18,
+              "endLine": 616,
+              "file": "COACTUPC.cbl",
+              "startColumn": 7,
+              "startLine": 616
+            }
+          }
+        }
+      ]
+    },
+    "sourceNormalOutcome": {
+      "binding": "",
+      "id": "outcome:statement:888/normal",
+      "kind": "NORMAL",
+      "proofs": [
+        "proof:statement:888/command-normal"
+      ],
+      "role": "normal",
+      "statement": "statement:888",
+      "target": {
+        "kind": "OCCURRENCE",
+        "proofs": [
+          "proof:statement:888"
+        ],
+        "reference": "statement:889"
+      }
+    },
+    "continuationNode": {
+      "id": {
+        "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+        "ordinal": "280"
+      },
+      "kind": "SEQUENCE",
+      "label": {
+        "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+        "unit": "unit",
+        "localId": "17202e488f72480075016184e8ef444b"
+      },
+      "terminator": {
+        "kind": "OPAQUE",
+        "operation": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "unit": "unit",
+          "localId": "aace90dddfa7331fa33c5a919e392926"
+        },
+        "openControlRemainder": false
+      }
+    },
+    "reachedFromContinuation": 2062,
+    "reachableTerminals": [
+      {
+        "node": {
+          "id": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "1399"
+          },
+          "kind": "SEQUENCE",
+          "label": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit",
+            "localId": "7735e8831a33cd76048b01811f8387e0"
+          },
+          "terminator": {
+            "kind": "OPAQUE",
+            "operation": {
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit",
+              "localId": "3a2558f8ead915b125346b152a4160e0"
+            },
+            "openControlRemainder": true
+          }
+        },
+        "statements": [
+          {
+            "statement": "statement:866",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 80,
+                "endLine": 3348,
+                "file": "<preprocessed>",
+                "startColumn": 12,
+                "startLine": 3348
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 26,
+                "endLine": 954,
+                "file": "COACTUPC.cbl",
+                "startColumn": 19,
+                "startLine": 952
+              }
+            }
+          }
+        ]
+      },
+      {
+        "node": {
+          "id": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "2094"
+          },
+          "kind": "SEQUENCE",
+          "label": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit",
+            "localId": "aed93a85d99303e5800f2503a3fa915d"
+          },
+          "terminator": {
+            "kind": "OPAQUE",
+            "operation": {
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit",
+              "localId": "0d261563037c11cf48da93b54bf577d8"
+            },
+            "openControlRemainder": true
+          }
+        },
+        "statements": [
+          {
+            "statement": "statement:1206",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 254,
+                "endLine": 7033,
+                "file": "<preprocessed>",
+                "startColumn": 4,
+                "startLine": 7033
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 3601,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 3594
+              }
+            }
+          }
+        ]
+      },
+      {
+        "node": {
+          "id": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "2544"
+          },
+          "kind": "SEQUENCE",
+          "label": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit",
+            "localId": "d63f991d3279687524f204dfee1091ee"
+          },
+          "terminator": {
+            "kind": "OPAQUE",
+            "operation": {
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit",
+              "localId": "6f8cca28d588e8c5d1f153f55dd89e99"
+            },
+            "openControlRemainder": true
+          }
+        },
+        "statements": [
+          {
+            "statement": "statement:867",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 147,
+                "endLine": 3351,
+                "file": "<preprocessed>",
+                "startColumn": 12,
+                "startLine": 3351
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 26,
+                "endLine": 959,
+                "file": "COACTUPC.cbl",
+                "startColumn": 19,
+                "startLine": 956
+              }
+            }
+          }
+        ]
+      },
+      {
+        "node": {
+          "id": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "586"
+          },
+          "kind": "SEQUENCE",
+          "label": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit",
+            "localId": "355d09b10cb051c41a8e425130e4e012"
+          },
+          "terminator": {
+            "kind": "OPAQUE",
+            "operation": {
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit",
+              "localId": "34801631f379dccf43d3a2ac64a7f805"
+            },
+            "openControlRemainder": true
+          }
+        },
+        "statements": [
+          {
+            "statement": "statement:888",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 191,
+                "endLine": 3430,
+                "file": "<preprocessed>",
+                "startColumn": 4,
+                "startLine": 3430
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 1045,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 1040
+              }
+            }
+          }
+        ]
+      },
+      {
+        "node": {
+          "id": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "ordinal": "695"
+          },
+          "kind": "SEQUENCE",
+          "label": {
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit",
+            "localId": "3e069d0f295c4c107c312b9688daf365"
+          },
+          "terminator": {
+            "kind": "OPAQUE",
+            "operation": {
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit",
+              "localId": "b5f70c9101b7e6a0c94151b9d2aeace9"
+            },
+            "openControlRemainder": true
+          }
+        },
+        "statements": [
+          {
+            "statement": "statement:1206",
+            "provenance": {
+              "exact": false,
+              "expanded": {
+                "endColumn": 254,
+                "endLine": 7033,
+                "file": "<preprocessed>",
+                "startColumn": 4,
+                "startLine": 7033
+              },
+              "includeChain": [],
+              "original": {
+                "endColumn": 18,
+                "endLine": 3601,
+                "file": "COACTUPC.cbl",
+                "startColumn": 11,
+                "startLine": 3594
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "1387"
+        },
+        "site": {
+          "action": "read",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "2529b8b070c7d49bb5bdaa3070bb3391",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "41f3186b966c0e402096ecc934c5c467",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "2529b8b070c7d49bb5bdaa3070bb3391",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "75f4cdaa0c3ceab9d586ae9cb907e2ac",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "2271984f348a14ffd439ef11609f13f0",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "b4dd77e1118c321105a847f768f76a53",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "41f3186b966c0e402096ecc934c5c467",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      },
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "719"
+        },
+        "site": {
+          "action": "read",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "6d877793458efb5cba37e173689c183c",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "4aae3c991b5cf9b88d7ab991695c09d8",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "6d877793458efb5cba37e173689c183c",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "3fe23504094933262ad4f0ebae1398a2",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "81139b1ff748a3667cb9b9c29b23f637",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "e2abe350c3da8a200af5745e7ed480f3",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "4aae3c991b5cf9b88d7ab991695c09d8",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      },
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "1028"
+        },
+        "site": {
+          "action": "rewrite",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "b8ab9ec2139142162b36f70d9938c87c",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "6329cc9c5551235ff183e531f7a873c3",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "b8ab9ec2139142162b36f70d9938c87c",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "5a60473bfef595c85d9dd6081fea848c",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "ed3c528b1b1d9f84087f59b522197e2d",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "4303719e4b9d0055502bc94a89d0ee6b",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "6329cc9c5551235ff183e531f7a873c3",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      },
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "400"
+        },
+        "site": {
+          "action": "read",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "d9127702d1b78afb677813fa37a6e941",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "6c3ec0f8b8da9d874f370f7098d12acb",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "d9127702d1b78afb677813fa37a6e941",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "22a766037bc9ef10843ead6e44d36311",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "26c219895a3ab954dab5dd478ce41796",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "2a9746d4fea74bbeeee3fa8111310cdf",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "6c3ec0f8b8da9d874f370f7098d12acb",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      },
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "2712"
+        },
+        "site": {
+          "action": "rewrite",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "8a38047c9fe17ba363f08923a4690f01",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "7e7bcb8871c2cb3a8d8b6ad7f0ee0b3b",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "8a38047c9fe17ba363f08923a4690f01",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "e482f5027196010b4fe85358de98e9b3",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "6639988c79b59d00dd0d679a9ba2fe95",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "fa7c46ee2afd1fee5caec6354d528679",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "7e7bcb8871c2cb3a8d8b6ad7f0ee0b3b",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      },
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "244"
+        },
+        "site": {
+          "action": "read",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "90e7326ccf40179c90cc885a09bbcaed",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "8a63c7f9e6645feb24bf48bad21f8791",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "90e7326ccf40179c90cc885a09bbcaed",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "14dd73acddc21c509815c8778396e740",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "ce144946424fb0d72b1a6bccac39dd96",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "57ce1938015d5aecba9fedd52d080b53",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "8a63c7f9e6645feb24bf48bad21f8791",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      },
+      {
+        "node": {
+          "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+          "ordinal": "550"
+        },
+        "site": {
+          "action": "read",
+          "analysisReasons": [
+            "CICS_NAME_AREA_INTERPRETATION_OPEN",
+            "FILE_VALUES_UNAVAILABLE"
+          ],
+          "bindings": [],
+          "candidates": [],
+          "context": {
+            "analysisReasons": [],
+            "candidates": [],
+            "origin": {
+              "domain": "origin",
+              "localId": "e44b91f8be4acc9e177f51d059287c32",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            },
+            "selection": "DEFAULT",
+            "targetKind": "ABSENT",
+            "unknownRemainder": false,
+            "valuePoint": null
+          },
+          "control": "OPEN",
+          "effects": "OPEN",
+          "entry": {
+            "domain": "entry",
+            "localId": "c4de8a797697cb8ddf3012f2248da01f",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "namespace": "cics.file",
+          "operation": {
+            "domain": "operation",
+            "localId": "a93455c0a6bb32cce80ac1513886b3e2",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "origin": {
+            "domain": "origin",
+            "localId": "e44b91f8be4acc9e177f51d059287c32",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "owner": {
+            "domain": "unit",
+            "localId": "unit",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "reachability": "UNREACHABLE_IN_MODEL",
+          "sequence": {
+            "domain": "label",
+            "localId": "328101fdf4093fcf8654aa4d19f6e904",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+            "unit": "unit"
+          },
+          "targetKind": "COMPUTED",
+          "targetOrigin": {
+            "domain": "origin",
+            "localId": "ed1e85efa54ecc81d27ee003fd7bd8c5",
+            "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+          },
+          "uncertaintyRefs": [
+            {
+              "domain": "uncertainty",
+              "localId": "83e414f2565602f9f0abbef91c8e2b0e",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75"
+            }
+          ],
+          "unknownRemainder": true,
+          "valuePoint": {
+            "entryId": {
+              "domain": "entry",
+              "localId": "c4de8a797697cb8ddf3012f2248da01f",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "operationId": {
+              "domain": "operation",
+              "localId": "a93455c0a6bb32cce80ac1513886b3e2",
+              "publication": "b4fbf1ed1f8a03d7f54f806ae6d3aa75",
+              "unit": "unit"
+            },
+            "outcome": null,
+            "position": "BEFORE"
+          }
+        },
+        "reachableFromEntry": false,
+        "reachableFromSpContinuationNode": true
+      }
+    ],
+    "note": "Reachability from the continuation is a diagnostic traversal of existing edges. No edge was inserted."
+  },
+  "copyMissing": {
+    "provenance": {
+      "directory": ".local/coactupc-investigation/copy-missing",
+      "execution": {
+        "build": {
+          "repos": {
+            "proleap-poc": {
+              "sha": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+              "status": ""
+            },
+            "cobol-lower": {
+              "sha": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+              "status": ""
+            },
+            "air-java": {
+              "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+              "status": ""
+            },
+            "analysis-cfg": {
+              "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+              "status": ""
+            },
+            "analysis-ir": {
+              "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+              "status": ""
+            }
+          },
+          "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+          "sourceCount": 461,
+          "sourcesSha256": "c895d33d952b5bb659653cb3032773d4bade5c774e9fde146183b575f3837cce",
+          "libraries": {
+            "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+            "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+            "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+            "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+            "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+            "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+            "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+            "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+          }
+        },
+        "source": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/investigation/CICS-COPY-FRONTIER.cbl",
+        "sourceSha256": "49590df8a458c199c7db30559123943cd1ea5cba88c4e506e6affd102fb2d536",
+        "executions": [
+          {
+            "phase": "frontend",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+              "--source",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/investigation/CICS-COPY-FRONTIER.cbl",
+              "--output",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/sp",
+              "--copybooks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/no-copybooks",
+              "--storage-profile",
+              "ibm-enterprise-6.4-fixed-display-1047@1",
+              "--entry-storage-state",
+              "initial",
+              "--cics-entry-mode",
+              "new-logical-level",
+              "--logical-text",
+              "disabled"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "lower",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "ExportLinks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/sp/cobol-semantic-product.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/links.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/source-evidence.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "cfg",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/cfg.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "dependencies",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/dependencies.json",
+              "--source-evidence",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-missing/source-evidence.json",
+              "--experimental-physical"
+            ],
+            "exitCode": 0
+          }
+        ]
+      },
+      "sha256": {
+        "sp/cobol-semantic-product.json": "552d4a1d059dd900a78d778d35d4d402c3510ebcd6adce64fdadd44376c1d953",
+        "air.json": "4b1e4e3f024bb752d28f270b98b372387e83db3c449b1e84cdfe861d8c359536",
+        "cfg.json": "1ca9c132bcc85d57a5a961712762b51fd25b6713bbb43e57e63ca96beb269f3c",
+        "links.json": "55e8e0d05c3ed2add5998de82492c8cb0d5c4e3c442a852718e4237d0667e521",
+        "dependencies.json": "e5602f960313a3522a2eba02787af88f5c1d61faf163390faa60a3586abd53cf"
+      }
+    },
+    "receiveIntoBindingAvailable": false,
+    "receiveSuccessors": [],
+    "site": {
+      "action": "read",
+      "analysisReasons": [
+        "CICS_NAME_AREA_INTERPRETATION_OPEN",
+        "FILE_VALUES_UNAVAILABLE"
+      ],
+      "bindings": [],
+      "candidates": [],
+      "context": {
+        "analysisReasons": [],
+        "candidates": [],
+        "origin": {
+          "domain": "origin",
+          "localId": "b9eaae7cd3cd3513f87db54006711758",
+          "publication": "50b9c12b8d81c140f6c65b76799857ad"
+        },
+        "selection": "DEFAULT",
+        "targetKind": "ABSENT",
+        "unknownRemainder": false,
+        "valuePoint": null
+      },
+      "control": "OPEN",
+      "effects": "OPEN",
+      "entry": {
+        "domain": "entry",
+        "localId": "c4de8a797697cb8ddf3012f2248da01f",
+        "publication": "50b9c12b8d81c140f6c65b76799857ad",
+        "unit": "unit"
+      },
+      "namespace": "cics.file",
+      "operation": {
+        "domain": "operation",
+        "localId": "6d3a0bb6f60fec44807243bb0ed0b316",
+        "publication": "50b9c12b8d81c140f6c65b76799857ad",
+        "unit": "unit"
+      },
+      "origin": {
+        "domain": "origin",
+        "localId": "b9eaae7cd3cd3513f87db54006711758",
+        "publication": "50b9c12b8d81c140f6c65b76799857ad"
+      },
+      "owner": {
+        "domain": "unit",
+        "localId": "unit",
+        "publication": "50b9c12b8d81c140f6c65b76799857ad"
+      },
+      "reachability": "UNREACHABLE_IN_MODEL",
+      "sequence": {
+        "domain": "label",
+        "localId": "922aef9ead0e4063c3835fed371fce40",
+        "publication": "50b9c12b8d81c140f6c65b76799857ad",
+        "unit": "unit"
+      },
+      "targetKind": "COMPUTED",
+      "targetOrigin": {
+        "domain": "origin",
+        "localId": "43ac278a6f51b7d2f1e8314b4a10d7ed",
+        "publication": "50b9c12b8d81c140f6c65b76799857ad"
+      },
+      "uncertaintyRefs": [
+        {
+          "domain": "uncertainty",
+          "localId": "0bedb0c95c9df44be504fee8bc40dda0",
+          "publication": "50b9c12b8d81c140f6c65b76799857ad"
+        }
+      ],
+      "unknownRemainder": true,
+      "valuePoint": {
+        "entryId": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "50b9c12b8d81c140f6c65b76799857ad",
+          "unit": "unit"
+        },
+        "operationId": {
+          "domain": "operation",
+          "localId": "6d3a0bb6f60fec44807243bb0ed0b316",
+          "publication": "50b9c12b8d81c140f6c65b76799857ad",
+          "unit": "unit"
+        },
+        "outcome": null,
+        "position": "BEFORE"
+      }
+    },
+    "nodes": 5,
+    "edges": 3
+  },
+  "copyPresent": {
+    "provenance": {
+      "directory": ".local/coactupc-investigation/copy-present",
+      "execution": {
+        "build": {
+          "repos": {
+            "proleap-poc": {
+              "sha": "7775c0407f6e5b60d73517b687f9768c878e59eb",
+              "status": ""
+            },
+            "cobol-lower": {
+              "sha": "449ae4466ee2c7317a4df2148c6d4254762667cd",
+              "status": ""
+            },
+            "air-java": {
+              "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+              "status": ""
+            },
+            "analysis-cfg": {
+              "sha": "10eae0c3d51ac9b3d01cad5261f0fc439c1bc30b",
+              "status": ""
+            },
+            "analysis-ir": {
+              "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+              "status": ""
+            }
+          },
+          "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+          "sourceCount": 461,
+          "sourcesSha256": "c895d33d952b5bb659653cb3032773d4bade5c774e9fde146183b575f3837cce",
+          "libraries": {
+            "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+            "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+            "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+            "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+            "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+            "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+            "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+            "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+          }
+        },
+        "source": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/investigation/CICS-COPY-FRONTIER.cbl",
+        "sourceSha256": "49590df8a458c199c7db30559123943cd1ea5cba88c4e506e6affd102fb2d536",
+        "executions": [
+          {
+            "phase": "frontend",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.cobolexplorer.ExplorerMain",
+              "--source",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/investigation/CICS-COPY-FRONTIER.cbl",
+              "--output",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/sp",
+              "--copybooks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/fixtures/investigation/copybooks",
+              "--storage-profile",
+              "ibm-enterprise-6.4-fixed-display-1047@1",
+              "--entry-storage-state",
+              "initial",
+              "--cics-entry-mode",
+              "new-logical-level",
+              "--logical-text",
+              "disabled"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "lower",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "ExportLinks",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/sp/cobol-semantic-product.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/links.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/source-evidence.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "cfg",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/cfg.json"
+            ],
+            "exitCode": 0
+          },
+          {
+            "phase": "dependencies",
+            "command": [
+              "java",
+              "-cp",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.cache/runtime/classes:/home/gustavo/workspace/teste-e2e/proleap-poc/src/main/resources:/home/gustavo/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/home/gustavo/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar:/home/gustavo/.m2/repository/ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar:/home/gustavo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar:/home/gustavo/.m2/repository/com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar",
+              "io.github.gustavo2358.analysis.launcher.AnalysisDependencies",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/air.json",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/dependencies.json",
+              "--source-evidence",
+              "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/.local/coactupc-investigation/copy-present/source-evidence.json",
+              "--experimental-physical"
+            ],
+            "exitCode": 0
+          }
+        ]
+      },
+      "sha256": {
+        "sp/cobol-semantic-product.json": "5b7d4204af96577ecea9451a0ed975e85697cb2320e28d6988351207dd72b3c7",
+        "air.json": "f06df072c2a6e98b303212e7fe2c3fa7b8ec25f49e99a344f25b64dddf0bb1b8",
+        "cfg.json": "c9e0c5f04d618a2448413035b50881bb03e4d7a39e7be819b015956e1bef4ecd",
+        "links.json": "16f3317c1163d22764d9f3f6577ff318ec5d52f2d2c753bb88633f897b5df262",
+        "dependencies.json": "1ebeb8c710638ed73ea5ce89c27dfafd45bd574a841f2ff710e4b100fd82408f"
+      }
+    },
+    "receiveIntoBindingAvailable": true,
+    "receiveSuccessors": [
+      {
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+        "ordinal": "2"
+      }
+    ],
+    "site": {
+      "action": "read",
+      "analysisReasons": [
+        "FILE_SOURCE_VALUE_REMAINDER"
+      ],
+      "bindings": [],
+      "candidates": [
+        {
+          "rawValue": "ACCOUNTS",
+          "referenceName": "ACCOUNTS",
+          "supports": [
+            {
+              "kind": "VALUE_PRODUCER",
+              "origin": {
+                "domain": "origin",
+                "localId": "bc42b32a7e0866dcb30fb4a0c1810b8d",
+                "publication": "a5d4c28ada42154113c5a4ddfa7303ac"
+              },
+              "premises": [],
+              "producer": {
+                "domain": "operand",
+                "localId": "6520e7d271d81d6a896dc81d9e23cbcf",
+                "owner": {
+                  "domain": "entry",
+                  "localId": "c4de8a797697cb8ddf3012f2248da01f",
+                  "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+                  "unit": "unit"
+                },
+                "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+                "unit": "unit"
+              }
+            }
+          ]
+        }
+      ],
+      "context": {
+        "analysisReasons": [],
+        "candidates": [],
+        "origin": {
+          "domain": "origin",
+          "localId": "b9eaae7cd3cd3513f87db54006711758",
+          "publication": "a5d4c28ada42154113c5a4ddfa7303ac"
+        },
+        "selection": "DEFAULT",
+        "targetKind": "ABSENT",
+        "unknownRemainder": false,
+        "valuePoint": null
+      },
+      "control": "OPEN",
+      "effects": "OPEN",
+      "entry": {
+        "domain": "entry",
+        "localId": "c4de8a797697cb8ddf3012f2248da01f",
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+        "unit": "unit"
+      },
+      "namespace": "cics.file",
+      "operation": {
+        "domain": "operation",
+        "localId": "6d3a0bb6f60fec44807243bb0ed0b316",
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+        "unit": "unit"
+      },
+      "origin": {
+        "domain": "origin",
+        "localId": "b9eaae7cd3cd3513f87db54006711758",
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac"
+      },
+      "owner": {
+        "domain": "unit",
+        "localId": "unit",
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac"
+      },
+      "reachability": "REACHABLE",
+      "sequence": {
+        "domain": "label",
+        "localId": "922aef9ead0e4063c3835fed371fce40",
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+        "unit": "unit"
+      },
+      "targetKind": "COMPUTED",
+      "targetOrigin": {
+        "domain": "origin",
+        "localId": "43ac278a6f51b7d2f1e8314b4a10d7ed",
+        "publication": "a5d4c28ada42154113c5a4ddfa7303ac"
+      },
+      "uncertaintyRefs": [
+        {
+          "domain": "uncertainty",
+          "localId": "0bedb0c95c9df44be504fee8bc40dda0",
+          "publication": "a5d4c28ada42154113c5a4ddfa7303ac"
+        }
+      ],
+      "unknownRemainder": false,
+      "valuePoint": {
+        "entryId": {
+          "domain": "entry",
+          "localId": "c4de8a797697cb8ddf3012f2248da01f",
+          "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+          "unit": "unit"
+        },
+        "operationId": {
+          "domain": "operation",
+          "localId": "6d3a0bb6f60fec44807243bb0ed0b316",
+          "publication": "a5d4c28ada42154113c5a4ddfa7303ac",
+          "unit": "unit"
+        },
+        "outcome": null,
+        "position": "BEFORE"
+      }
+    },
+    "nodes": 5,
+    "edges": 4
+  },
+  "limits": [
+    "The original CardDemo was not rerun with genuine IBM copybooks.",
+    "The synthetic complete case retains a FILE source value remainder."
+  ]
+}
