@@ -6,7 +6,7 @@
 
 ## Abrir
 
-Com `npm run dev`, abra [COACTUPC no Trama](http://127.0.0.1:5173/?example=carddemo-coactupc) ou escolha **CardDemo · COACTUPC** na lista de exemplos. O pacote `public/examples/carddemo-coactupc.json.gz` também pode ser importado em outra instância.
+Com `npm run dev`, abra [COACTUPC no Osiris](http://127.0.0.1:5173/?example=carddemo-coactupc) ou escolha **CardDemo · COACTUPC** na lista de exemplos. O pacote `public/examples/carddemo-coactupc.json.gz` também pode ser importado em outra instância.
 
 ## Sincronização e origem
 

@@ -13,7 +13,7 @@ flowchart LR
   L --> LINKS[StatementLink e EntryLink]
   AIR --> C[Produtor CFG]
   AIR --> D[Produtor dependencies]
-  SP --> V[Trama no browser]
+  SP --> V[Osiris no browser]
   AIR --> V
   LINKS --> V
   C --> V

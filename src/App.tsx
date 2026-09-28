@@ -14,7 +14,6 @@ import {
   ArrowLeft,
   Download,
   ScanSearch,
-  Network,
   FolderOpen,
   Maximize2,
   Minimize2,
@@ -447,9 +446,9 @@ function App() {
         </h1>
         <div className="brand">
           <span className="brand-mark">
-            <Network size={24} />
+            <img className="osiris-symbol" src="osiris.png" width={34} height={34} alt="" />
           </span>
-          <strong>trama</strong>
+          <strong>Osiris</strong>
           <span className="brand-divider" />
           <span className="brand-sub">COBOL GRAPH EXPLORER</span>
         </div>
@@ -916,7 +915,7 @@ function App() {
               />
             ) : (
               <div className="start-state">
-                <Network size={40} />
+                <img className="osiris-symbol" src="osiris.png" width={40} height={40} alt="" />
                 <h2>Seu programa, em perspectiva.</h2>
                 <p>Abra um pacote de exemplo ou selecione AIR e CFG.</p>
                 <button className="primary-button" onClick={() => input.current?.click()}>
@@ -984,7 +983,7 @@ function App() {
       {busy && (
         <div className="loading-overlay" role="status">
           <div className="loading-card">
-            <Network className="pulse" size={28} />
+            <img className="osiris-symbol pulse" src="osiris.png" width={32} height={32} alt="" />
             <strong>{busy}</strong>
             <span>Artefatos processados nesta aba.</span>
           </div>
@@ -1000,7 +999,7 @@ function App() {
           >
             <X />
           </button>
-          <span className="eyebrow">TRAMA / GUIA RÁPIDO</span>
+          <span className="eyebrow">OSIRIS / GUIA RÁPIDO</span>
           <h2 id="help-title">Explore com as evidências à mão.</h2>
           <p>
             Abra um pacote <code>.json.gz</code> ou selecione vários arquivos de uma mesma execução.

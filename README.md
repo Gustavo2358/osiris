@@ -1,22 +1,23 @@
-# Trama · COBOL Graph Explorer
+# Osiris · COBOL Graph Explorer
 
 Aplicação local para navegar pelo controle que o analisador publicou, com statements e paragraphs COBOL, chamadas, candidatos e suas evidências.
 
-## Experimento 3D
+## Visualização 3D
 
-Esta branch, **`experiment/3d-force-graph`**, troca o renderer por `3d-force-graph` + Three.js/WebGL. Os centros dos nós e as conexões ficam num plano organizado por ELK. As caixas com conteúdo COBOL se voltam para a câmera, com órbita 3D livre pelos dois lados do plano. Partículas percorrem conexões ortogonais no sentido publicado. Veja [decisões, validação e limites do experimento](docs/EXPERIMENTO-3D.md).
+A visualização usa `3d-force-graph` + Three.js/WebGL e está integrada à `main`. Os centros dos nós e as conexões ficam num plano organizado por ELK. As caixas com conteúdo COBOL se voltam para a câmera, com órbita 3D livre pelos dois lados do plano. Partículas percorrem conexões ortogonais no sentido publicado. Veja [decisões, validação e limites do experimento](docs/EXPERIMENTO-3D.md).
 
 ## Rodar
 
 Requer Node.js 22.12+ (validado em 24.19). Java só é necessário para gerar novos exemplos.
 
 ```bash
-cd /home/gustavo/workspace/teste-e2e/cobol-graph-explorer
+git clone https://github.com/Gustavo2358/osiris.git
+cd osiris
 npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:5173**. Dezessete pacotes reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
+Abra **http://127.0.0.1:5173**. Dezenove pacotes reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
 
 Para servir o build estático:
 
@@ -159,7 +160,7 @@ npm run test:e2e          # browser real contra o build em :4173
 - Os nomes de paragraphs usam regiões tipadas do SP e seus spans. Sem essa informação, a navegação por paragraphs fica indisponível.
 - Os artefatos AIR podem não conter digest do fonte. O texto fornecido é uma anotação visual; os links SP/AIR são verificados, mas isso não autentica uma cópia de fonte escolhida pelo usuário.
 - O CFG JSON legado não representa todos os resultados `PARTIAL_ANALYSIS`. Falhas do produtor ou ausência de CFG não são substituídas por fluxo reconstruído do SP.
-- Escala exercitada nesta branch: COACTUPC com 3.048 nós / 3.887 transições, além do exemplo de 503 nós / 602 transições / 100 sites. WebGL2 é necessário. Os centros das caixas ficam separados no plano; em ângulos rasantes, as caixas podem se sobrepor em perspectiva. Use Vista frontal, zoom e os recortes para leitura. Detalhes e partículas têm limites visuais para reduzir o uso de GPU, descritos no documento do experimento.
+- Escala exercitada: COACTUPC com 5.037 nós / 6.293 transições, além do exemplo de 503 nós / 602 transições / 100 sites. WebGL2 é necessário. Os centros das caixas ficam separados no plano; em ângulos rasantes, as caixas podem se sobrepor em perspectiva. Use Vista frontal, zoom e os recortes para leitura. Detalhes e partículas têm limites visuais para reduzir o uso de GPU, descritos no documento do experimento.
 - Um fixture upstream de captura de dados entre programas aninhados falhou no lower; os detalhes para revisão estão em [VALIDATION.md](docs/VALIDATION.md#limitações-encontradas).
 
-Repositório Git independente, sem remote. Caches, builds e dependências não são versionados.
+Repositório independente: [Gustavo2358/osiris](https://github.com/Gustavo2358/osiris). Caches, builds e dependências não são versionados.

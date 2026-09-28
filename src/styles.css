@@ -99,7 +99,7 @@ a {
 }
 .brand strong {
   font-size: 26px;
-  letter-spacing: -1.6px;
+  letter-spacing: -1px;
   font-weight: 750;
   color: var(--ink);
 }
@@ -111,6 +111,14 @@ a {
   color: #fff;
   display: grid;
   place-items: center;
+}
+.osiris-symbol {
+  display: block;
+  flex-shrink: 0;
+}
+.brand-mark .osiris-symbol {
+  width: 100%;
+  height: 100%;
 }
 .brand-divider {
   height: 24px;
@@ -1536,9 +1544,6 @@ input[type='checkbox'] {
 .viewing-mode .brand-mark {
   width: 28px;
   height: 28px;
-}
-.viewing-mode .brand-mark svg {
-  width: 19px;
 }
 .viewing-mode .example-picker {
   flex-basis: 230px;

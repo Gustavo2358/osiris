@@ -2,7 +2,7 @@
 
 Reexecução de 27/09/2026, com atualização do exemplo e verificação no browser.
 
-**Resultado: o grafo publicado tem um único componente e todos os 5.037 nós são alcançáveis pela entrada.** O Trama carrega os novos produtos, preserva as 6.293 transições e permite consultar caminhos até os acessos a arquivos.
+**Resultado: o grafo publicado tem um único componente e todos os 5.037 nós são alcançáveis pela entrada.** O Osiris carrega os novos produtos, preserva as 6.293 transições e permite consultar caminhos até os acessos a arquivos.
 
 ## Comparação
 
