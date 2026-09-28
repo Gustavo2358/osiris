@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/osiris.png" alt="Logo do Osiris" width="144" height="144" />
+</p>
+
 # Osiris · COBOL Graph Explorer
 
 Aplicação local para navegar pelo controle que o analisador publicou, com statements e paragraphs COBOL, chamadas, candidatos e suas evidências.
