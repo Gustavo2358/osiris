@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/osiris.png" alt="Logo do Osiris" width="144" height="144" />
+  <img src="public/osiris.png" alt="Logo do Osiris" width="320" height="320" />
 </p>
 
 # Osiris · COBOL Graph Explorer
