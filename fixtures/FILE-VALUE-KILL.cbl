@@ -1,0 +1,13 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. FILE-VALUE-KILL.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 FN PIC X(8).
+       01 FLAG PIC X.
+       PROCEDURE DIVISION.
+           MOVE 'ACCOUNTS' TO FN.
+           IF FLAG = 'Y'
+               MOVE 'CUSTOMER' TO FN
+           END-IF.
+           EXEC CICS ENDBR FILE(FN) NOHANDLE END-EXEC.
+           GOBACK.

@@ -50,6 +50,7 @@ export class RoutedLink extends Group {
   private particles: Points<BufferGeometry, PointsMaterial>;
   private scratch = new Vector3();
   animated = false;
+  private dimmed = false;
   constructor(public link: SceneLink) {
     super();
     this.userData.targetId = link.edge.target;
@@ -75,17 +76,24 @@ export class RoutedLink extends Group {
     this.add(this.line, this.arrow, this.particles);
     this.style();
   }
-  style(witness?: Set<string>) {
-    const color = edgeColor(this.link.edge, witness);
+  style(witness?: Set<string>, values?: Set<string>, killed?: Set<string>) {
+    this.dimmed = !!values && !values.has(this.link.id);
+    const color = killed?.has(this.link.id)
+      ? '#fb7185'
+      : values?.has(this.link.id)
+        ? '#67e8f9'
+        : edgeColor(this.link.edge, witness);
     this.line.material.color.set(color);
-    this.line.material.opacity = witness?.has(this.link.id) ? 1 : 0.7;
+    this.line.material.opacity = this.dimmed ? 0.1 : values || witness?.has(this.link.id) ? 1 : 0.7;
+    this.arrow.material.transparent = true;
+    this.arrow.material.opacity = this.dimmed ? 0.1 : 1;
     this.arrow.material.color.set(color);
-    this.arrow.scale.setScalar(witness?.has(this.link.id) ? 1.4 : 1);
+    this.arrow.scale.setScalar(values?.has(this.link.id) || witness?.has(this.link.id) ? 1.4 : 1);
     this.particles.material.color.set(color);
   }
   tick(time: number) {
-    this.particles.visible = this.animated;
-    if (!this.animated) return;
+    this.particles.visible = this.animated && !this.dimmed;
+    if (!this.particles.visible) return;
     const positions = this.particles.geometry.getAttribute('position');
     for (let i = 0; i < 2; i++) {
       const p = pointOnRoute(

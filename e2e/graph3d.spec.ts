@@ -37,21 +37,45 @@ test('orbit, pan, zoom, keyboard, framing and Back preserve an explored 3D camer
   await open(page);
   const area = (await canvas(page).boundingBox())!;
   const initial = (await camera(page))!;
+  const selection = await page
+    .locator('.graph-node-target.is-selected')
+    .getAttribute('data-node-id');
   await page.mouse.move(area.x + area.width * 0.8, area.y + area.height * 0.7);
-  await page.mouse.down();
+  await page.mouse.down({ button: 'right' });
   await page.mouse.move(area.x + area.width * 0.8 - 100, area.y + area.height * 0.7 - 50, {
     steps: 10,
   });
-  await page.mouse.up();
+  await page.mouse.up({ button: 'right' });
   await expect.poll(() => camera(page)).not.toBe(initial);
   const orbit = (await camera(page))!;
-  await page.mouse.down({ button: 'right' });
+  // Right drag rotates around the same pivot.
+  expect(JSON.parse(orbit).target).toEqual(JSON.parse(initial).target);
+  expect(JSON.parse(orbit).position).not.toEqual(JSON.parse(initial).position);
+  await page.mouse.down({ button: 'left' });
   await page.mouse.move(area.x + area.width * 0.8 - 60, area.y + area.height * 0.7 - 30, {
     steps: 5,
   });
-  await page.mouse.up({ button: 'right' });
+  await page.mouse.up({ button: 'left' });
   await expect.poll(() => camera(page)).not.toBe(orbit);
   const pan = (await camera(page))!;
+  // Pan preserves orientation and selection; its pivot is rebased onto the diagram
+  // along the view ray, so a long translation cannot strand zoom behind the plane.
+  const beforePan = JSON.parse(orbit),
+    afterPan = JSON.parse(pan);
+  expect(afterPan.target).not.toEqual(beforePan.target);
+  expect(afterPan.target.z).toBeCloseTo(0, 7);
+  const direction = (v: typeof beforePan) => {
+    const d = ['x', 'y', 'z'].map((axis) => v.position[axis] - v.target[axis]);
+    const length = Math.hypot(...d);
+    return d.map((x) => x / length);
+  };
+  direction(afterPan).forEach((n: number, i: number) =>
+    expect(n).toBeCloseTo(direction(beforePan)[i], 7),
+  );
+  await expect(page.locator('.graph-node-target.is-selected')).toHaveAttribute(
+    'data-node-id',
+    selection!,
+  );
   await page.mouse.wheel(0, 150);
   await expect.poll(() => camera(page)).not.toBe(pan);
   await canvas(page).press('ArrowRight');

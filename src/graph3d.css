@@ -94,3 +94,11 @@
 .graph3d-caption span:last-child {
   flex-shrink: 0;
 }
+
+.graph3d-controls button.value-fit {
+  width: auto;
+  display: flex;
+  gap: 4px;
+  padding: 0 7px;
+  font-size: 11px;
+}

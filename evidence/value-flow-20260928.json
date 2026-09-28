@@ -1,0 +1,390 @@
+{
+  "date": "2026-09-28",
+  "scope": "Viewer and viewer-owned export adapter only. No producer edits.",
+  "runtime": {
+    "repos": {
+      "proleap-poc": {
+        "sha": "313236603815cd8c4d7299ae366310a4292bc5ee",
+        "status": ""
+      },
+      "cobol-lower": {
+        "sha": "da3325caa059a4beb7bd01f1fee262f9844725f2",
+        "status": ""
+      },
+      "air-java": {
+        "sha": "59df1f7d6f3523b21b172a3ea4b5a0dc95128faa",
+        "status": ""
+      },
+      "analysis-cfg": {
+        "sha": "50453b80f2cdac3239b7b77944c3546cdb8fc621",
+        "status": ""
+      },
+      "analysis-ir": {
+        "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+        "status": ""
+      }
+    },
+    "java": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+    "sourceCount": 463,
+    "sourcesSha256": "5c3335e9d3f109614d308694bcd4888c5680117ede7fd09e59806626acfc67c4",
+    "libraries": {
+      "org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+      "org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+      "ch/qos/logback/logback-classic/1.6.3/logback-classic-1.6.3.jar": "beebede8db065fe1b72909ecc66bb49acda618901635d86c25fce14a5915e37e",
+      "ch/qos/logback/logback-core/1.6.3/logback-core-1.6.3.jar": "a6967a28c8b086dee75a694d2f6fb8830c71153539866d7d8af065c9b6df91e0",
+      "com/fasterxml/jackson/core/jackson-databind/2.22.2/jackson-databind-2.22.2.jar": "d0da14c12b16b5d54719aa172d83b542ff4abeb8b0fb7db476fde8ceece760ca",
+      "com/fasterxml/jackson/core/jackson-core/2.22.2/jackson-core-2.22.2.jar": "ff167a6317be15895706c26668f45b898efe40ab8780970658210fe1393d52a6",
+      "com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.jar": "21ddb598807d3a51a876704eb979d9296e1c6a6f47ab1826ff88c6d6a127a2d0",
+      "com/dynatrace/hash4j/hash4j/0.30.0/hash4j-0.30.0.jar": "d3224b113ea835ce3452097747e5209ec760cf443dbed770d6ba68a0d480178f"
+    }
+  },
+  "adapterSha256": "a0ffdcb4f07c11e12d46c4d5f71c637b6c5afdad4217bad538a4517f8448bedf",
+  "examples": [
+    {
+      "example": "order-router",
+      "publication": {
+        "domain": "publication",
+        "localId": "3b475f9cfa43426dfe3a030525c16c19"
+      },
+      "observations": 26,
+      "uniqueFacts": 5,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "39d4484028727ac447b2bfe82f7caffdc08636a1f353bd1696e8def0d83bcbe7",
+      "airSha256": "204800783fa6ff6e67feb30d13d9e8b17019636279d66484fa46722e9ef7c829",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "86b0890645744333cc9b59114713b942442b82ef3e85bb4af8054c07fdb9cbc6",
+      "decodedBytes": 750425,
+      "nativeEvidence": ".local/kill-flow-order-router-v1/analysis/regional.json"
+    },
+    {
+      "example": "goto",
+      "publication": {
+        "domain": "publication",
+        "localId": "f6bcde82fd752cf7c77e4290cf1349a1"
+      },
+      "observations": 16,
+      "uniqueFacts": 5,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "57c38084615c636a6ff21b26bf9c91d421a4fd7a2a0e9b3413910102e2e72842",
+      "airSha256": "4d50bdcc8a7a706bc76f6a12430a747104d13ef40c134899ffdf9a27c0179fef",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "b7a65e861801ffc655d4098dd3c8c9a61dcde2e721f93e41a3d03e0135e8359f",
+      "decodedBytes": 593593,
+      "nativeEvidence": ".local/kill-flow-goto-v1/analysis/regional.json"
+    },
+    {
+      "example": "perform",
+      "publication": {
+        "domain": "publication",
+        "localId": "e3bb71d0ba898a8b4f76a3b3434e451e"
+      },
+      "observations": 17,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "a804bc0d503bf65809f08f6d49d4c72c8296176da416636c0186a3d0246ffe4b",
+      "airSha256": "ef8039ec2d56a34283ec44d453e9a251520617abd447aeefc22615b93e61c715",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "374e4ef44a4ede3321b7dd58b97b3d06713c5c5658adadcab59b55a2108d21fe",
+      "decodedBytes": 540923,
+      "nativeEvidence": ".local/kill-flow-perform-v1/analysis/regional.json"
+    },
+    {
+      "example": "cics",
+      "publication": {
+        "domain": "publication",
+        "localId": "4ae74b168b2e9a57a16680b88599e86c"
+      },
+      "observations": 14,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "e72fdf2b586dc098289f3b86a9c23167d3044f2720d21beed2bca7e97fb20011",
+      "airSha256": "62e39c8ad378d7bfcd9937de4aa6e5b21bc89f05f5b678cb52ff610f63e97b5c",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "5e458583e65b60aca304fe625881d830f95888cd9ac8e1541df457e3fabdc9dc",
+      "decodedBytes": 511231,
+      "nativeEvidence": ".local/kill-flow-cics-v1/analysis/regional.json"
+    },
+    {
+      "example": "large",
+      "publication": {
+        "domain": "publication",
+        "localId": "3e91721277381a6c85f0c5cbced82cfa"
+      },
+      "observations": 802,
+      "uniqueFacts": 200,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "89852707b84fd1058c831b94f2c443232b69576c1c9955b348c1a30904b02a47",
+      "airSha256": "9ce18ee73b13a89d294d1ac5f25e0b7759cae0bf6ba54743364e9ae2665a73e6",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "21f5103128dfa467898d9a038f7e3004422e1957af9264327232b6d7a86f6efa",
+      "decodedBytes": 18525557,
+      "nativeEvidence": ".local/kill-flow-large-v1/analysis/regional.json"
+    },
+    {
+      "example": "multi-call",
+      "publication": {
+        "domain": "publication",
+        "localId": "e27b271146a9c84f335696e6a3a70e02"
+      },
+      "observations": 28,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "f490819a9bfd11f3562df33d2a2b41d102fba0a7e393bc38b4990e1661d87d70",
+      "airSha256": "f91d6bf933fc199d4ac4bda5bac06b3e5875324ef93248e8e97d4aba6878d6dd",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "42a989376d41d134ad61d9a313e52b92596afdf2aa1f73e12d9539f89fd3db0f",
+      "decodedBytes": 446391,
+      "nativeEvidence": ".local/kill-flow-multi-call-v1/analysis/regional.json"
+    },
+    {
+      "example": "nested",
+      "publication": {
+        "domain": "publication",
+        "localId": "fe668bfc95101f35c7a0ffb7367e850f"
+      },
+      "observations": 0,
+      "uniqueFacts": 0,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "70b7edf818714f35f8b41b294bf1ed1d55c6c1dcbb45648f6d5967f47f7bff2b",
+      "airSha256": "0a16d9cfe2e5461ed05eeddc3ccdc3bd2b3659c3347ce70ced32623500e83814",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "003173f92a6586143ee57d6398f4da4f57cc366a150651841e720c4e781f8536",
+      "decodedBytes": 193106,
+      "nativeEvidence": ".local/kill-flow-nested-v1/analysis/regional.json"
+    },
+    {
+      "example": "copy",
+      "publication": {
+        "domain": "publication",
+        "localId": "3c70abd0b45c51819304906fb076838c"
+      },
+      "observations": 9,
+      "uniqueFacts": 2,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "d63b92a1b4048e8dc3736a28baf747b6944bfd6bdd013d3a4e6d5a4b1cc10e12",
+      "airSha256": "8be9252fa7211779f3b96d510d8c95ee1d3e5c703267958fa70f334c36d50b37",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "aec42085829bfdf277ba583501049973515c67c32652077a0f4a84ec9f967407",
+      "decodedBytes": 323276,
+      "nativeEvidence": ".local/kill-flow-copy-v1/analysis/regional.json"
+    },
+    {
+      "example": "cycle",
+      "publication": {
+        "domain": "publication",
+        "localId": "3ac46455f7f05ecfce5b8028f9c19970"
+      },
+      "observations": 7,
+      "uniqueFacts": 3,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "bb165896efdfd97fb20ae4505b2271180693da43f0e72c9276ed64d9247fbc2b",
+      "airSha256": "0dc6e6b299fce54d146071e26a68bca66b3cc72548a5e6210d88a2916cd61fed",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "bf48e02e30d5e29c9d4da66e5fef467d36e378f7abaa67d3602348ba721cec00",
+      "decodedBytes": 430828,
+      "nativeEvidence": ".local/kill-flow-cycle-v1/analysis/regional.json"
+    },
+    {
+      "example": "until",
+      "publication": {
+        "domain": "publication",
+        "localId": "96e619c590b1f3315a1932962283ed58"
+      },
+      "observations": 12,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "b49d1823affc111e2a665a15a2fe3d76245d2e5162637da62aabf0984477807d",
+      "airSha256": "d411c4e7c9ffe0587e1618c7dcf58527e3043d806138ef90067a66c6e377727b",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "10fc8231459ff4a09ccb1630cd129cd439e3771455fa06c4a6aad7314f17749c",
+      "decodedBytes": 401812,
+      "nativeEvidence": ".local/kill-flow-until-v1/analysis/regional.json"
+    },
+    {
+      "example": "minimal",
+      "publication": {
+        "domain": "publication",
+        "localId": "a92b58c6ea8c432b192b145b468af236"
+      },
+      "observations": 0,
+      "uniqueFacts": 0,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "d4cfac47c7ad4a27ddc250841589d329cea4ef606fe15bd97eef371c472f1892",
+      "airSha256": "d2d2eb48cdb73dc4d3c6723d2a80ee92668841a3ab1d88a2bb9ccd6109ab2210",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "0404e72f88c1b60ae1f0f7da702189df4d4cd67df577b5d022fcb02d35d71069",
+      "decodedBytes": 58754,
+      "nativeEvidence": ".local/kill-flow-minimal-v1/analysis/regional.json"
+    },
+    {
+      "example": "partial",
+      "publication": {
+        "domain": "publication",
+        "localId": "714ff4363b7992ee2c09ef2166d80793"
+      },
+      "observations": 8,
+      "uniqueFacts": 2,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "63609e88fe925179d2f885591a4ef870a75b6f63da9764de19ded73d02efdf69",
+      "airSha256": "4536835c734ffd03c8c6c9a3a61763d71bab68efd17a80134ec9b058b3fe196e",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "3629c061a332440cf17de9a2052711cf52f18846a7542066ec4614b089e208e5",
+      "decodedBytes": 403560,
+      "nativeEvidence": ".local/kill-flow-partial-v1/analysis/regional.json"
+    },
+    {
+      "example": "files-values",
+      "publication": {
+        "domain": "publication",
+        "localId": "d943d826fd196eb1cebe5b991e18f509"
+      },
+      "observations": 14,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "e42073b2ee08d082c077fe0e89de2327ef1bb3b321c817349689ea7086355c77",
+      "airSha256": "5ad6a117241ee56678dfadb3a6c43ba8cc71a0fc32528707a57a93b600631d7f",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "cfecf97d83f42d74487c428bb60df24d8a981865db5917bd8da0a0fbdf16cd34",
+      "decodedBytes": 1018691,
+      "nativeEvidence": ".local/kill-flow-files-values-v1/analysis/regional.json"
+    },
+    {
+      "example": "files-partial",
+      "publication": {
+        "domain": "publication",
+        "localId": "7fad91f004cfafb32297f25a19a7bd49"
+      },
+      "observations": 14,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "17f474a738d1a9448c1053707862088a7c2c98f5bc30f50b1d1d221c761ecd76",
+      "airSha256": "931db3fec28af6d4a01b612e0d0d176bc4711badaaf8c3e6bc9cfabcf403367e",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "99cbe2ac143b3f1641f9e6b566e390f0b64895368a492325f37baddfacb3906c",
+      "decodedBytes": 1016982,
+      "nativeEvidence": ".local/kill-flow-files-partial-v1/analysis/regional.json"
+    },
+    {
+      "example": "files-native",
+      "publication": {
+        "domain": "publication",
+        "localId": "c956b7b1bf42c4e128e97e944585b0d8"
+      },
+      "observations": 0,
+      "uniqueFacts": 0,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "316cec2271fad2bee73391c7a60d295aa6f2b0266bd824077cb912e78018e860",
+      "airSha256": "7620b4a452e80da6b4b0834ba6aade344eba1cc6ddcf2a2742e59fb8acddefdc",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "35752b97fafc7f8ebc283ff0759507791f46a58dc6dba032e6e20c917a1677f6",
+      "decodedBytes": 591554,
+      "nativeEvidence": ".local/kill-flow-files-native-v1/analysis/regional.json"
+    },
+    {
+      "example": "files-unknown",
+      "publication": {
+        "domain": "publication",
+        "localId": "d943d826fd196eb1cebe5b991e18f509"
+      },
+      "observations": 0,
+      "uniqueFacts": 0,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "49b3e9bebd1c86c393d5cbe011a0ab867086fd1b79461d8fdb49e0bdb73981c2",
+      "airSha256": "5ad6a117241ee56678dfadb3a6c43ba8cc71a0fc32528707a57a93b600631d7f",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "fa111c52667f83d18eb265c3cef5fa6034b2c42903c89223929600fef81e81f5",
+      "decodedBytes": 997099,
+      "nativeEvidence": ".local/kill-flow-files-unknown-v1/analysis/regional.json"
+    },
+    {
+      "example": "carddemo-coactupc",
+      "publication": {
+        "domain": "publication",
+        "localId": "4dd0daa5ad135dcf0d8e88f278724b6c"
+      },
+      "observations": 21588,
+      "uniqueFacts": 8,
+      "nativeVersion": "1.2.0",
+      "nativeSha256": "2236590218e8b3a87140fd35a5e989ab70b1b8d4649c9a06312c623f8aa8280f",
+      "airSha256": "ef886c7c53835cd1b094195fb7dd39f8b984c57f873d2fdb1bc3f49a7b13a072",
+      "originalArtifactsUnchanged": true,
+      "bundleSha256": "6d9125b533c8dbc92c83d0d170684c190d0fc8fe3f451e13adaacb4795a1b5f8",
+      "decodedBytes": 154080459,
+      "nativeEvidence": ".local/kill-flow-carddemo-coactupc-v1/analysis/regional.json"
+    },
+    {
+      "example": "file-value-kill",
+      "publication": {
+        "domain": "publication",
+        "localId": "da8f4cc2bcfbb360e04159700ae82c39"
+      },
+      "observations": 11,
+      "uniqueFacts": 4,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "c1acdb34405d309b0657a7c31854b3e2d13ecbf5089cf913b3a97a2a1f4490fb",
+      "airSha256": "cd4e3b2e38dbaf9682b7a2b946e3069e2ffcfab78e7f90328e3658f5bfeabcff",
+      "originalArtifactsUnchanged": null,
+      "bundleSha256": "95799647f883359c4b1ab65fc5da8a8c89a2dd57e04a016e40af729db6a628f8",
+      "decodedBytes": 360786,
+      "nativeEvidence": ".local/file-value-kill-v4/value-flow/regional.json"
+    },
+    {
+      "example": "value-copy-boundary",
+      "publication": {
+        "domain": "publication",
+        "localId": "4a71aca10a0215da3ac3adce985d0eec"
+      },
+      "observations": 13,
+      "uniqueFacts": 2,
+      "nativeVersion": "1.0.0",
+      "nativeSha256": "5092a0e24f8b08db8673f55b80854f19d76f82aecedeca43da63a047414585c0",
+      "airSha256": "d943f410fbccbfe8361c14c5ac2742963e317369bea913d9302397be2adda03c",
+      "originalArtifactsUnchanged": null,
+      "bundleSha256": "df9c9d2c4b08ae12678bff870594bf85edf8e5dc1097640dce0f00c484bdd6ba",
+      "decodedBytes": 384449,
+      "nativeEvidence": ".local/value-copy-boundary-v4/value-flow/regional.json"
+    }
+  ],
+  "limitations": [
+    "No predicate satisfiability or path witness",
+    "Direct named objects only; copied producer chains use structural fallback",
+    "Uncertain and partial definitions are never marked as proven kills",
+    "Intermediate exceptional outcomes end at uncertainty boundaries",
+    "COACTUPC entry RD remains open in pinned runtime"
+  ],
+  "validation": {
+    "unitTests": {
+      "passed": 84,
+      "command": "npm test"
+    },
+    "build": {
+      "status": "PASS",
+      "command": "npm run build",
+      "warning": "Existing large JS chunk warning"
+    },
+    "valueFlowBrowser": {
+      "command": "npx playwright test e2e/value-paths.spec.ts",
+      "stats": {
+        "startTime": "2026-09-28T12:34:03.456Z",
+        "duration": 9492.826,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "graphAndCarddemoBrowser": {
+      "command": "npx playwright test e2e/graph3d.spec.ts e2e/carddemo.spec.ts",
+      "stats": {
+        "startTime": "2026-09-28T12:35:33.562Z",
+        "duration": 65838.995,
+        "expected": 13,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "pythonSyntax": "PASS",
+    "diffCheck": "PASS"
+  }
+}

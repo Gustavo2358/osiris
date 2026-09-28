@@ -49,6 +49,8 @@ export function edgeDescription(edge: GraphEdge) {
     INVOKE_NORMAL: 'Retorno da chamada',
     RETURN: 'Retorno',
     OPAQUE_JUMP: 'Continuação conhecida',
+    EXCEPTION: 'Tratamento de exceção',
+    CONTROL_EXIT: 'Saída de controle',
     ENTRY: 'Entrada',
     JUMP: 'Continuação',
   };
@@ -70,7 +72,11 @@ function lines(context: CanvasRenderingContext2D, text: string, width: number, m
   return result.slice(0, max);
 }
 // Textures exist only for nearby cards. Distant cards share one texture per category.
-export function cardTexture(item: SceneNode | string, selected = false) {
+export function cardTexture(
+  item: SceneNode | string,
+  selected = false,
+  role?: 'definition' | 'destination' | 'kill' | 'unknown',
+) {
   const detailed = typeof item !== 'string';
   const canvas = document.createElement('canvas');
   canvas.width = detailed ? 540 : 90;
@@ -79,8 +85,17 @@ export function cardTexture(item: SceneNode | string, selected = false) {
   ctx.scale(canvas.width / 540, canvas.height / 264);
   const kind = detailed ? item.category : item;
   ctx.fillStyle = '#f8fafc';
-  ctx.strokeStyle = selected ? '#818cf8' : colors[kind];
-  ctx.lineWidth = selected ? 14 : 6;
+  ctx.strokeStyle =
+    role === 'kill'
+      ? '#fb7185'
+      : role === 'unknown'
+        ? '#fb923c'
+        : role === 'definition'
+          ? '#fbbf24'
+          : role === 'destination' || selected
+            ? '#a78bfa'
+            : colors[kind];
+  ctx.lineWidth = selected || role ? 14 : 6;
   ctx.beginPath();
   ctx.roundRect(8, 8, 524, 248, 18);
   ctx.fill();
@@ -92,7 +107,18 @@ export function cardTexture(item: SceneNode | string, selected = false) {
   if (detailed) {
     ctx.fillStyle = '#42526b';
     ctx.font = '600 18px system-ui, sans-serif';
-    const meta = kind === 'FLUXO' ? item.paragraph || kind : kind;
+    const meta =
+      role === 'kill'
+        ? 'DEFINIÇÃO SOBRESCRITA · FIM'
+        : role === 'unknown'
+          ? 'LIMITE DA EVIDÊNCIA'
+          : role === 'definition'
+            ? 'DEFINIÇÃO DO VALOR'
+            : role === 'destination'
+              ? 'DESTINO DO VALOR'
+              : kind === 'FLUXO'
+                ? item.paragraph || kind
+                : kind;
     ctx.fillText(meta.length > 32 ? meta.slice(0, 31) + '…' : meta, 42, 45, 375);
     ctx.textAlign = 'right';
     ctx.fillText(item.node.location ? `L${item.node.location.startLine}` : '', 508, 45);

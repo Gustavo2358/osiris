@@ -317,15 +317,21 @@ export function buildModel(doc: Documents): Model {
     assert(raw.id.publication === p.id.localId, 'Nó CFG de outra publicação.');
     assert(!nodeById.has(id), 'Identidade de nó CFG duplicada.');
     assert(
-      ['ENTRY', 'SEQUENCE', 'NORMAL_EXIT', 'HALT_EXIT'].includes(raw.kind),
+      [
+        'ENTRY',
+        'SEQUENCE',
+        'NORMAL_EXIT',
+        'HALT_EXIT',
+        ...(doc.cfg.schemaVersion === '4.0.0' ? ['OUTCOME_EXIT'] : []),
+      ].includes(raw.kind),
       'Kind de nó CFG não suportado.',
     );
     const seq = raw.kind === 'SEQUENCE' ? sequences.get(idKey(raw.label, 'label')) : undefined;
     if (raw.kind === 'SEQUENCE') {
-      if (doc.cfg.schemaVersion === '3.0.0')
+      if (['3.0.0', '4.0.0'].includes(doc.cfg.schemaVersion))
         assert(
           typeof raw.terminator?.openControlRemainder === 'boolean',
-          'CFG v3 exige openControlRemainder explícito.',
+          'CFG v3/v4 exige openControlRemainder explícito.',
         );
       assert(seq, 'Label CFG ausente na AIR.');
       assert(allowedTerms.includes(raw.terminator.kind), 'Terminador incompatível com versão CFG.');
@@ -337,6 +343,22 @@ export function buildModel(doc: Documents): Model {
       assert(
         seq.terminator.kind.toUpperCase() === raw.terminator.kind,
         'Kind de terminador AIR/CFG diverge.',
+      );
+    }
+    const outcomeOperation =
+      raw.kind === 'OUTCOME_EXIT' ? operations.get(idKey(raw.operation, 'operation')) : undefined;
+    if (raw.kind === 'OUTCOME_EXIT') {
+      assert(
+        outcomeOperation && ['invoke', 'opaque'].includes(outcomeOperation.kind),
+        'Saída CFG aponta para operação AIR ausente ou incompatível.',
+      );
+      assert(
+        ['HALT', 'EXCEPTION', 'ANY_EXCEPTION'].includes(raw.outcome),
+        'Outcome de saída CFG não suportado.',
+      );
+      assert(
+        raw.outcome !== 'EXCEPTION' || typeof raw.tag === 'string',
+        'Saída excepcional CFG exige tag explícita.',
       );
     }
     const ops: Raw[] = seq ? [...seq.instructions, seq.terminator] : [];
@@ -351,6 +373,7 @@ export function buildModel(doc: Documents): Model {
       linked[0]?.location ??
       locations(
         seq?.terminator?.header?.origin ??
+          outcomeOperation?.header?.origin ??
           (raw.entry ? airEntries.get(idKey(raw.entry, 'entry'))?.origin : undefined),
       ).find((l) => l.file !== '<preprocessed>');
     const snippet = sourceText(loc, doc.sources, 1);
@@ -378,6 +401,13 @@ export function buildModel(doc: Documents): Model {
       }[seq?.terminator?.kind as string] ||
       'Trecho de controle';
     if (raw.kind === 'ENTRY') title = 'Entrada do programa';
+    if (raw.kind === 'OUTCOME_EXIT')
+      title =
+        raw.outcome === 'HALT'
+          ? 'Fim da execução'
+          : raw.outcome === 'EXCEPTION'
+            ? `Saída excepcional · ${raw.tag}`
+            : 'Saída excepcional · tipo aberto';
     const unitId = raw.label
       ? { publication: raw.label.publication, localId: raw.label.unit }
       : (raw.unit ??
@@ -433,7 +463,8 @@ export function buildModel(doc: Documents): Model {
     'RETURN',
     'HALT',
     ...(doc.cfg.schemaVersion !== '1.0.0' ? ['INVOKE_NORMAL'] : []),
-    ...(doc.cfg.schemaVersion === '3.0.0' ? ['OPAQUE_JUMP', 'OPAQUE_RETURN'] : []),
+    ...(['3.0.0', '4.0.0'].includes(doc.cfg.schemaVersion) ? ['OPAQUE_JUMP', 'OPAQUE_RETURN'] : []),
+    ...(doc.cfg.schemaVersion === '4.0.0' ? ['EXCEPTION', 'CONTROL_EXIT'] : []),
   ];
   for (const [i, e] of doc.cfg.transitions.entries()) {
     assert(edgeKinds.includes(e.kind), 'Transição não suportada pela versão CFG.');

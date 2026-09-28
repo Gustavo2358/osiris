@@ -31,6 +31,9 @@ import {
 } from './model';
 import { Graph, type GraphViewport } from './Graph';
 import { Inspector } from './Inspector';
+import { valuePaths, combineValuePaths } from './value-paths';
+import { ValuePathsBanner } from './ValuePathsBanner';
+type ValueFocus = { siteId: string; candidate?: number };
 import { SourcePane } from './SourcePane';
 import { SplitWorkspace } from './SplitWorkspace';
 import { Tabs } from './Tabs';
@@ -56,6 +59,7 @@ interface ViewState {
   routeTargets: string[];
   routeCaption: string;
   routeSite?: string;
+  valueFocus?: ValueFocus;
   highlight: boolean;
   witness: boolean;
   viewport?: GraphViewport;
@@ -73,6 +77,7 @@ function App() {
   function setQuery(value: string) {
     setQueries((previous) => ({ ...previous, [sidebar]: value }));
   }
+  const [valueFocus, setValueFocus] = useState<ValueFocus>();
   const [routeTargets, setRouteTargets] = useState<string[]>([]);
   const [routeCaption, setRouteCaption] = useState('');
   const [routeSite, setRouteSite] = useState<string>();
@@ -108,6 +113,7 @@ function App() {
         routeTargets,
         routeCaption,
         routeSite,
+        valueFocus,
         highlight,
         witness,
         viewport: graphViewport.current,
@@ -130,6 +136,7 @@ function App() {
     setRouteTargets(previous.routeTargets);
     setRouteCaption(previous.routeCaption);
     setRouteSite(previous.routeSite);
+    setValueFocus(previous.valueFocus);
     setHighlight(previous.highlight);
     setWitness(previous.witness);
     if (previous.viewport)
@@ -169,6 +176,7 @@ function App() {
     setRouteTargets([]);
     setRouteCaption('');
     setRouteSite(undefined);
+    setValueFocus(undefined);
     setRestoreView(undefined);
     graphViewport.current = undefined;
     setSidebar(firstSite?.family === 'file' ? 'files' : 'calls');
@@ -258,6 +266,7 @@ function App() {
     if (site.id === selectedSite && selected === site.nodeIds[0]) return;
     rememberView();
     if (site.entry) setEntry(site.entry);
+    if (valueFocus && valueFocus.siteId !== site.id) setValueFocus(undefined);
     setSelectedSite(site.id);
     setSelected(site.nodeIds[0]);
     if (!site.nodeIds.some((id) => scope.nodes.some((n) => n.id === id))) {
@@ -270,6 +279,31 @@ function App() {
     site =
       allSites.find((s) => s.id === selectedSite) ??
       allSites.find((s) => s.nodeIds.includes(selected ?? '') && (!s.entry || s.entry === entry));
+  const valueSite = allSites.find((s) => s.id === valueFocus?.siteId);
+  const valueTraces = useMemo(
+    () => (model && valueSite ? valuePaths(model, valueSite, entry) : []),
+    [model, valueSite, entry],
+  );
+  const valueHighlight = useMemo(
+    () =>
+      valueFocus
+        ? combineValuePaths(
+            valueFocus.candidate === undefined
+              ? valueTraces
+              : valueTraces.slice(valueFocus.candidate, valueFocus.candidate + 1),
+          )
+        : undefined,
+    [valueFocus, valueTraces],
+  );
+  function highlightDefinitions(candidate?: number) {
+    if (!site) return;
+    rememberView();
+    setValueFocus({ siteId: site.id, candidate });
+    setMode('all');
+    setParagraph('');
+    setWitness(false);
+    setHighlight(false);
+  }
   const targetIds = useMemo(() => site?.nodeIds ?? (selected ? [selected] : []), [site, selected]);
   const reach = useMemo(
     () => (model && routeTargets.length ? pathsTo(model, entry, routeTargets) : undefined),
@@ -347,6 +381,7 @@ function App() {
         : foundNodes.length;
   const pathAction = () => {
     if (mode !== 'paths' || routeTargets.join() !== targetIds.join()) rememberView();
+    setValueFocus(undefined);
     setRouteTargets(targetIds);
     setRouteCaption(site?.title ?? node?.title ?? 'Trecho selecionado');
     setRouteSite(site?.id);
@@ -366,6 +401,24 @@ function App() {
       nodes: scope.nodes.map((n) => n.raw),
       transitions: scope.edges.map((e) => e.raw),
       selectedSite: site?.raw,
+      valueHighlight: valueFocus
+        ? {
+            site: valueSite?.raw,
+            candidate: valueFocus.candidate,
+            producers: [...(valueHighlight?.producers ?? [])],
+            kills: valueTraces
+              .filter((_, i) => valueFocus.candidate === undefined || i === valueFocus.candidate)
+              .flatMap((t) => t.kills),
+            unknowns: valueTraces
+              .filter((_, i) => valueFocus.candidate === undefined || i === valueFocus.candidate)
+              .flatMap((t) => t.unknowns),
+            transitions: scope.edges
+              .filter((e) => valueHighlight?.edges.has(e.id))
+              .map((e) => e.raw),
+            notice:
+              'Supports publicados e caminhos estruturais; não verifica condições nem sobrescritas.',
+          }
+        : undefined,
       sourceKnowledge: model.documents.cfg.sourceKnowledge,
     };
     const url = URL.createObjectURL(
@@ -507,6 +560,7 @@ function App() {
               onChange={(e) => {
                 rememberView();
                 setEntry(e.target.value);
+                setValueFocus(undefined);
                 setMode('all');
                 setSelected(undefined);
                 setSelectedSite(undefined);
@@ -634,6 +688,7 @@ function App() {
                   onClick={() => {
                     rememberView();
                     setParagraph(p.id);
+                    setValueFocus(undefined);
                     setMode('paragraph');
                     setSelected(p.nodeIds[0]);
                     setSourceTarget(p.location ?? model?.nodeById.get(p.nodeIds[0])?.location);
@@ -706,7 +761,8 @@ function App() {
                 className={mode === 'all' ? 'chosen' : ''}
                 aria-pressed={mode === 'all'}
                 onClick={() => {
-                  if (mode !== 'all') rememberView();
+                  if (mode !== 'all' || valueFocus) rememberView();
+                  setValueFocus(undefined);
                   setMode('all');
                   setParagraph('');
                 }}
@@ -719,6 +775,7 @@ function App() {
                 disabled={!selected}
                 onClick={() => {
                   if (mode !== 'local') rememberView();
+                  setValueFocus(undefined);
                   setMode('local');
                 }}
               >
@@ -795,6 +852,31 @@ function App() {
               </button>
             </div>
           )}
+          {valueFocus && valueSite && (
+            <ValuePathsBanner
+              site={valueSite}
+              traces={valueTraces}
+              candidate={valueFocus.candidate}
+              onCandidate={(candidate) => {
+                rememberView();
+                setValueFocus({ siteId: valueSite.id, candidate });
+              }}
+              onClose={() => {
+                rememberView();
+                setValueFocus(undefined);
+              }}
+              onSite={() => selectSite(valueSite)}
+              onDefinition={(id, location) => {
+                if (id) selectNode(id);
+                else rememberView();
+                if (location) {
+                  setSourceOpen(true);
+                  setSourceTarget(location);
+                  setSourceRequest((n) => n + 1);
+                }
+              }}
+            />
+          )}
           <SplitWorkspace
             source={
               model && (sourceOpen || viewing)
@@ -828,6 +910,8 @@ function App() {
                 highlightFiles={highlight && sidebar === 'files'}
                 viewportRef={graphViewport}
                 restoreView={restoreView}
+                valueHighlight={valueHighlight}
+                focusIds={valueHighlight?.nodes}
                 witnessIds={witness ? new Set(reach?.witness.map((e) => e.id)) : undefined}
               />
             ) : (
@@ -874,6 +958,13 @@ function App() {
             node={node}
             site={site}
             onPaths={pathAction}
+            onValuePaths={highlightDefinitions}
+            onSourceLocation={(location) => {
+              rememberView();
+              setSourceOpen(true);
+              setSourceTarget(location);
+              setSourceRequest((n) => n + 1);
+            }}
             onSource={() => {
               setSourceOpen(true);
               setSourceTarget(site?.statement?.location ?? site?.location ?? node?.location);
@@ -924,6 +1015,9 @@ function App() {
             </li>
             <li>
               <strong>dependencies.json</strong> fornece candidatos, suportes e remainders.
+              Opcionalmente,
+              <strong> value-flow.json</strong> permite verificar as sobrescritas com os fatos do
+              analisador.
             </li>
             <li>
               <strong>Fontes .cbl/.cpy</strong> são opcionais. Seus nomes devem corresponder aos
@@ -937,14 +1031,14 @@ function App() {
           </p>
           <p>
             Use Voltar (Esc) para restaurar a visão anterior. Código fonte abre o arquivo completo
-            ao lado da exploração. No grafo 3D, arraste para girar, use o botão direito para
-            deslocar e a roda para aproximar. Os centros das caixas e as conexões ficam em um plano;
-            os textos acompanham a câmera, inclusive ao girar para o outro lado. Clicar seleciona e
-            acompanha o código sem mover a câmera. Centralizar seleção reencontra o trecho sem
-            alterar o zoom; Enquadrar recorte mostra o grafo visível. Nas abas, use as setas, Home e
-            End; Enter ou Espaço selecionam um trecho. Com foco no grafo, as setas giram a câmera,
-            Home enquadra, F centraliza e Espaço pausa as partículas. Elas indicam o sentido das
-            arestas, sem representar uma execução do programa. Esc fecha esta ajuda.
+            ao lado da exploração. No grafo 3D, arraste com o botão esquerdo para deslocar, com o
+            direito para girar e use a roda para aproximar. Os centros das caixas e as conexões
+            ficam em um plano; os textos acompanham a câmera, inclusive ao girar para o outro lado.
+            Clicar seleciona e acompanha o código sem mover a câmera. Centralizar seleção reencontra
+            o trecho sem alterar o zoom; Enquadrar recorte mostra o grafo visível. Nas abas, use as
+            setas, Home e End; Enter ou Espaço selecionam um trecho. Com foco no grafo, as setas
+            giram a câmera, Home enquadra, F centraliza e Espaço pausa as partículas. Elas indicam o
+            sentido das arestas, sem representar uma execução do programa. Esc fecha esta ajuda.
           </p>
           <p>
             Modo de visualização mostra apenas grafo e código; Esc retorna à exploração. Arraste a
@@ -965,6 +1059,6 @@ function App() {
 }
 function assertTotal(list: FileList | File[]) {
   if (Array.from(list).reduce((sum, f) => sum + f.size, 0) > MAX_BYTES)
-    throw new Error('A seleção excede 128 MiB. Abra uma publicação por vez.');
+    throw new Error('A seleção excede 192 MiB. Abra uma publicação por vez.');
 }
 export default App;

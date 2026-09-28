@@ -12,7 +12,7 @@ npm run dev
 # http://127.0.0.1:5173/?example=carddemo-coactupc
 ```
 
-- Arraste para orbitar; botão direito desloca; roda aproxima ou afasta. A órbita é livre pelos dois lados do plano; os cartões acompanham a câmera e mantêm o texto de frente.
+- Arraste com o botão esquerdo para deslocar e com o direito para orbitar; a roda aproxima ou afasta. A órbita é livre pelos dois lados do plano; os cartões acompanham a câmera e mantêm o texto de frente.
 - Clique numa caixa para selecionar seu trecho e acompanhar o código. O clique mantém posição, zoom e centro de rotação da câmera. O centro da caixa permanece no plano. Todos os cartões têm a mesma prioridade de desenho; a seleção não passa à frente dos demais.
 - **Enquadrar recorte** mostra caixas e conexões do conjunto; **Ler seleção de perto** aproxima para leitura. **Centralizar seleção** conserva o zoom, e **Vista frontal** recupera a orientação de um diagrama 2D.
 - **Pausar partículas** interrompe o movimento, mantendo as setas. As partículas percorrem as linhas e seus cantos no sentido source → target. Verde indica `BRANCH_TRUE`, âmbar indica `BRANCH_FALSE`; o tooltip informa o tipo e as pontas.

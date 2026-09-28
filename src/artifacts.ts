@@ -7,12 +7,13 @@ export interface Documents {
   sp?: Raw;
   links?: Raw;
   dependencies?: Raw;
+  valueFlow?: Raw;
   sources: Record<string, string>;
   title?: string;
   evidence?: Raw;
   files: Record<string, string>;
 }
-export const MAX_BYTES = 128 * 1024 * 1024;
+export const MAX_BYTES = 192 * 1024 * 1024;
 export function assert(ok: unknown, message: string): asserts ok {
   if (!ok) throw new Error(message);
 }
@@ -30,7 +31,7 @@ export async function sha256(text: string): Promise<string> {
   return Array.from(new Uint8Array(hash), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 export async function decodeBytes(bytes: Uint8Array): Promise<string> {
-  assert(bytes.byteLength <= MAX_BYTES, 'Arquivo excede o limite local de 128 MiB.');
+  assert(bytes.byteLength <= MAX_BYTES, 'Arquivo excede o limite local de 192 MiB.');
   if (bytes[0] !== 31 || bytes[1] !== 139)
     return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
   const reader = new Blob([bytes as BlobPart])
@@ -44,7 +45,7 @@ export async function decodeBytes(bytes: Uint8Array): Promise<string> {
       const { value, done } = await reader.read();
       if (done) break;
       size += value.length;
-      assert(size <= MAX_BYTES, 'Conteúdo descomprimido excede 128 MiB.');
+      assert(size <= MAX_BYTES, 'Conteúdo descomprimido excede 192 MiB.');
       chunks.push(value);
     }
   } finally {
@@ -103,7 +104,9 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
               ? 'dependencies'
               : d.schema === 'cobol-explorer-links'
                 ? 'links'
-                : null;
+                : d.schema === 'cobol-explorer-value-flow'
+                  ? 'valueFlow'
+                  : null;
     assert(type, `${name}: contrato não suportado (${d.schema ?? d.binding ?? 'sem schema'}).`);
     assert(!found[type], `Mais de um artefato ${type}. Abra uma publicação por vez.`);
     found[type] = { raw: d, text };
@@ -119,7 +122,7 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
     'Binding AIR não suportado (esperado 1.0.0 / AIR 2.0.0).',
   );
   assert(
-    ['1.0.0', '2.0.0', '3.0.0'].includes(cfg.schemaVersion) && cfg.airVersion === '2.0.0',
+    ['1.0.0', '2.0.0', '3.0.0', '4.0.0'].includes(cfg.schemaVersion) && cfg.airVersion === '2.0.0',
     'Versão de CFG não suportada.',
   );
   assert(
@@ -144,7 +147,7 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
       (sp.schema === 'cobol-semantic-compilation' && sp.contractVersion === '1.0.0') ||
         (sp.schema === 'cobol-semantic-product' &&
           /^2\.([0-9]+)\.0$/.test(sp.contractVersion) &&
-          Number(sp.contractVersion.split('.')[1]) <= 47),
+          Number(sp.contractVersion.split('.')[1]) <= 50),
       'Versão SP não suportada.',
     );
   }
@@ -199,5 +202,92 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
       );
     }
   }
-  return { air, cfg, sp, links, dependencies: dep, sources, title, evidence, files: expanded };
+  const valueFlow = found.valueFlow?.raw;
+  if (valueFlow) {
+    const f = valueFlow;
+    assert(
+      f.version === '1.0.0' &&
+        f.native?.schema === 'regional-analysis-result' &&
+        /^1\.[0-4]\.0$/.test(f.native.version) &&
+        f.native.status === 'COMPLETE' &&
+        f.native.referenceAuthority === 'VALIDATED_AIR_PUBLICATION' &&
+        f.native.pathWitness === 'NOT_PROVIDED',
+      'Contrato de definições não suportado.',
+    );
+    assert(
+      f.native.publicationId?.localId === cfg.publication.localId &&
+        f.airSha256 === (await sha256(found.air.text)),
+      'Definições pertencem a outra AIR (hash/publicação).',
+    );
+    assert(
+      Array.isArray(f.facts) && Array.isArray(f.observations),
+      'Inventário de definições inválido.',
+    );
+    const ref = (id: Raw) => JSON.stringify([id?.domain, id?.publication, id?.unit, id?.localId]);
+    const entries = new Set(
+      air.publication.units.flatMap((u: Raw) => u.entries.map((e: Raw) => ref(e.id))),
+    );
+    const objects = new Set(
+      air.publication.units.flatMap((u: Raw) => u.objects.map((o: Raw) => ref(o.id))),
+    );
+    const operations = new Set(
+      air.publication.units.flatMap((u: Raw) =>
+        u.sequences.flatMap((s: Raw) =>
+          [...s.instructions, s.terminator].map((o: Raw) => ref(o.header.id)),
+        ),
+      ),
+    );
+    const points = new Set<string>();
+    for (const observation of f.observations) {
+      const p = observation.point,
+        subject = observation.subject;
+      assert(
+        p &&
+          subject?.kind === 'NAMED_OBJECT' &&
+          entries.has(ref(p.entryId)) &&
+          objects.has(ref(subject.objectId)) &&
+          p.entryId.unit === subject.objectId.unit &&
+          ['ENTRY', 'BEFORE', 'AFTER', 'OUTCOME'].includes(p.position) &&
+          (p.position === 'ENTRY'
+            ? p.operationId === null
+            : operations.has(ref(p.operationId)) && p.operationId.unit === p.entryId.unit),
+        'Ponto de definição fora da AIR.',
+      );
+      const point = JSON.stringify([
+        ref(p.entryId),
+        ref(subject.objectId),
+        ref(p.operationId),
+        p.position,
+        p.outcome,
+      ]);
+      assert(!points.has(point), 'Ponto de definição duplicado.');
+      points.add(point);
+      assert(
+        Number.isInteger(observation.rd) && observation.rd >= 0 && observation.rd < f.facts.length,
+        'Referência de fato de definição inválida.',
+      );
+    }
+    for (const rd of f.facts)
+      assert(
+        typeof rd.status === 'string' &&
+          (rd.status !== 'VALUE' ||
+            (rd.fact &&
+              Array.isArray(rd.fact.definitions) &&
+              typeof rd.fact.unknownRemainder === 'boolean' &&
+              typeof rd.fact.resolutionRemainder === 'boolean')),
+        'Fato de definição inválido.',
+      );
+  }
+  return {
+    air,
+    cfg,
+    sp,
+    links,
+    dependencies: dep,
+    valueFlow,
+    sources,
+    title,
+    evidence,
+    files: expanded,
+  };
 }

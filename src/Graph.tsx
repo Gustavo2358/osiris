@@ -3,6 +3,7 @@ import ForceGraph3D, { type ForceGraph3DInstance } from '3d-force-graph';
 import {
   Sprite,
   SpriteMaterial,
+  MOUSE,
   Vector3,
   Vector2,
   Raycaster,
@@ -41,6 +42,13 @@ import { planarLayout, type PlanarLayout } from './planar-layout';
 import ELK from 'elkjs/lib/elk-api.js';
 import elkWorkerUrl from 'elkjs/lib/elk-worker.min.js?url';
 import { RoutedLink } from './routed-link';
+import {
+  diagramIntersection,
+  zoomView,
+  wheelZoomFactor,
+  MIN_ZOOM_DISTANCE,
+  MAX_ZOOM_DISTANCE,
+} from './graph-navigation';
 
 export type { GraphViewport } from './graph3d';
 type Props = {
@@ -55,6 +63,14 @@ type Props = {
   restoreView?: { id: number; viewport: GraphViewport };
   focusIds?: Set<string>;
   witnessIds?: Set<string>;
+  valueHighlight?: {
+    edges: Set<string>;
+    producers: Set<string>;
+    targets: Set<string>;
+    kills: Set<string>;
+    unknowns: Set<string>;
+    killedEdges: Set<string>;
+  };
   onReady?: () => void;
 };
 type Target = {
@@ -123,14 +139,14 @@ export function Graph(props: Props) {
       String(camera.position.distanceTo(controls.target)),
     );
   }
-  function move(position: Point3D, target: Point3D) {
+  function move(position: Point3D, target: Point3D, details = true) {
     const g = graph.current;
     if (!g) return;
     // Immediate moves keep history exact; the explicit reading action can animate below.
     g.cameraPosition(position, target, 0);
     (g.controls() as OrbitControls).update();
     capture();
-    refresh.current();
+    if (details) refresh.current();
   }
   function focus(id: string | undefined, animate = false, first = false) {
     const g = graph.current,
@@ -150,14 +166,20 @@ export function Graph(props: Props) {
       g.cameraPosition(position, node, 550);
     } else move(position, node);
   }
-  function fit() {
+  function fit(highlightOnly = false) {
     const g = graph.current;
     if (!g || !nodes.current.length) return;
-    const points: Point3D[] = nodes.current.flatMap((n) => [
-      { x: n.x - CARD_WIDTH / 2, y: n.y - CARD_HEIGHT / 2, z: 0 },
-      { x: n.x + CARD_WIDTH / 2, y: n.y + CARD_HEIGHT / 2, z: 0 },
-    ]);
-    routes.current.forEach((route) => points.push(...route.link.points));
+    const points: Point3D[] = nodes.current
+      .filter((n) => !highlightOnly || live.current.focusIds?.has(n.id))
+      .flatMap((n) => [
+        { x: n.x - CARD_WIDTH / 2, y: n.y - CARD_HEIGHT / 2, z: 0 },
+        { x: n.x + CARD_WIDTH / 2, y: n.y + CARD_HEIGHT / 2, z: 0 },
+      ]);
+    routes.current.forEach((route) => {
+      if (!highlightOnly || live.current.valueHighlight?.edges.has(route.link.id))
+        points.push(...route.link.points);
+    });
+    if (!points.length) return;
     const min = new Vector3(Infinity, Infinity, Infinity),
       max = min.clone().negate();
     points.forEach((p) => {
@@ -178,13 +200,17 @@ export function Graph(props: Props) {
     move(point(target.clone().add(new Vector3(0, 0, distance))), point(target));
   }
 
-  function zoom(factor: number) {
+  function zoom(factor: number, pointer?: Vector2) {
     const g = graph.current;
-    if (!g) return;
-    const target = (g.controls() as OrbitControls).target;
-    const offset = g.camera().position.clone().sub(target);
-    offset.setLength(Math.max(150, Math.min(1000000, offset.length() * factor)));
-    move(point(offset.add(target)), point(target));
+    if (!g || layoutPending.current) return;
+    const view = zoomView(
+      g.camera() as PerspectiveCamera,
+      (g.controls() as OrbitControls).target,
+      factor,
+      pointer,
+    );
+    // Details follow the throttled controls change; wheel input never paints textures synchronously.
+    move(point(view.position), point(view.target), false);
   }
   function rotate(horizontal: number, vertical = 0) {
     const g = graph.current;
@@ -225,6 +251,7 @@ export function Graph(props: Props) {
       g.backgroundColor('#111c2c')
         .showNavInfo(false)
         .enableNodeDrag(false)
+        .enablePointerInteraction(false)
         .cooldownTicks(0)
         .nodeThreeObjectExtend(false)
         .linkOpacity(0.65)
@@ -247,20 +274,14 @@ export function Graph(props: Props) {
           cards.current.set(n.id, card);
           return card;
         })
-        .nodeLabel((n) => {
-          const label = document.createElement('div');
-          label.textContent = n.node.title;
-          return label;
-        })
-        .linkLabel((l) => {
-          const label = document.createElement('div');
-          label.textContent = `${edgeDescription(l.edge)}: ${live.current.model.nodeById.get(l.edge.source)?.title} → ${live.current.model.nodeById.get(l.edge.target)?.title}`;
-          return label;
-        })
         .linkThreeObjectExtend(false)
         .linkThreeObject((l) => {
           const route = new RoutedLink(l);
-          route.style(live.current.witnessIds);
+          route.style(
+            live.current.witnessIds,
+            live.current.valueHighlight?.edges,
+            live.current.valueHighlight?.killedEdges,
+          );
           routes.current.set(l.id, route);
           return route;
         })
@@ -270,8 +291,7 @@ export function Graph(props: Props) {
           return true;
         })
         .linkDirectionalParticles(0)
-        .linkDirectionalArrowLength(0)
-        .onNodeHover((n) => setHover(n?.node.title ?? ''));
+        .linkDirectionalArrowLength(0);
       const scene = g.scene();
       const previousRender = scene.onBeforeRender;
       scene.onBeforeRender = (...args) => {
@@ -292,7 +312,7 @@ export function Graph(props: Props) {
       canvas.tabIndex = 0;
       canvas.setAttribute(
         'aria-label',
-        'Grafo 3D: arraste para girar; botão direito desloca; roda aproxima. Setas giram, Home enquadra e F centraliza a seleção.',
+        'Grafo 3D: arraste com o botão esquerdo para deslocar; botão direito gira; roda aproxima no cursor; duplo clique aproxima uma caixa. Setas giram, Home enquadra e F centraliza a seleção.',
       );
       // Pick from the current camera at click time. The library's cached hover can lag a fast click.
       const raycaster = new Raycaster();
@@ -304,15 +324,12 @@ export function Graph(props: Props) {
         if (press && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 5)
           press.dragged = true;
       };
-      const pick = (event: MouseEvent) => {
-        const dragged = press?.dragged;
-        press = undefined;
-        if (dragged || event.button !== 0 || layoutPending.current) return;
+      const hitAt = (x: number, y: number) => {
         const rect = canvas.getBoundingClientRect();
         raycaster.setFromCamera(
           new Vector2(
-            ((event.clientX - rect.left) / rect.width) * 2 - 1,
-            (-(event.clientY - rect.top) / rect.height) * 2 + 1,
+            ((x - rect.left) / rect.width) * 2 - 1,
+            (-(y - rect.top) / rect.height) * 2 + 1,
           ),
           g.camera(),
         );
@@ -323,24 +340,116 @@ export function Graph(props: Props) {
         let object: Object3D | undefined = hit?.object;
         while (object) {
           if (object.userData.sceneNode) {
-            selectInScene(object.userData.sceneNode as SceneNode);
-            break;
+            return { node: object.userData.sceneNode as SceneNode };
           }
           if (object instanceof RoutedLink) {
-            const target = nodes.current.find((n) => n.id === object!.userData.targetId);
-            if (target) selectInScene(target);
-            break;
+            return {
+              route: object,
+              node: nodes.current.find((n) => n.id === object!.userData.targetId),
+            };
           }
           object = object.parent ?? undefined;
         }
       };
+      const pick = (event: MouseEvent) => {
+        const dragged = press?.dragged;
+        press = undefined;
+        if (dragged || event.button !== 0 || layoutPending.current) return;
+        const hit = hitAt(event.clientX, event.clientY);
+        if (hit?.node) selectInScene(hit.node);
+      };
+      const read = (event: MouseEvent) => {
+        if (layoutPending.current) return;
+        const hit = hitAt(event.clientX, event.clientY);
+        if (hit?.node && !hit.route) focus(hit.node.id, true, true);
+      };
+      let hoverTimer: ReturnType<typeof setTimeout> | undefined;
+      const clearHover = () => {
+        clearTimeout(hoverTimer);
+        canvas.title = '';
+        setHover('');
+      };
+      const hoverAt = (event: PointerEvent) => {
+        clearTimeout(hoverTimer);
+        if (event.buttons || layoutPending.current) {
+          clearHover();
+          return;
+        }
+        hoverTimer = setTimeout(() => {
+          if (!active) return;
+          const hit = hitAt(event.clientX, event.clientY);
+          const label = hit?.route
+            ? `${edgeDescription(hit.route.link.edge)}: ${live.current.model.nodeById.get(hit.route.link.edge.source)?.title} → ${hit.node?.node.title}`
+            : (hit?.node?.node.title ?? '');
+          canvas.title = label;
+          setHover(label);
+        }, 100);
+      };
+      let wheelFrame = 0,
+        wheelDelta = 0;
+      const pointer = new Vector2();
+      const wheel = (event: WheelEvent) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        clearHover();
+        if (layoutPending.current) return;
+        const rect = canvas.getBoundingClientRect();
+        pointer.set(
+          ((event.clientX - rect.left) / rect.width) * 2 - 1,
+          1 - ((event.clientY - rect.top) / rect.height) * 2,
+        );
+        wheelDelta +=
+          event.deltaY *
+          (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? rect.height : 1) *
+          (event.ctrlKey ? 4 : 1);
+        if (!wheelFrame)
+          wheelFrame = requestAnimationFrame(() => {
+            wheelFrame = 0;
+            zoom(wheelZoomFactor(wheelDelta), pointer);
+            wheelDelta = 0;
+          });
+      };
+      canvas.addEventListener('wheel', wheel, { capture: true, passive: false });
+      canvas.addEventListener('dblclick', read);
+      canvas.addEventListener('pointermove', hoverAt);
+      canvas.addEventListener('pointerleave', clearHover);
       canvas.addEventListener('pointerdown', down);
       canvas.addEventListener('pointermove', drag);
       canvas.addEventListener('click', pick);
       const controls = g.controls() as OrbitControls;
+      controls.mouseButtons.LEFT = MOUSE.PAN;
+      controls.mouseButtons.RIGHT = MOUSE.ROTATE;
       controls.enableDamping = false;
-      controls.minDistance = 150;
-      controls.maxDistance = 1000000;
+      controls.minDistance = MIN_ZOOM_DISTANCE;
+      controls.maxDistance = MAX_ZOOM_DISTANCE;
+      controls.zoomSpeed = 3;
+      const reanchor = () => {
+        const camera = g.camera() as PerspectiveCamera;
+        const target = diagramIntersection(
+          camera.position,
+          camera.getWorldDirection(new Vector3()),
+        );
+        // Changing a collinear target preserves the camera pose. Rebase after pan
+        // so the next zoom/orbit uses the diagram, not a point behind it.
+        if (
+          target &&
+          camera.position.distanceTo(target) >= controls.minDistance &&
+          target.distanceTo(controls.target) > 0.000001
+        ) {
+          controls.target.copy(target);
+          controls.update();
+          capture();
+        }
+        // Refresh projected boxes at gesture end; hit targets must not lag the final pan.
+        refresh.current();
+      };
+      const interruptMotion = () => {
+        clearHover();
+        // Stop a reading transition at the current pose as soon as the user takes over.
+        g.cameraPosition(point(g.camera().position), point(controls.target), 0);
+      };
+      controls.addEventListener('start', interruptMotion);
+      controls.addEventListener('end', reanchor);
       // Centers and routes stay in the layout plane; billboards remain readable from either side.
       controls.minAzimuthAngle = -Infinity;
       controls.maxAzimuthAngle = Infinity;
@@ -392,12 +501,28 @@ export function Graph(props: Props) {
         for (const n of nodes.current) {
           const card = cards.current.get(n.id);
           if (!card) continue;
-          const key = n.id + (n.id === live.current.selected ? '/selected' : '');
+          const role = live.current.valueHighlight?.kills.has(n.id)
+            ? 'kill'
+            : live.current.valueHighlight?.unknowns.has(n.id)
+              ? 'unknown'
+              : live.current.valueHighlight?.producers.has(n.id)
+                ? 'definition'
+                : live.current.valueHighlight?.targets.has(n.id)
+                  ? 'destination'
+                  : undefined;
+          const key = n.id + (n.id === live.current.selected ? '/selected' : '') + (role ?? '');
           if (ids.has(n.id)) {
-            if (!textures.current.has(key))
-              textures.current.set(key, cardTexture(n, n.id === live.current.selected));
-            card.material.map = textures.current.get(key)!;
-          } else card.material.map = shared.current.get(n.category)!;
+            const texture =
+              textures.current.get(key) ?? cardTexture(n, n.id === live.current.selected, role);
+            textures.current.delete(key);
+            textures.current.set(key, texture);
+            card.material.map = texture;
+          } else {
+            const sharedKey = n.category + (role ?? '');
+            if (!shared.current.has(sharedKey))
+              shared.current.set(sharedKey, cardTexture(n.category, false, role));
+            card.material.map = shared.current.get(sharedKey)!;
+          }
           card.material.opacity =
             n.id !== live.current.selected &&
             ((live.current.highlightCalls && !n.node.siteIds.length) ||
@@ -407,10 +532,23 @@ export function Graph(props: Props) {
               : 1;
         }
         const used = new Set(
-          visible.map((t) => t.id + (t.id === live.current.selected ? '/selected' : '')),
+          visible.map(
+            (t) =>
+              t.id +
+              (t.id === live.current.selected ? '/selected' : '') +
+              (live.current.valueHighlight?.kills.has(t.id)
+                ? 'kill'
+                : live.current.valueHighlight?.unknowns.has(t.id)
+                  ? 'unknown'
+                  : live.current.valueHighlight?.producers.has(t.id)
+                    ? 'definition'
+                    : live.current.valueHighlight?.targets.has(t.id)
+                      ? 'destination'
+                      : ''),
+          ),
         );
         textures.current.forEach((t, key) => {
-          if (!used.has(key)) {
+          if (textures.current.size > DETAIL_LIMIT && !used.has(key)) {
             t.dispose();
             textures.current.delete(key);
           }
@@ -451,6 +589,14 @@ export function Graph(props: Props) {
         if (timer) clearTimeout(timer);
         resize.disconnect();
         controls.removeEventListener('change', schedule);
+        controls.removeEventListener('end', reanchor);
+        controls.removeEventListener('start', interruptMotion);
+        cancelAnimationFrame(wheelFrame);
+        clearTimeout(hoverTimer);
+        canvas.removeEventListener('wheel', wheel, true);
+        canvas.removeEventListener('dblclick', read);
+        canvas.removeEventListener('pointermove', hoverAt);
+        canvas.removeEventListener('pointerleave', clearHover);
         document.removeEventListener('visibilitychange', visibility);
         canvas.removeEventListener('webglcontextlost', lost);
         canvas.removeEventListener('pointerdown', down);
@@ -627,8 +773,16 @@ export function Graph(props: Props) {
   }, [props.selected, props.restoreView, busy, instanceReady]);
   useEffect(() => {
     refresh.current();
-    routes.current.forEach((route) => route.style(props.witnessIds));
-  }, [props.highlightCalls, props.highlightFiles, props.focusIds, props.witnessIds]);
+    routes.current.forEach((route) =>
+      route.style(props.witnessIds, props.valueHighlight?.edges, props.valueHighlight?.killedEdges),
+    );
+  }, [
+    props.highlightCalls,
+    props.highlightFiles,
+    props.focusIds,
+    props.witnessIds,
+    props.valueHighlight,
+  ]);
 
   return (
     <div
@@ -640,6 +794,12 @@ export function Graph(props: Props) {
       data-nodes={props.visibleNodes.length}
       data-edges={props.visibleEdges.length}
       data-witness-edges={props.witnessIds?.size ?? 0}
+      data-value-edges={props.valueHighlight?.edges.size ?? 0}
+      data-value-producers={props.valueHighlight?.producers.size ?? 0}
+      data-value-kills={props.valueHighlight?.kills.size ?? 0}
+      data-value-unknowns={props.valueHighlight?.unknowns.size ?? 0}
+      data-value-killed-edges={props.valueHighlight?.killedEdges.size ?? 0}
+      data-value-highlight={props.valueHighlight ? 'on' : 'off'}
       data-layout="planar"
       data-motion={motion ? 'on' : 'off'}
       onKeyDown={(e) => {
@@ -709,9 +869,23 @@ export function Graph(props: Props) {
         <button aria-label="Diminuir zoom" title="Afastar (-)" onClick={() => zoom(1.25)}>
           <Minus size={16} />
         </button>
-        <button aria-label="Enquadrar recorte" title="Enquadrar recorte (Home)" onClick={fit}>
+        <button
+          aria-label="Enquadrar recorte"
+          title="Enquadrar recorte (Home)"
+          onClick={() => fit()}
+        >
           <Scan size={16} />
         </button>
+        {props.valueHighlight && (
+          <button
+            className="value-fit"
+            aria-label="Enquadrar valores destacados"
+            title="Enquadrar definições e destino"
+            onClick={() => fit(true)}
+          >
+            <Scan size={16} /> Valores
+          </button>
+        )}
         <button
           aria-label="Centralizar seleção"
           title="Centralizar seleção (F)"
@@ -775,9 +949,12 @@ export function Graph(props: Props) {
       )}
       <div
         className="graph3d-caption"
-        title="Arraste para girar · botão direito desloca · roda aproxima. Partículas indicam a direção do CFG."
+        title="Arraste: esquerdo desloca · direito gira · roda aproxima no cursor; duplo clique para ler. Partículas indicam a direção do CFG."
       >
-        <span>{hover || 'Arraste para girar · roda para aproximar'}</span>
+        <span>
+          {hover ||
+            'Esquerdo desloca · direito gira · roda aproxima no cursor · duplo clique para ler'}
+        </span>
         <span>
           {props.visibleNodes.length} caixas · {props.visibleEdges.length} transições
         </span>

@@ -30,41 +30,46 @@ const index = JSON.parse(
 );
 describe('Real analyzer artifacts', () => {
   for (const ex of index)
-    it(`preserves all published nodes, edges, links and candidates: ${ex.id}`, async () => {
-      const m = await model(ex.id);
-      expect(m.nodes).toHaveLength(ex.nodes);
-      expect(m.edges).toHaveLength(ex.edges);
-      expect(m.edges.map((e) => e.raw)).toEqual(m.documents.cfg.transitions);
-      expect(m.fileSites.map((s) => s.raw)).toEqual(
-        m.documents.dependencies!.fileDependencies?.sites ?? [],
-      );
-      expect(m.fileSites).toHaveLength(ex.fileSites ?? 0);
-      expect(m.sites.filter((s) => !s.sourceOnly)).toHaveLength(ex.sites);
-      for (const site of m.documents.dependencies!.sites) {
-        const s = m.sites.find(
-          (s) =>
-            s.operation === idKey(site.operation, 'operation') &&
-            s.entry === idKey(site.entry, 'entry'),
-        )!;
-        expect(s).toBeDefined();
-        expect(s.candidates).toEqual(site.candidates);
-        expect(s.raw).toEqual(site);
-      }
-      for (const link of m.documents.links!.statements) {
-        const nodes = m.operationNodes.get(idKey(link.target, 'operation'));
-        expect(nodes?.length).toBeGreaterThan(0);
-        for (const id of nodes!)
-          expect(
-            m.nodeById
-              .get(id)!
-              .statements.some(
-                (s) =>
-                  s.id === link.source.handle && canonical(s.unit) === canonical(link.source.unit),
-              ),
-          ).toBe(true);
-      }
-      expect(m.documents.cfg.sourceKnowledge.publicationInventory).toBe('PARTIAL');
-    });
+    it(
+      `preserves all published nodes, edges, links and candidates: ${ex.id}`,
+      { timeout: ex.id === 'carddemo-coactupc' ? 15000 : 5000 },
+      async () => {
+        const m = await model(ex.id);
+        expect(m.nodes).toHaveLength(ex.nodes);
+        expect(m.edges).toHaveLength(ex.edges);
+        expect(m.edges.map((e) => e.raw)).toEqual(m.documents.cfg.transitions);
+        expect(m.fileSites.map((s) => s.raw)).toEqual(
+          m.documents.dependencies!.fileDependencies?.sites ?? [],
+        );
+        expect(m.fileSites).toHaveLength(ex.fileSites ?? 0);
+        expect(m.sites.filter((s) => !s.sourceOnly)).toHaveLength(ex.sites);
+        for (const site of m.documents.dependencies!.sites) {
+          const s = m.sites.find(
+            (s) =>
+              s.operation === idKey(site.operation, 'operation') &&
+              s.entry === idKey(site.entry, 'entry'),
+          )!;
+          expect(s).toBeDefined();
+          expect(s.candidates).toEqual(site.candidates);
+          expect(s.raw).toEqual(site);
+        }
+        for (const link of m.documents.links!.statements) {
+          const nodes = m.operationNodes.get(idKey(link.target, 'operation'));
+          expect(nodes?.length).toBeGreaterThan(0);
+          for (const id of nodes!)
+            expect(
+              m.nodeById
+                .get(id)!
+                .statements.some(
+                  (s) =>
+                    s.id === link.source.handle &&
+                    canonical(s.unit) === canonical(link.source.unit),
+                ),
+            ).toBe(true);
+        }
+        expect(m.documents.cfg.sourceKnowledge.publicationInventory).toBe('PARTIAL');
+      },
+    );
   it('presents full COBOL tokens and paragraph names from source provenance', async () => {
     const m = await model();
     expect(m.nodes.some((n) => n.title === "CALL 'AUDITLOG'")).toBe(true);
@@ -404,21 +409,64 @@ describe('FILE projection from real analyzer runs', () => {
   );
 });
 
-it('COACTUPC keeps source candidates separate from unreachable control sites', async () => {
-  const m = await model('carddemo-coactupc');
-  const controls = m.sites.filter((s) => !s.sourceOnly);
-  expect(controls).toHaveLength(4);
-  for (const s of [...controls, ...m.fileSites]) {
-    expect(s.raw.reachability).toBe('UNREACHABLE_IN_MODEL');
-    expect(s.candidates).toEqual([]);
-    expect(pathsTo(m, m.entries[0].id, s.nodeIds).reachable).toBe(false);
-  }
-  const sourceOnly = m.sites.filter((s) => s.sourceOnly);
-  expect(sourceOnly).toHaveLength(1);
-  expect(sourceOnly[0].title).toContain('XCTL');
-  expect(sourceOnly[0].nodeIds).toEqual([]);
-  expect(m.documents.sources['COACTUPC.cbl']).toContain('9000-READ-ACCT.');
-  expect(m.documents.sources['CSUTLDPY.cpy']).toContain("CALL 'CSUTLDTC'");
-  expect(m.documents.sources).not.toHaveProperty('DFHAID');
-  expect(m.documents.sources).not.toHaveProperty('DFHBMSCA');
-});
+it(
+  'COACTUPC SP 2.50 / CFG v4 preserves connected control and exceptional exits',
+  { timeout: 15000 },
+  async () => {
+    const m = await model('carddemo-coactupc');
+    expect(m.documents.sp!.contractVersion).toBe('2.50.0');
+    expect(m.documents.cfg.schemaVersion).toBe('4.0.0');
+    expect(m.nodes).toHaveLength(5037);
+    expect(m.edges).toHaveLength(6293);
+    const entry = m.entries[0];
+    expect(
+      traverse(
+        [entry.nodeId],
+        m.edges.filter((e) => e.entry === entry.id),
+      ).size,
+    ).toBe(m.nodes.length);
+    const controls = m.sites.filter((s) => !s.sourceOnly);
+    expect(controls).toHaveLength(8);
+    expect(m.fileSites).toHaveLength(14);
+    for (const site of [...controls, ...m.fileSites]) {
+      expect(site.raw.reachability).toBe('REACHABLE');
+      expect(site.candidates.length).toBeGreaterThan(0);
+      const path = pathsTo(m, entry.id, site.nodeIds);
+      expect(path.reachable).toBe(true);
+      expect(path.witness.length).toBeGreaterThan(0);
+    }
+    expect(new Set(controls.flatMap((s) => s.candidates.map((c) => c.referenceName)))).toEqual(
+      new Set(['CSUTLDTC', 'COMEN01C']),
+    );
+    expect(new Set(m.fileSites.flatMap((s) => s.candidates.map((c) => c.referenceName)))).toEqual(
+      new Set(['ACCTDAT', 'CUSTDAT', 'CXACAIX']),
+    );
+    expect(m.sites.filter((s) => s.sourceOnly)).toHaveLength(0);
+    const exits = m.nodes.filter((n) => n.kind === 'OUTCOME_EXIT');
+    expect(exits).toHaveLength(3);
+    for (const node of exits) {
+      expect(node.title).toBe('Saída excepcional · CICS_TASK_ABEND');
+      expect(m.edges.some((e) => e.source === node.id)).toBe(false);
+      expect(m.edges.some((e) => e.target === node.id && e.kind === 'CONTROL_EXIT')).toBe(true);
+      expect(node.siteIds).toEqual([]);
+      expect(m.operationNodes.get(idKey(node.raw.operation, 'operation'))).not.toContain(node.id);
+    }
+    expect(m.edges.some((e) => e.kind === 'EXCEPTION')).toBe(true);
+    expect(m.documents.sources['COACTUPC.cbl']).toContain('9000-READ-ACCT.');
+    expect(m.documents.sources['CSUTLDPY.cpy']).toContain("CALL 'CSUTLDTC'");
+
+    const d = m.documents;
+    const exit = d.cfg.nodes.find((n: any) => n.kind === 'OUTCOME_EXIT');
+    const original = exit.operation;
+    exit.operation = { ...original, localId: 'absent' };
+    expect(() => buildModel(d)).toThrow('operação AIR ausente');
+    exit.operation = original;
+    const term = d.cfg.nodes.find((n: any) => n.kind === 'SEQUENCE').terminator;
+    const remainder = term.openControlRemainder;
+    delete term.openControlRemainder;
+    expect(() => buildModel(d)).toThrow('openControlRemainder');
+    term.openControlRemainder = remainder;
+    d.cfg.schemaVersion = '3.0.0';
+    expect(() => buildModel(d)).toThrow('Kind de nó CFG não suportado');
+  },
+);

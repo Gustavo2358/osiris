@@ -62,6 +62,8 @@ export function Inspector({
   site,
   entry,
   onPaths,
+  onValuePaths,
+  onSourceLocation,
   onSource,
   onOperation,
   onNode,
@@ -71,6 +73,8 @@ export function Inspector({
   node?: GraphNode;
   site?: Site;
   onPaths: () => void;
+  onValuePaths: (candidate?: number) => void;
+  onSourceLocation: (location: Location) => void;
   onSource: () => void;
   onOperation: (key: string) => void;
   onNode: (id: string) => void;
@@ -201,6 +205,14 @@ export function Inspector({
                       <h3>{isFile ? 'Valores possíveis' : 'Candidatos'}</h3>
                       <span>{candidates.length}</span>
                     </div>
+                    {candidates.length > 0 && (
+                      <button
+                        className="path-action value-path-action"
+                        onClick={() => onValuePaths()}
+                      >
+                        <Route size={16} /> Iluminar definições dos valores
+                      </button>
+                    )}
                     {!candidates.length ? (
                       <p className="empty-note">
                         {site.raw.targetStatus === 'UNREACHABLE_IN_MODEL' ||
@@ -222,6 +234,13 @@ export function Inspector({
                           <code className="raw-value" title="Valor bruto">
                             {JSON.stringify(c.rawValue)}
                           </code>
+                          <button
+                            className="candidate-path-action"
+                            onClick={() => onValuePaths(i)}
+                            aria-label={`Iluminar definição de ${c.referenceName ?? c.rawValue}`}
+                          >
+                            <Route size={14} /> Iluminar este valor
+                          </button>
                           <div className="candidate-supports">
                             {(c.supports ?? []).map((support: Raw, j: number) => {
                               const locs = uniqueLocations(model.locations(support.origin));
@@ -247,8 +266,11 @@ export function Inspector({
                                     .map((l, k) => (
                                       <button
                                         key={k}
-                                        disabled={!key || !model.operationNodes.has(key)}
-                                        onClick={() => key && onOperation(key)}
+                                        onClick={() => {
+                                          if (key && model.operationNodes.has(key))
+                                            onOperation(key);
+                                          else onSourceLocation(l);
+                                        }}
                                         className="producer-link"
                                       >
                                         <LocationLabel loc={l} columns />

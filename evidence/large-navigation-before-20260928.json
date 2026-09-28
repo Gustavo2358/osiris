@@ -1,0 +1,167 @@
+{
+  "config": {
+    "argv": [
+      "/home/gustavo/.nvm/versions/node/v24.19.0/bin/node",
+      "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/node_modules/.bin/playwright",
+      "test",
+      "e2e/large-navigation.spec.ts",
+      "--grep",
+      "long pan"
+    ],
+    "configFile": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/playwright.config.ts",
+    "rootDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview -- --port 4173 --strictPort",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true,
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "large-navigation.spec.ts",
+      "file": "large-navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "long pan keeps zoom referenced to the diagram plane, including near the bottom",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5577,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m0.001\u001b[39m\nReceived:   \u001b[31m8038.3015054566995\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m0.001\u001b[39m\nReceived:   \u001b[31m8038.3015054566995\u001b[39m\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts:27:36",
+                    "location": {
+                      "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts",
+                      "column": 36,
+                      "line": 27
+                    },
+                    "snippet": "  25 |   const after=await camera(page);\n  26 |   expect(Math.abs(after.target.y-before.target.y)).toBeGreaterThan(10000);\n> 27 |   expect(Math.abs(after.target.z)).toBeLessThan(.001);\n     |                                    ^\n  28 |   const distance=Math.abs(after.position.z);\n  29 |   const r=(await canvas(page).boundingBox())!;\n  30 |   await page.mouse.move(r.x+r.width*.5,r.y+r.height*.5);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts",
+                        "column": 36,
+                        "line": 27
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m0.001\u001b[39m\nReceived:   \u001b[31m8038.3015054566995\u001b[39m\n\n  25 |   const after=await camera(page);\n  26 |   expect(Math.abs(after.target.y-before.target.y)).toBeGreaterThan(10000);\n> 27 |   expect(Math.abs(after.target.z)).toBeLessThan(.001);\n     |                                    ^\n  28 |   const distance=Math.abs(after.position.z);\n  29 |   const r=(await canvas(page).boundingBox())!;\n  30 |   await page.mouse.move(r.x+r.width*.5,r.y+r.height*.5);\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts:27:36"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T12:56:23.305Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/large-navigation-long-pan--49ba5-e-including-near-the-bottom/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/large-navigation-long-pan--49ba5-e-including-near-the-bottom/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/large-navigation-long-pan--49ba5-e-including-near-the-bottom/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts",
+                    "column": 36,
+                    "line": 27
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b25754f294a0bca8a5c8-52dd38c7ee4ce45d53f3",
+          "file": "large-navigation.spec.ts",
+          "line": 19,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T12:56:22.886Z",
+    "duration": 6457.392000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

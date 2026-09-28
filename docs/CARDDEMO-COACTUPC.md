@@ -1,5 +1,7 @@
 # CardDemo · COACTUPC — 27/09/2026
 
+**Resultado mais recente:** a [nova execução e verificação na UI](COACTUPC-CONTROLE-ATUALIZADO.md) publicou um único componente, com todos os 5.037 nós alcançáveis. O conteúdo abaixo preserva o resultado histórico.
+
 **Atualização:** a [reexecução com modelos IBM sintéticos](COACTUPC-IBM-RERUN.md) confirmou cinco componentes desconectados e a mesma estrutura de nós/transições. Os resultados abaixo documentam o baseline embutido no visualizador.
 
 ## Abrir

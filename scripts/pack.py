@@ -13,12 +13,12 @@ def pack(files,sources,title,output,evidence=None):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    for role in ['air','cfg','sp','links','dependencies']:parser.add_argument('--'+role,type=pathlib.Path,required=role in ['air','cfg'])
+    for role in ['air','cfg','sp','links','dependencies','value-flow']:parser.add_argument('--'+role,type=pathlib.Path,required=role in ['air','cfg'])
     parser.add_argument('--source',action='append',default=[],metavar='LOGICAL_NAME=PATH');parser.add_argument('--title',default='Publicação local');parser.add_argument('--out',type=pathlib.Path,required=True)
     args=parser.parse_args();sources={}
     for item in args.source:
         name,path=item.split('=',1)
         if name in sources:parser.error('Repeated logical source name: '+name)
         sources[name]=path
-    files={r+'.json':getattr(args,r) for r in ['air','cfg','sp','links','dependencies']}
+    files={r+'.json':getattr(args,r.replace('-','_')) for r in ['air','cfg','sp','links','dependencies','value-flow']}
     print(pack(files,sources,args.title,args.out))

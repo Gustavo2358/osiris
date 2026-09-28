@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Real producer executions. No source parsing, inferred edges or rewritten products."""
 import pathlib,subprocess,json,hashlib,gzip,datetime,shutil,sys
+from value_flow import generate as generate_value_flow
 ROOT=pathlib.Path(__file__).resolve().parents[1];WS=ROOT.parent
 runtime=ROOT/'.cache/runtime';cp=(runtime/'classpath.txt').read_text();build=json.loads((runtime/'build.json').read_text())
 stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'); run=ROOT/'.cache/runs'/stamp;run.mkdir(parents=True)
@@ -34,9 +35,10 @@ for name,title,description,fmt,source in cases:
   execute(dest,'cfg',['java','-cp',cp,'io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg',str(dest/'air.json'),str(dest/'cfg.json')],ROOT)
   execute(dest,'dependencies',['java','-cp',cp,'io.github.gustavo2358.analysis.launcher.AnalysisDependencies',str(dest/'air.json'),str(dest/'dependencies.json'),'--source-evidence',str(dest/'source-evidence.json')],ROOT)
   files={'sp.json':sp,**{f:dest/f for f in ['air.json','links.json','cfg.json','dependencies.json']}}
+  files['value-flow.json']=generate_value_flow(dest/'air.json',dest/'dependencies.json',dest/'value-flow')
   artifacts={k:p.read_text() for k,p in files.items()}
   c=json.loads(artifacts['cfg.json']);d=json.loads(artifacts['dependencies.json'])
-  bundle={'schema':'cobol-explorer-bundle','version':'1.0.0','title':title,'artifacts':artifacts,'sources':{source.name:source.read_text(),'<preprocessed>':(front/'preprocessed.cbl').read_text(),**({p.name:p.read_text() for p in source.parent.glob('*.cpy')} if name=='copy' else {})},'evidence':{'generatedAt':stamp,'producerBuild':build,'sourcePath':str(source.relative_to(WS)),'sourceFormat':fmt,'sourceSha256':sha(source.read_bytes()),'artifactSha256':{k:sha(p.read_bytes()) for k,p in files.items()}}}
+  bundle={'schema':'cobol-explorer-bundle','version':'1.0.0','title':title,'artifacts':artifacts,'sources':{source.name:source.read_text(),'<preprocessed>':(front/'preprocessed.cbl').read_text(),**({p.name:p.read_text() for p in source.parent.glob('*.cpy')} if name=='copy' else {})},'evidence':{'generatedAt':stamp,'producerBuild':build,'valueFlow':json.loads((dest/'value-flow/execution.json').read_text()),'sourcePath':str(source.relative_to(WS)),'sourceFormat':fmt,'sourceSha256':sha(source.read_bytes()),'artifactSha256':{k:sha(p.read_bytes()) for k,p in files.items()}}}
   encoded=json.dumps(bundle,ensure_ascii=False,separators=(',',':')).encode();out=ROOT/'public/examples'/f'{name}.json.gz';out.write_bytes(gzip.compress(encoded,mtime=0))
   row={'id':name,'title':title,'description':description,'format':fmt,'url':f'examples/{name}.json.gz','nodes':len(c['nodes']),'edges':len(c['transitions']),'sites':len(d['sites']),'bytes':len(encoded),'sha256':sha(out.read_bytes())};manifest.append(row);print('OK',row,flush=True)
  except Exception as e:

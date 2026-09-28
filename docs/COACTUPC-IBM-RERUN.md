@@ -1,5 +1,7 @@
 # COACTUPC com modelos IBM sintéticos — 27/09/2026
 
+**Resultado mais recente:** a [nova execução e verificação na UI](COACTUPC-CONTROLE-ATUALIZADO.md) publicou um único componente, com todos os 5.037 nós alcançáveis. O conteúdo abaixo preserva o resultado histórico.
+
 **Resultado: o CFG continua desconexo.** A pipeline atual foi recompilada e executada de novo, com os modelos sintéticos ativos. Os nós e as transições são iguais aos do baseline quando se remove somente o namespace `publication` das identidades. A igualdade foi conferida nos produtos completos, além da comparação das contagens.
 
 ## Antes e depois

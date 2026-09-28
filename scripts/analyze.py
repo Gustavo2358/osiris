@@ -4,6 +4,7 @@ No writes to analyzer repositories. Build the runtime with prepare_runtime.py fi
 """
 import argparse,pathlib,subprocess,json,hashlib,sys
 from pack import pack
+from value_flow import generate as generate_value_flow
 ROOT=pathlib.Path(__file__).resolve().parents[1];WS=ROOT.parent
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('source',type=pathlib.Path);parser.add_argument('--out',required=True,type=pathlib.Path)
@@ -28,6 +29,8 @@ run('lower',['ExportLinks',str(sp),str(out/'air.json'),str(out/'links.json'),str
 run('cfg',['io.github.gustavo2358.analysis.cfg.launcher.AnalysisCfg',str(out/'air.json'),str(out/'cfg.json')],ROOT)
 run('dependencies',['io.github.gustavo2358.analysis.launcher.AnalysisDependencies',str(out/'air.json'),str(out/'dependencies.json'),'--source-evidence',str(out/'source-evidence.json'),*(['--experimental-physical'] if args.experimental_physical else [])],ROOT)
 files={'sp.json':sp,**{r+'.json':out/(r+'.json') for r in ['air','cfg','links','dependencies']}}
+files['value-flow.json']=generate_value_flow(out/'air.json',out/'dependencies.json',out/'value-flow')
+report['valueFlow']=json.loads((out/'value-flow/execution.json').read_text())
 # Never open paths discovered in untrusted provenance. Include only explicit source
 # and preprocessed file. Additional copybooks can be passed to pack.py by name.
 print(pack(files,{source.name:source,'<preprocessed>':front/'preprocessed.cbl'},source.stem,out/'bundle.json.gz',report))

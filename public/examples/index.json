@@ -8,8 +8,8 @@
     "nodes": 16,
     "edges": 17,
     "sites": 3,
-    "bytes": 715818,
-    "sha256": "64e462bd9cca73eabd5e6b05d9737f441cba6e9f5c3964e9975d8a7598e72b91"
+    "bytes": 750425,
+    "sha256": "86b0890645744333cc9b59114713b942442b82ef3e85bb4af8054c07fdb9cbc6"
   },
   {
     "id": "goto",
@@ -20,8 +20,8 @@
     "nodes": 10,
     "edges": 10,
     "sites": 1,
-    "bytes": 565394,
-    "sha256": "85f8e654d1463aeaf7b0dd1c7e9f290617f89cf597e698936f95cb4212529a49"
+    "bytes": 593593,
+    "sha256": "b7a65e861801ffc655d4098dd3c8c9a61dcde2e721f93e41a3d03e0135e8359f"
   },
   {
     "id": "perform",
@@ -32,8 +32,8 @@
     "nodes": 10,
     "edges": 9,
     "sites": 2,
-    "bytes": 515435,
-    "sha256": "4f2442cb0e671fdc41a0d2cc9bdf78678a2c93fd32619bbca64f85dd9acf2167"
+    "bytes": 540923,
+    "sha256": "374e4ef44a4ede3321b7dd58b97b3d06713c5c5658adadcab59b55a2108d21fe"
   },
   {
     "id": "cics",
@@ -44,8 +44,8 @@
     "nodes": 9,
     "edges": 8,
     "sites": 3,
-    "bytes": 485003,
-    "sha256": "d557f101bd779aed34ae0efc3373b8e1e7fb76a9cfaca0b8dc4947ae454437b3"
+    "bytes": 511231,
+    "sha256": "5e458583e65b60aca304fe625881d830f95888cd9ac8e1541df457e3fabdc9dc"
   },
   {
     "id": "large",
@@ -56,8 +56,8 @@
     "nodes": 503,
     "edges": 602,
     "sites": 100,
-    "bytes": 17481514,
-    "sha256": "ad41b20b2ccd86114fc560b3f62d7cdfca2905ef7b1213fc2ea26a2926d8671f"
+    "bytes": 18525557,
+    "sha256": "21f5103128dfa467898d9a038f7e3004422e1957af9264327232b6d7a86f6efa"
   },
   {
     "id": "multi-call",
@@ -68,8 +68,8 @@
     "nodes": 8,
     "edges": 7,
     "sites": 3,
-    "bytes": 414745,
-    "sha256": "9c32b12350bc20b9826f54b42957ee4c58ce5aa1ef3c27f121a4ba708fba2108"
+    "bytes": 446391,
+    "sha256": "42a989376d41d134ad61d9a313e52b92596afdf2aa1f73e12d9539f89fd3db0f"
   },
   {
     "id": "nested",
@@ -80,8 +80,8 @@
     "nodes": 8,
     "edges": 6,
     "sites": 2,
-    "bytes": 183248,
-    "sha256": "941cbedb4ec24360c1c99dcde2edb13efdd855275a0bf3d13524687a83011602"
+    "bytes": 193106,
+    "sha256": "003173f92a6586143ee57d6398f4da4f57cc366a150651841e720c4e781f8536"
   },
   {
     "id": "copy",
@@ -92,8 +92,8 @@
     "nodes": 6,
     "edges": 5,
     "sites": 2,
-    "bytes": 306182,
-    "sha256": "e59835fe06f0799b8f640dbd53c8fa7a34a9c53b2ceb248d38e24e75114c2109"
+    "bytes": 323276,
+    "sha256": "aec42085829bfdf277ba583501049973515c67c32652077a0f4a84ec9f967407"
   },
   {
     "id": "cycle",
@@ -104,8 +104,8 @@
     "nodes": 5,
     "edges": 4,
     "sites": 1,
-    "bytes": 412269,
-    "sha256": "8978153b010fa2b3b696bef35bd0e5e9fe466daa30b18181b2dca602a2f99b56"
+    "bytes": 430828,
+    "sha256": "bf48e02e30d5e29c9d4da66e5fef467d36e378f7abaa67d3602348ba721cec00"
   },
   {
     "id": "until",
@@ -116,8 +116,8 @@
     "nodes": 8,
     "edges": 8,
     "sites": 1,
-    "bytes": 378064,
-    "sha256": "d4cd7b1808838fe8ba1675d776380341b77fb2ea1ff13d2310a22d428374c4c3"
+    "bytes": 401812,
+    "sha256": "10fc8231459ff4a09ccb1630cd129cd439e3771455fa06c4a6aad7314f17749c"
   },
   {
     "id": "minimal",
@@ -128,8 +128,8 @@
     "nodes": 3,
     "edges": 2,
     "sites": 0,
-    "bytes": 50562,
-    "sha256": "26a2ef194c168549e6b13ddc4d3795fad2ea54783b24b177de6c0d2b0de2eb30"
+    "bytes": 58754,
+    "sha256": "0404e72f88c1b60ae1f0f7da702189df4d4cd67df577b5d022fcb02d35d71069"
   },
   {
     "id": "partial",
@@ -140,8 +140,8 @@
     "nodes": 6,
     "edges": 5,
     "sites": 1,
-    "bytes": 386786,
-    "sha256": "d61b87e11c09263ebd3badda99552adf52c05693aa5ca3cd611b48c39ee44ce6"
+    "bytes": 403560,
+    "sha256": "3629c061a332440cf17de9a2052711cf52f18846a7542066ec4614b089e208e5"
   },
   {
     "id": "files-values",
@@ -153,8 +153,8 @@
     "edges": 8,
     "sites": 0,
     "fileSites": 1,
-    "bytes": 993730,
-    "sha256": "024059faf99cbe43dfcbbda37e4683ca3342c9cf25a06dba1edaeb037387f941"
+    "bytes": 1018691,
+    "sha256": "cfecf97d83f42d74487c428bb60df24d8a981865db5917bd8da0a0fbdf16cd34"
   },
   {
     "id": "files-partial",
@@ -166,8 +166,8 @@
     "edges": 8,
     "sites": 0,
     "fileSites": 1,
-    "bytes": 992614,
-    "sha256": "71bf47c88a44fb20ec66ce7ff9cf16f008b24ce31d8bc2faad58dcc92ecb4acb"
+    "bytes": 1016982,
+    "sha256": "99cbe2ac143b3f1641f9e6b566e390f0b64895368a492325f37baddfacb3906c"
   },
   {
     "id": "files-native",
@@ -179,8 +179,8 @@
     "edges": 30,
     "sites": 0,
     "fileSites": 4,
-    "bytes": 582798,
-    "sha256": "812860a53759b1c276762c16ed6d1b9496b1671a8dc0ec569a9f7d41d963bd39"
+    "bytes": 591554,
+    "sha256": "35752b97fafc7f8ebc283ff0759507791f46a58dc6dba032e6e20c917a1677f6"
   },
   {
     "id": "files-unknown",
@@ -192,8 +192,8 @@
     "edges": 8,
     "sites": 0,
     "fileSites": 1,
-    "bytes": 988609,
-    "sha256": "1ff8a6833789b0105502debba364ba02ba73a28a9c35e20c1b1d4f96dd5abf67"
+    "bytes": 997099,
+    "sha256": "fa111c52667f83d18eb265c3cef5fa6034b2c42903c89223929600fef81e81f5"
   },
   {
     "id": "carddemo-coactupc",
@@ -201,11 +201,36 @@
     "description": "Atualização de conta real: 4.236 linhas, CICS, PERFORM e COPY; análise parcial",
     "format": "fixed",
     "url": "examples/carddemo-coactupc.json.gz",
-    "nodes": 3048,
-    "edges": 3887,
-    "sites": 4,
-    "fileSites": 7,
-    "bytes": 105583292,
-    "sha256": "e4a8d19265d688e7eb7da22bea65e16a88339e0cf456b8195534069f2a95a1d6"
+    "nodes": 5037,
+    "edges": 6293,
+    "sites": 8,
+    "fileSites": 14,
+    "bytes": 154080459,
+    "sha256": "6d9125b533c8dbc92c83d0d170684c190d0fc8fe3f451e13adaacb4795a1b5f8"
+  },
+  {
+    "id": "file-value-kill",
+    "title": "Arquivo: valor sobrescrito",
+    "description": "Nome FILE e kill em um braço do IF",
+    "format": "fixed",
+    "url": "examples/file-value-kill.json.gz",
+    "nodes": 7,
+    "edges": 7,
+    "sites": 0,
+    "bytes": 360786,
+    "sha256": "95799647f883359c4b1ab65fc5da8a8c89a2dd57e04a016e40af729db6a628f8",
+    "fileSites": 1
+  },
+  {
+    "id": "value-copy-boundary",
+    "title": "Valor copiado entre variáveis",
+    "description": "Limite da comprovação por reaching definitions",
+    "format": "fixed",
+    "url": "examples/value-copy-boundary.json.gz",
+    "nodes": 7,
+    "edges": 6,
+    "sites": 1,
+    "bytes": 384449,
+    "sha256": "df9c9d2c4b08ae12678bff870594bf85edf8e5dc1097640dce0f00c484bdd6ba"
   }
 ]
