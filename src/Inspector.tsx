@@ -1,3 +1,4 @@
+import { edgeDescription } from './graph3d';
 import { useState } from 'react';
 import {
   ArrowUpRight,
@@ -8,7 +9,15 @@ import {
   ChevronRight,
   CircleHelp,
 } from 'lucide-react';
-import { type Model, type GraphNode, type Site, type Location, idKey, sourceText } from './model';
+import {
+  type Model,
+  type GraphNode,
+  type Site,
+  type Location,
+  idKey,
+  cfgKey,
+  sourceText,
+} from './model';
 import type { Raw } from './artifacts';
 import { Tabs } from './Tabs';
 function Json({ value, label }: { value: any; label: string }) {
@@ -109,6 +118,16 @@ export function Inspector({
   ];
   const incoming = model.edges.filter((e) => e.target === node?.id && e.entry === entry),
     outgoing = model.edges.filter((e) => e.source === node?.id && e.entry === entry);
+  const localGraph = model.localGraphs?.get(entry);
+  const defensiveExit =
+    node &&
+    model.documents.cfg.localControl?.some(
+      (rule: Raw) =>
+        (rule.kind === 'LOCAL_RESUME' || rule.kind === 'LOCAL_UNWIND') &&
+        cfgKey(rule.invalidExit) === node.id,
+    );
+  const executionContexts =
+    node && localGraph ? [...localGraph.nodes.values()].filter((id) => id === node.id).length : 0;
   return (
     <aside className="inspector" aria-label="Inspetor">
       <div className="inspector-heading">
@@ -137,7 +156,13 @@ export function Inspector({
         <>
           <div className="selection-heading">
             <span className="eyebrow">
-              {site ? site.command : node?.kind === 'BRANCH' ? 'DECISÃO' : 'TRECHO DO PROGRAMA'}
+              {site
+                ? site.command
+                : defensiveExit
+                  ? 'SAÍDA DEFENSIVA'
+                  : node?.kind === 'BRANCH'
+                    ? 'DECISÃO'
+                    : 'TRECHO DO PROGRAMA'}
             </span>
             <h2>{site?.title ?? node?.title}</h2>
             {loc && (
@@ -166,6 +191,9 @@ export function Inspector({
                 <span>
                   Contexto {node.contextIndex} de {node.contexts}
                 </span>
+              )}
+              {executionContexts > 1 && (
+                <span>Corpo compartilhado · {executionContexts} contextos de execução</span>
               )}
               {site?.sourceOnly && <span>Sem nó no CFG</span>}
             </div>
@@ -199,6 +227,15 @@ export function Inspector({
                   <Route size={16} /> Caminhos até aqui <ArrowUpRight size={15} />
                 </button>
                 <p className="micro">Consulta sobre o fluxo conhecido da entrada selecionada.</p>
+                {defensiveExit && (
+                  <p className="empty-note">
+                    Proteção publicada pelo analisador para uma operação inválida na pilha de
+                    PERFORM.{' '}
+                    {executionContexts > 0
+                      ? 'Há caminho conhecido até esta saída na entrada selecionada.'
+                      : 'Sem caminho conhecido nesta entrada; sua presença não indica uma falha no programa.'}
+                  </p>
+                )}
                 {site && (
                   <section>
                     <div className="section-title">
@@ -485,6 +522,12 @@ export function Inspector({
                 {node && (
                   <section>
                     <h3>Navegar no fluxo</h3>
+                    {executionContexts > 1 && (
+                      <p className="micro">
+                        As continuações abaixo pertencem a diferentes chamadores. Use “Caminhos até
+                        aqui” para percorrer retornos compatíveis.
+                      </p>
+                    )}
                     <div className="neighbor-list">
                       {[
                         ...incoming.map((e) => ({ e, id: e.source, direction: '←' })),
@@ -494,7 +537,7 @@ export function Inspector({
                           <span>{direction}</span>
                           <span>
                             {model.nodeById.get(id)?.title}
-                            <small>{e.kind}</small>
+                            <small>{edgeDescription(e)}</small>
                           </span>
                           <ChevronRight size={13} />
                         </button>
@@ -563,6 +606,14 @@ export function Inspector({
                   Identidades completas e fatos originais, sem interpretação adicional.
                 </p>
                 <Json label="Nó CFG" value={node?.raw} />
+                <Json
+                  label="Regras de controle local (CFG v5)"
+                  value={model.documents.cfg.localControl?.filter((r: Raw) =>
+                    node?.operations.some(
+                      (o) => idKey(o.header.id, 'operation') === idKey(r.operation, 'operation'),
+                    ),
+                  )}
+                />
                 <Json label="Sequence AIR (instruções e terminador)" value={node?.sequence} />
                 <Json label="Dependency site / ocorrência" value={site?.raw} />
                 <Json label="Transições de entrada" value={incoming.map((e) => e.raw)} />

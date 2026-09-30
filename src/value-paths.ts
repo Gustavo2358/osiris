@@ -1,3 +1,4 @@
+import { contextualModel } from './local-control';
 import type { Raw } from './artifacts';
 import { definitionFlow, type FlowStop } from './definition-flow';
 import { idKey, traverse, type Model, type Site, type Location } from './model';
@@ -11,6 +12,7 @@ export interface ValueDefinition {
 }
 export interface ValueTrace {
   candidate: Raw;
+  contextual?: boolean;
   definitions: ValueDefinition[];
   nodes: Set<string>;
   edges: Set<string>;
@@ -41,6 +43,32 @@ function operandKey(id: Raw) {
 
 /** Published supports and CFG corridors, refined by optional native reaching definitions. */
 export function valuePaths(model: Model, site: Site, entry: string): ValueTrace[] {
+  const expanded = contextualModel(model, entry),
+    graph = model.localGraphs?.get(entry);
+  if (expanded && graph) {
+    const ids = new Set(site.nodeIds);
+    const contextualSite = {
+      ...site,
+      nodeIds: [...graph.nodes].filter(([, n]) => ids.has(n)).map(([id]) => id),
+    };
+    const projectNodes = (ids: Set<string>) => new Set([...ids].map((id) => graph.nodes.get(id)!));
+    const projectEdges = (ids: Set<string>) =>
+      new Set(graph.edges.filter((e) => ids.has(e.id)).map((e) => e.raw.displayEdge as string));
+    return valuePaths(expanded, contextualSite, entry).map((trace) => ({
+      ...trace,
+      contextual: true,
+      definitions: trace.definitions.map((d) => ({
+        ...d,
+        nodes: [...projectNodes(new Set(d.nodes))],
+      })),
+      nodes: projectNodes(trace.nodes),
+      producers: projectNodes(trace.producers),
+      targets: new Set(site.nodeIds),
+      edges: projectEdges(trace.edges),
+      liveEdges: projectEdges(trace.liveEdges),
+      killedEdges: projectEdges(trace.killedEdges),
+    }));
+  }
   const activation = model.entries.find((e) => e.id === entry);
   const edges = model.edges.filter((e) => e.entry === entry);
   const reachable = traverse(activation ? [activation.nodeId] : [], edges);

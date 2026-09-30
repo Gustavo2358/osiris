@@ -1,0 +1,36 @@
+{
+  "repos": [
+    {
+      "repo": "air-java",
+      "sha": "e0aef0e1928d88a74fe66b7a4d0af84556b84b19",
+      "matchesBuild": true,
+      "status": ""
+    },
+    {
+      "repo": "cobol-lower",
+      "sha": "85abf8e0e3f601e9c56b322bc1dcf8a055e7c75a",
+      "matchesBuild": true,
+      "status": ""
+    },
+    {
+      "repo": "analysis-cfg",
+      "sha": "c1900f744e1309ffb2f6fde958374f4ede535a56",
+      "matchesBuild": true,
+      "status": ""
+    },
+    {
+      "repo": "proleap-poc",
+      "sha": "4c00dea2a6bad1ba21076e55681f6038b80f8a47",
+      "matchesBuild": true,
+      "status": ""
+    },
+    {
+      "repo": "analysis-ir",
+      "sha": "2c7f31f19efbe3211a2aea5bbda90173a9666fe2",
+      "matchesBuild": true,
+      "status": ""
+    }
+  ],
+  "unchangedLegacyBundles": 19,
+  "coSourceFiles": 18
+}

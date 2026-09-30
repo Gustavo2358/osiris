@@ -22,6 +22,7 @@ import { admitFiles, decodeBytes, MAX_BYTES } from './artifacts';
 import {
   buildModel,
   entryGraph,
+  unreachableDefensiveExits,
   pathsTo,
   type Model,
   type Site,
@@ -61,6 +62,7 @@ interface ViewState {
   valueFocus?: ValueFocus;
   highlight: boolean;
   witness: boolean;
+  showDefensive: boolean;
   viewport?: GraphViewport;
 }
 function App() {
@@ -88,6 +90,7 @@ function App() {
     [error, setError] = useState(''),
     [help, setHelp] = useState(false),
     [warnings, setWarnings] = useState(false);
+  const [showDefensive, setShowDefensive] = useState(false);
   const [sourceOpen, setSourceOpen] = useState(false);
   const [viewing, setViewing] = useState(false);
   const [sourceTarget, setSourceTarget] = useState<Location>();
@@ -115,6 +118,7 @@ function App() {
         valueFocus,
         highlight,
         witness,
+        showDefensive,
         viewport: graphViewport.current,
       },
     ]);
@@ -138,6 +142,7 @@ function App() {
     setValueFocus(previous.valueFocus);
     setHighlight(previous.highlight);
     setWitness(previous.witness);
+    setShowDefensive(previous.showDefensive);
     if (previous.viewport)
       setRestoreView({ id: ++restoreSerial.current, viewport: previous.viewport });
   }, [history]);
@@ -166,6 +171,11 @@ function App() {
     const docs = await admitFiles(files);
     const m = buildModel(docs);
     if (serial !== loadId.current) return;
+    // Commit the URL with the admitted publication, never with a failed or stale load.
+    const url = new URL(window.location.href);
+    if (id) url.searchParams.set('example', id);
+    else url.searchParams.delete('example');
+    window.history.replaceState(window.history.state, '', url);
     const firstSite =
       m.sites.find((s) => s.entry === m.entries[0]?.id && s.raw.targetKind === 'COMPUTED') ??
       m.sites.find((s) => s.entry === m.entries[0]?.id) ??
@@ -189,6 +199,7 @@ function App() {
     setQueries({});
     setWitness(false);
     setHighlight(false);
+    setShowDefensive(false);
     setExampleId(id);
     setError('');
   }, []);
@@ -308,10 +319,44 @@ function App() {
     () => (model && routeTargets.length ? pathsTo(model, entry, routeTargets) : undefined),
     [model, entry, routeTargets],
   );
-  const baseScope = useMemo(
+  const publishedScope = useMemo(
     () => (model ? entryGraph(model, entry) : { nodes: [], edges: [] }),
     [model, entry],
   );
+  const defensiveExits = useMemo(
+    () => (model ? unreachableDefensiveExits(model, entry) : new Set<string>()),
+    [model, entry],
+  );
+  const baseScope = useMemo(
+    () =>
+      showDefensive || !defensiveExits.size
+        ? publishedScope
+        : {
+            nodes: publishedScope.nodes.filter((n) => !defensiveExits.has(n.id)),
+            edges: publishedScope.edges.filter(
+              (e) => !defensiveExits.has(e.source) && !defensiveExits.has(e.target),
+            ),
+          },
+    [publishedScope, defensiveExits, showDefensive],
+  );
+  function toggleDefensive(visible: boolean) {
+    rememberView();
+    setShowDefensive(visible);
+    if (
+      !visible &&
+      (defensiveExits.has(selected ?? '') || routeTargets.some((id) => defensiveExits.has(id)))
+    ) {
+      setSelected(undefined);
+      setSelectedSite(undefined);
+      setSourceTarget(undefined);
+      setMode('all');
+      setParagraph('');
+      setRouteTargets([]);
+      setRouteCaption('');
+      setRouteSite(undefined);
+      setWitness(false);
+    }
+  }
   const scope = useMemo(() => {
     if (!model) return baseScope;
     const base = baseScope;
@@ -358,12 +403,9 @@ function App() {
           (id) => model.nodeById.get(id)?.unit === model.entries.find((e) => e.id === entry)?.unit,
         ) && p.title.toLowerCase().includes(query.toLowerCase()),
     ) ?? [];
-  const foundNodes =
-    model?.nodes.filter(
-      (n) =>
-        n.unit === model.entries.find((e) => e.id === entry)?.unit &&
-        `${n.title} ${n.subtitle}`.toLowerCase().includes(query.toLowerCase()),
-    ) ?? [];
+  const foundNodes = baseScope.nodes.filter((n) =>
+    `${n.title} ${n.subtitle}`.toLowerCase().includes(query.toLowerCase()),
+  );
   const totalResults =
     sidebar === 'calls' || sidebar === 'files'
       ? entrySites.length
@@ -392,13 +434,27 @@ function App() {
     if (!model) return;
     const value = {
       schema: 'cobol-explorer-selection',
-      version: '1.0.0',
+      version: model.localGraphs ? '2.0.0' : '1.0.0',
       publication: model.documents.cfg.publication,
       entry,
       mode,
-      notice: 'Subgrafo do CFG conhecido; não prova a viabilidade dos predicados.',
+      presentation: {
+        showDefensiveExits: showDefensive,
+        hiddenDefensiveExits: showDefensive ? [] : [...defensiveExits],
+      },
+      notice: model.localGraphs
+        ? 'Projeção visual de estados (entrada, nó, pilha). Linhas locais não são retornos livres; aplicar localControl para consultar caminhos. Não prova viabilidade de predicados.'
+        : 'Subgrafo do CFG conhecido; não prova a viabilidade dos predicados.',
       nodes: scope.nodes.map((n) => n.raw),
-      transitions: scope.edges.map((e) => e.raw),
+      transitions: scope.edges
+        .filter((e) => e.raw.derivedFrom !== 'CFG_LOCAL_RULE')
+        .map((e) => e.raw),
+      ...(model.localGraphs
+        ? {
+            localControl: model.documents.cfg.localControl,
+            displayTransitions: scope.edges.map((e) => e.raw),
+          }
+        : {}),
       selectedSite: site?.raw,
       valueHighlight: valueFocus
         ? {
@@ -804,6 +860,12 @@ function App() {
               <strong>{scope.nodes.length}</strong> de {baseScope.nodes.length} trechos nesta
               entrada <span className="dot-separator">·</span> {scope.edges.length} transições
               {mode === 'paragraph' ? ' · recorte do paragraph' : ''}
+              {model?.localGraphs && (
+                <span title="CFG v5: os caminhos acompanham a pilha dos PERFORMs. As linhas da visão geral resumem os contextos.">
+                  {' '}
+                  · rotinas compartilhadas
+                </span>
+              )}
             </span>
             <label>
               <input
@@ -835,6 +897,7 @@ function App() {
                 </button>
                 <small>
                   Alcançabilidade estrutural no CFG. Não avalia a viabilidade das condições.
+                  {model?.localGraphs && ' Retornos de PERFORM respeitam o chamador.'}
                   {reach?.hasOpenControl ? ' Há controle aberto neste recorte.' : ''}
                 </small>
               </span>
@@ -924,18 +987,43 @@ function App() {
               </div>
             )}
           </SplitWorkspace>
-          <button className="coverage-bar" onClick={() => setWarnings(!warnings)}>
+          <button
+            className="coverage-bar"
+            aria-expanded={warnings}
+            aria-controls="coverage-details"
+            onClick={() => setWarnings(!warnings)}
+          >
             <span className="coverage-tag">
               {model?.documents.cfg.sourceKnowledge?.publicationInventory ?? '—'}
             </span>
             <span>
               Cobertura publicada
               {model?.warnings.length ? ` · ${model.warnings.length} observações` : ''}
+              {defensiveExits.size > 0 &&
+                ` · ${defensiveExits.size} ${defensiveExits.size === 1 ? `saída defensiva ${showDefensive ? 'visível' : 'oculta'}` : `saídas defensivas ${showDefensive ? 'visíveis' : 'ocultas'}`}`}
             </span>
             <ChevronRight size={14} className={warnings ? 'rotate' : ''} />
           </button>
           {warnings && (
-            <div className="coverage-details">
+            <div className="coverage-details" id="coverage-details">
+              {defensiveExits.size > 0 && (
+                <div className="defensive-visibility">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={showDefensive}
+                      onChange={(e) => toggleDefensive(e.target.checked)}
+                      aria-describedby="defensive-description"
+                    />{' '}
+                    Mostrar saídas defensivas ({defensiveExits.size})
+                  </label>
+                  <p id="defensive-description">
+                    Proteções de retorno e de remoção da pilha de PERFORM sem caminho conhecido
+                    nesta entrada. Ative para inspecioná-las no grafo e na aba Trechos. Os nós e as
+                    regras originais permanecem no pacote; nenhuma conexão é criada.
+                  </p>
+                </div>
+              )}
               <p>
                 CFG_BUILT indica que o grafo foi produzido. O estado de cobertura e os remainders
                 permanecem os publicados.

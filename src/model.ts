@@ -1,3 +1,10 @@
+import {
+  admitLocalRules,
+  contextGraph,
+  contextualModel,
+  localKind,
+  type ContextGraph,
+} from './local-control';
 import { assert, type Documents, type Raw } from './artifacts';
 export function canonical(v: any): string {
   if (v === null || typeof v !== 'object') return JSON.stringify(v);
@@ -92,6 +99,7 @@ export interface Paragraph {
 }
 export interface Model {
   documents: Documents;
+  localGraphs?: Map<string, ContextGraph>;
   nodes: GraphNode[];
   edges: GraphEdge[];
   sites: Site[];
@@ -311,7 +319,17 @@ export function buildModel(doc: Documents): Model {
       ? ['JUMP', 'BRANCH', 'RETURN', 'HALT']
       : doc.cfg.schemaVersion === '2.0.0'
         ? ['JUMP', 'BRANCH', 'RETURN', 'HALT', 'INVOKE']
-        : ['JUMP', 'BRANCH', 'RETURN', 'HALT', 'INVOKE', 'OPAQUE'];
+        : [
+            'JUMP',
+            'BRANCH',
+            'RETURN',
+            'HALT',
+            'INVOKE',
+            'OPAQUE',
+            ...(doc.cfg.schemaVersion === '5.0.0'
+              ? ['LOCAL_INVOKE', 'LOCAL_BOUNDARY', 'LOCAL_RESUME', 'LOCAL_UNWIND']
+              : []),
+          ];
   for (const raw of doc.cfg.nodes) {
     const id = cfgKey(raw.id);
     assert(raw.id.publication === p.id.localId, 'Nó CFG de outra publicação.');
@@ -322,16 +340,16 @@ export function buildModel(doc: Documents): Model {
         'SEQUENCE',
         'NORMAL_EXIT',
         'HALT_EXIT',
-        ...(doc.cfg.schemaVersion === '4.0.0' ? ['OUTCOME_EXIT'] : []),
+        ...(['4.0.0', '5.0.0'].includes(doc.cfg.schemaVersion) ? ['OUTCOME_EXIT'] : []),
       ].includes(raw.kind),
       'Kind de nó CFG não suportado.',
     );
     const seq = raw.kind === 'SEQUENCE' ? sequences.get(idKey(raw.label, 'label')) : undefined;
     if (raw.kind === 'SEQUENCE') {
-      if (['3.0.0', '4.0.0'].includes(doc.cfg.schemaVersion))
+      if (['3.0.0', '4.0.0', '5.0.0'].includes(doc.cfg.schemaVersion))
         assert(
           typeof raw.terminator?.openControlRemainder === 'boolean',
-          'CFG v3/v4 exige openControlRemainder explícito.',
+          'CFG v3–v5 exige openControlRemainder explícito.',
         );
       assert(seq, 'Label CFG ausente na AIR.');
       assert(allowedTerms.includes(raw.terminator.kind), 'Terminador incompatível com versão CFG.');
@@ -341,7 +359,7 @@ export function buildModel(doc: Documents): Model {
         'Terminador CFG não corresponde à AIR.',
       );
       assert(
-        seq.terminator.kind.toUpperCase() === raw.terminator.kind,
+        localKind(seq.terminator.kind) === raw.terminator.kind,
         'Kind de terminador AIR/CFG diverge.',
       );
     }
@@ -349,7 +367,12 @@ export function buildModel(doc: Documents): Model {
       raw.kind === 'OUTCOME_EXIT' ? operations.get(idKey(raw.operation, 'operation')) : undefined;
     if (raw.kind === 'OUTCOME_EXIT') {
       assert(
-        outcomeOperation && ['invoke', 'opaque'].includes(outcomeOperation.kind),
+        outcomeOperation &&
+          [
+            'invoke',
+            'opaque',
+            ...(['5.0.0'].includes(doc.cfg.schemaVersion) ? ['local.resume', 'local.unwind'] : []),
+          ].includes(outcomeOperation.kind),
         'Saída CFG aponta para operação AIR ausente ou incompatível.',
       );
       assert(
@@ -398,6 +421,10 @@ export function buildModel(doc: Documents): Model {
         invoke:
           seq?.terminator?.target?.category === 'file' ? 'Acesso a arquivo' : 'Chamada externa',
         opaque: 'Operação parcialmente modelada',
+        'local.invoke': 'PERFORM · entrar na rotina',
+        'local.boundary': 'Fim de paragraph · retorno ou continuação',
+        'local.resume': 'Retorno do PERFORM',
+        'local.unwind': 'Saída de controle local',
       }[seq?.terminator?.kind as string] ||
       'Trecho de controle';
     if (raw.kind === 'ENTRY') title = 'Entrada do programa';
@@ -406,7 +433,11 @@ export function buildModel(doc: Documents): Model {
         raw.outcome === 'HALT'
           ? 'Fim da execução'
           : raw.outcome === 'EXCEPTION'
-            ? `Saída excepcional · ${raw.tag}`
+            ? raw.tag === 'invalid_local_return'
+              ? 'Retorno sem PERFORM ativo'
+              : raw.tag === 'invalid_local_unwind'
+                ? 'Saída além dos PERFORMs ativos'
+                : `Saída excepcional · ${raw.tag}`
             : 'Saída excepcional · tipo aberto';
     const unitId = raw.label
       ? { publication: raw.label.publication, localId: raw.label.unit }
@@ -463,8 +494,10 @@ export function buildModel(doc: Documents): Model {
     'RETURN',
     'HALT',
     ...(doc.cfg.schemaVersion !== '1.0.0' ? ['INVOKE_NORMAL'] : []),
-    ...(['3.0.0', '4.0.0'].includes(doc.cfg.schemaVersion) ? ['OPAQUE_JUMP', 'OPAQUE_RETURN'] : []),
-    ...(doc.cfg.schemaVersion === '4.0.0' ? ['EXCEPTION', 'CONTROL_EXIT'] : []),
+    ...(['3.0.0', '4.0.0', '5.0.0'].includes(doc.cfg.schemaVersion)
+      ? ['OPAQUE_JUMP', 'OPAQUE_RETURN']
+      : []),
+    ...(['4.0.0', '5.0.0'].includes(doc.cfg.schemaVersion) ? ['EXCEPTION', 'CONTROL_EXIT'] : []),
   ];
   for (const [i, e] of doc.cfg.transitions.entries()) {
     assert(edgeKinds.includes(e.kind), 'Transição não suportada pela versão CFG.');
@@ -703,7 +736,7 @@ export function buildModel(doc: Documents): Model {
     warnings.push(
       'Alguns trechos auxiliares não têm StatementLink. Sua identidade e provenance AIR permanecem disponíveis.',
     );
-  return {
+  const model: Model = {
     documents: doc,
     nodes,
     edges,
@@ -721,12 +754,53 @@ export function buildModel(doc: Documents): Model {
     warnings,
     units,
   };
+  const rules = admitLocalRules(model);
+  if (rules.size) {
+    model.localGraphs = new Map(
+      entries.map((entry) => [entry.id, contextGraph(model, entry, rules)]),
+    );
+    for (const graph of model.localGraphs.values())
+      for (const edge of graph.displayEdges.values())
+        if (edge.raw.derivedFrom === 'CFG_LOCAL_RULE') edges.push(edge);
+    const reachable = new Set(
+      [...model.localGraphs.values()].flatMap((g) => [...g.nodes.values()]),
+    );
+    const guards = nodes.filter(
+      (n) =>
+        n.raw.kind === 'OUTCOME_EXIT' &&
+        ['invalid_local_return', 'invalid_local_unwind'].includes(n.raw.tag) &&
+        !reachable.has(n.id),
+    );
+    if (guards.length)
+      warnings.push(
+        `${guards.length} saídas defensivas de controle local sem caminho conhecido. São proteções publicadas pelo analisador, não trechos COBOL perdidos.`,
+      );
+    warnings.push(
+      'Rotinas compartilhadas: os caminhos respeitam o chamador de cada PERFORM. As linhas da visão geral resumem vários contextos de execução.',
+    );
+  }
+  return model;
 }
 export function entryGraph(model: Model, entry: string) {
   const edges = model.edges.filter((e) => e.entry === entry),
     unit = model.entries.find((e) => e.id === entry)?.unit;
   const nodes = model.nodes.filter((n) => n.unit === unit);
   return { nodes, edges };
+}
+/** Presentation-only: hide admitted defensive exits only when unreachable from this entry.
+ * Ordinary unreachable nodes and reachable error exits must remain visible.
+ */
+export function unreachableDefensiveExits(model: Model, entry: string): Set<string> {
+  const graph = model.localGraphs?.get(entry);
+  if (!graph) return new Set();
+  const reachable = new Set(graph.nodes.values()),
+    unit = model.entries.find((e) => e.id === entry)?.unit;
+  return new Set(
+    model.documents.cfg.localControl
+      .filter((r: Raw) => r.kind === 'LOCAL_RESUME' || r.kind === 'LOCAL_UNWIND')
+      .map((r: Raw) => cfgKey(r.invalidExit))
+      .filter((id: string) => model.nodeById.get(id)?.unit === unit && !reachable.has(id)),
+  );
 }
 export function traverse(start: string[], edges: GraphEdge[], reverse = false): Set<string> {
   const adjacency = new Map<string, string[]>();
@@ -747,7 +821,35 @@ export function traverse(start: string[], edges: GraphEdge[], reverse = false): 
       }
   return seen;
 }
-export function pathsTo(model: Model, entry: string, targets: string[]) {
+export function pathsTo(
+  model: Model,
+  entry: string,
+  targets: string[],
+): {
+  nodes: Set<string>;
+  edges: GraphEdge[];
+  witness: GraphEdge[];
+  reachable: boolean;
+  hasOpenControl: boolean;
+} {
+  const expanded = contextualModel(model, entry),
+    graph = model.localGraphs?.get(entry);
+  if (expanded && graph) {
+    const goals = new Set(targets);
+    const result = pathsTo(
+      expanded,
+      entry,
+      [...graph.nodes].filter(([, node]) => goals.has(node)).map(([state]) => state),
+    );
+    return {
+      ...result,
+      nodes: new Set([...result.nodes].map((id) => graph.nodes.get(id)!)),
+      edges: [...new Set(result.edges.map((e) => e.raw.displayEdge))].map(
+        (id) => graph.displayEdges.get(id)!,
+      ),
+      witness: result.witness.map((e) => graph.displayEdges.get(e.raw.displayEdge)!),
+    };
+  }
   const edges = model.edges.filter((e) => e.entry === entry),
     start = model.entries.find((e) => e.id === entry)?.nodeId;
   const forward = traverse(start ? [start] : [], edges),

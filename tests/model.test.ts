@@ -32,12 +32,14 @@ describe('Real analyzer artifacts', () => {
   for (const ex of index)
     it(
       `preserves all published nodes, edges, links and candidates: ${ex.id}`,
-      { timeout: ex.id === 'carddemo-coactupc' ? 15000 : 5000 },
+      { timeout: ex.id.startsWith('carddemo-coactupc') ? 15000 : 5000 },
       async () => {
         const m = await model(ex.id);
         expect(m.nodes).toHaveLength(ex.nodes);
-        expect(m.edges).toHaveLength(ex.edges);
-        expect(m.edges.map((e) => e.raw)).toEqual(m.documents.cfg.transitions);
+        const ordinary = m.edges.filter((e) => e.raw.derivedFrom !== 'CFG_LOCAL_RULE');
+        expect(ordinary).toHaveLength(ex.edges);
+        expect(ordinary.map((e) => e.raw)).toEqual(m.documents.cfg.transitions);
+        expect(m.documents.cfg.localControl?.length ?? 0).toBe(ex.localRules ?? 0);
         expect(m.fileSites.map((s) => s.raw)).toEqual(
           m.documents.dependencies!.fileDependencies?.sites ?? [],
         );

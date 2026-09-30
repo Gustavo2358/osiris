@@ -76,6 +76,20 @@ export class RoutedLink extends Group {
     this.add(this.line, this.arrow, this.particles);
     this.style();
   }
+  setPoints(points: Point3D[]) {
+    this.link.points = points;
+    this.lengths = routeLength(points);
+    // Geometry is updated only when presentation blocks change, never on each zoom tick.
+    this.line.geometry.dispose();
+    this.line.geometry = new BufferGeometry().setFromPoints(
+      points.map((p) => new Vector3(p.x, p.y, p.z)),
+    );
+    const total = this.lengths.at(-1)!;
+    const end = pointOnRoute(points, this.lengths, 1);
+    const near = pointOnRoute(points, this.lengths, Math.max(0, 1 - 6 / total));
+    this.arrow.position.copy(near);
+    this.arrow.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), end.sub(near).normalize());
+  }
   style(witness?: Set<string>, values?: Set<string>, killed?: Set<string>) {
     this.dimmed = !!values && !values.has(this.link.id);
     const color = killed?.has(this.link.id)

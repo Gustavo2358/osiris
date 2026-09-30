@@ -122,7 +122,8 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
     'Binding AIR não suportado (esperado 1.0.0 / AIR 2.0.0).',
   );
   assert(
-    ['1.0.0', '2.0.0', '3.0.0', '4.0.0'].includes(cfg.schemaVersion) && cfg.airVersion === '2.0.0',
+    ['1.0.0', '2.0.0', '3.0.0', '4.0.0', '5.0.0'].includes(cfg.schemaVersion) &&
+      cfg.airVersion === '2.0.0',
     'Versão de CFG não suportada.',
   );
   assert(
@@ -147,7 +148,7 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
       (sp.schema === 'cobol-semantic-compilation' && sp.contractVersion === '1.0.0') ||
         (sp.schema === 'cobol-semantic-product' &&
           /^2\.([0-9]+)\.0$/.test(sp.contractVersion) &&
-          Number(sp.contractVersion.split('.')[1]) <= 50),
+          Number(sp.contractVersion.split('.')[1]) <= 62),
       'Versão SP não suportada.',
     );
   }
@@ -180,6 +181,7 @@ export async function admitFiles(files: Record<string, string>): Promise<Documen
         '2.4.0',
         '2.5.0',
         '2.6.0',
+        '2.7.0',
       ].includes(dep.version),
       'Versão de dependencies não suportada.',
     );

@@ -22,6 +22,7 @@ flowchart LR
 ```
 
 - `src/artifacts.ts`: reconhecimento por contrato, descompressão, rejeição de versões/publicações incompatíveis e SHA-256 do sidecar.
+- `src/local-control.ts`: admissão das regras v5 e travessia por `(EntryId, nó, pilha)`; somente a apresentação reúne os contextos num nó físico.
 - `src/model.ts`: índices de identidades, joins explícitos, projeção de apresentação e consultas sobre arestas publicadas.
 - `src/Graph.tsx`: cena 3D, câmera, histórico, recortes, seleção e descarte de recursos. Os nós não são editáveis.
 - `src/graph3d.ts`: cartões em texturas Canvas, cores e tipos da cena.
@@ -50,15 +51,28 @@ O sidecar possui contrato próprio `cobol-explorer-links/1.0.0`, `spSha256`, `ai
 
 ## Apresentação COBOL
 
-Cada nó continua representando um nó CFG. Statements ligados às operações dão texto e tipo ao cartão. Statements sem arquivo fonte usam a variante tipada do SP. Helpers sem link preservam sua identidade e provenance AIR.
+Cada caixa individual representa um nó CFG. Com **Blocos** ativo, sequências maximais são resumidas à distância, até divisões, junções e limites de controle aberto; aproximar revela seus membros. `src/compact-layout.ts` recolhe faixas vazias sem alterar o layout de base nem a topologia. A partição de `src/linear-blocks.ts` conserva as identidades e consulta as arestas completas para não ocultar decisões cortadas pelo recorte. Ver [critérios e interação](BLOCOS-POR-ZOOM.md). Statements ligados às operações dão texto e tipo ao cartão. Statements sem arquivo fonte usam a variante tipada do SP. Helpers sem link preservam sua identidade e provenance AIR.
 
 Paragraphs/sections vêm de `controlTopology.regions`. A associação sobe a cadeia `occurrence.region → parent` até a região tipada mais próxima. A primeira linha do span da prova da região serve de título visual; ela não determina arestas ou membros. Nós com múltiplos statements preservam todos no inspetor. Um mesmo statement expandido em várias ocorrências CFG conserva os contextos separados.
 
 Rótulos “Sim” / “Não” representam `BRANCH_TRUE` / `BRANCH_FALSE`. Alternativas com o mesmo destino continuam como arestas diferentes. Candidatos de chamada nunca viram arestas de controle para callees.
 
+No CFG v5, `unreachableDefensiveExits` correlaciona `localControl[].invalidExit`
+com os IDs CFG e a alcançabilidade contextual da entrada selecionada. Apenas essas
+proteções sem caminho conhecido ficam ocultas por padrão no grafo e na busca de trechos.
+A opção em **Cobertura publicada** restaura a inspeção; outros nós inalcançáveis e
+proteções alcançáveis permanecem visíveis. `entryGraph`, os documentos e as consultas
+mantêm todos os nós. O export registra o filtro aplicado em `presentation`.
+
+O carregamento admite e constrói o modelo antes de atualizar estado e URL. Somente a
+última solicitação pode instalar a publicação. `history.replaceState` sincroniza o
+parâmetro `example` sem criar entradas extras no histórico do browser; importações
+locais removem esse parâmetro. O botão **Voltar** restaura o histórico interno do grafo,
+incluindo a visibilidade das saídas defensivas.
+
 ## Consulta de caminhos
 
-Para uma EntryId escolhida:
+Nas versões CFG 1–4, para uma EntryId escolhida:
 
 1. Selecione exclusivamente transições com `activationEntry` igual a essa identidade.
 2. Calcule `F`, os nós alcançáveis a partir do nó ENTRY, por BFS.
@@ -66,7 +80,18 @@ Para uma EntryId escolhida:
 4. O recorte é `F ∩ R`, com as arestas originais cujas pontas pertencem à interseção.
 5. Uma segunda BFS registra predecessores para um caminho mínimo, sem enumerar caminhos exponencialmente numerosos.
 
-Custo O(V+E) e memória O(V+E). Ciclos terminam por conjuntos de visitados. Os caminhos incluem as possibilidades estruturais publicadas, inclusive voltas em ciclos. Um caminho mínimo não resolve predicados. Não ter caminho conhecido é diferente de provar impossibilidade no COBOL completo.
+No CFG v5, a mesma consulta opera primeiro sobre estados `(EntryId, nó, pilha)`.
+`LOCAL_INVOKE` empilha, `LOCAL_BOUNDARY` casa somente o topo, `LOCAL_RESUME` desempilha e
+`LOCAL_UNWIND` remove a contagem exata. Destinos ordinários fora de sequences encerram
+a ativação e descartam a pilha. Estados e transições da consulta são projetados de volta
+nos IDs CFG somente após o recorte e a testemunha. O desenho agregado não é usado como
+entrada de consultas de caminhos. Recursão de uma invocação ativa é recusada; o limite
+operacional de 250.000 estados por entrada também recusa a publicação inteira, sem truncar.
+No v5, o export de seleção usa versão 2.0.0: `transitions` conserva as ordinárias,
+`localControl` conserva as regras e `displayTransitions` identifica as relações derivadas.
+Ver [contrato, oráculos e limitações](CFG-V5-ROTINAS-COMPARTILHADAS.md).
+
+Custo O(V+E) e memória O(V+E) na consulta já expandida; no v5, V/E contam estados e transições contextuais, que podem superar os nós físicos. Ciclos terminam por conjuntos de visitados. Os caminhos incluem as possibilidades estruturais publicadas, inclusive voltas em ciclos. Um caminho mínimo não resolve predicados. Não ter caminho conhecido é diferente de provar impossibilidade no COBOL completo.
 
 A seleção usada como alvo permanece fixa enquanto o usuário inspeciona outros nós do recorte. As ações de navegação podem voltar à visão completa quando o destino está fora do recorte.
 
@@ -99,4 +124,4 @@ Contratos e implementações locais fixados nos SHAs de `VALIDATION.md`:
 - `analysis-cfg/docs/architecture/analysis-dependency-result-v1.md`
 - `analysis-cfg/.../CfgJsonWriter.java`
 
-Integração visual conforme a [API oficial de 3d-force-graph](https://github.com/vasturiano/3d-force-graph#api-reference), especialmente `nodeThreeObject`, `linkThreeObject`, `linkPositionUpdate` e câmera. O [ELK Layered](https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html) fornece a geometria; partículas são interpoladas nos segmentos dessas rotas. Ver [experimento 3D](EXPERIMENTO-3D.md). A versão 2D está preservada na branch `main`.
+Integração visual conforme a [API oficial de 3d-force-graph](https://github.com/vasturiano/3d-force-graph#api-reference), especialmente `nodeThreeObject`, `linkThreeObject`, `linkPositionUpdate` e câmera. O [ELK Layered](https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html) fornece a geometria; partículas são interpoladas nos segmentos dessas rotas. Ver [experimento 3D](EXPERIMENTO-3D.md). O histórico Git preserva a implementação 2D anterior ao experimento; a `main` usa a visualização 3D.

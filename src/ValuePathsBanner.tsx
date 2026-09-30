@@ -64,6 +64,8 @@ export function ValuePathsBanner({
         )}
         {shown.some((t) => ['structural', 'mixed'].includes(t.verification)) &&
           ' Há percursos estruturais: falta evidência para verificar suas sobrescritas.'}
+        {shown.some((t) => t.contextual && ['structural', 'mixed'].includes(t.verification)) &&
+          ' Nesta versão, as definições são agregadas entre chamadas da rotina; não comprovam kills por chamador.'}
         {shown.some((t) => t.unknowns.length) &&
           ' Laranja: limite da evidência; o destaque para nesse ponto.'}{' '}
         As condições dos branches não são verificadas.

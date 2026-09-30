@@ -86,8 +86,11 @@ test('import real bundle; malformed and mismatched files preserve the current pr
   page,
 }) => {
   await ready(page);
+  await expect(page).toHaveURL(/example=order-router/);
   await page.getByLabel('Selecionar artefatos').setInputFiles('public/examples/copy.json.gz');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('COPY-DEMO');
+  await expect(page).toHaveURL('http://127.0.0.1:4173/');
+  await expect(page.getByLabel('Escolher exemplo')).toHaveValue('');
   await page
     .getByLabel('Selecionar artefatos')
     .setInputFiles({ name: 'bad.json', mimeType: 'application/json', buffer: Buffer.from('{') });

@@ -19,14 +19,16 @@
   overflow: hidden;
   pointer-events: none;
 }
-.graph-node-target {
+.graph-node-target,
+.graph-block-target {
   position: absolute;
   padding: 0;
   border: 0;
   pointer-events: none;
   border-radius: 8px;
 }
-.graph-node-target:focus-visible {
+.graph-node-target:focus-visible,
+.graph-block-target:focus-visible {
   outline: 3px solid #6366f1;
   outline-offset: 2px;
 }
@@ -98,6 +100,15 @@
 .graph3d-controls button.value-fit {
   width: auto;
   display: flex;
+  gap: 4px;
+  padding: 0 7px;
+  font-size: 11px;
+}
+
+.graph3d-controls button.block-toggle {
+  width: auto;
+  display: flex;
+  align-items: center;
   gap: 4px;
   padding: 0 7px;
   font-size: 11px;

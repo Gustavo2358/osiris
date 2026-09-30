@@ -5,3 +5,6 @@ evidence/
 node_modules/
 dist/
 package-lock.json
+
+# Frozen output of the independent producer oracle: preserve its original bytes.
+tests/fixtures/shared-routines-oracle.json
