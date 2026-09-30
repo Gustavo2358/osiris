@@ -1,0 +1,307 @@
+{
+  "config": {
+    "argv": [
+      "/home/gustavo/.nvm/versions/node/v24.19.0/bin/node",
+      "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/node_modules/.bin/playwright",
+      "test",
+      "e2e/linear-blocks.spec.ts"
+    ],
+    "configFile": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/playwright.config.ts",
+    "rootDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview -- --port 4173 --strictPort",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true,
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "linear-blocks.spec.ts",
+      "file": "linear-blocks.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "maximal blocks compact the diagram, retain branch choices, and open from a real WebGL click",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6970,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('graph')\nExpected: \u001b[32m\"3\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('graph') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('graph')\u001b[22m\n\u001b[2m    14 × locator resolved to <div data-nodes=\"10\" data-edges=\"10\" data-motion=\"on\" aria-busy=\"false\" data-textures=\"13\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"3\" data-value-unknowns=\"0\" data-full-height=\"1216\" data-value-producers=\"0\" data-rendered-nodes=\"10\" data-collapsed-blocks=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" data-rendered-height=\"1216\" class=\"graph-surface graph3d\" aria-label=\"Grafo de con…>…</div>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('graph')\nExpected: \u001b[32m\"3\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('graph') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('graph')\u001b[22m\n\u001b[2m    14 × locator resolved to <div data-nodes=\"10\" data-edges=\"10\" data-motion=\"on\" aria-busy=\"false\" data-textures=\"13\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"3\" data-value-unknowns=\"0\" data-full-height=\"1216\" data-value-producers=\"0\" data-rendered-nodes=\"10\" data-collapsed-blocks=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" data-rendered-height=\"1216\" class=\"graph-surface graph3d\" aria-label=\"Grafo de con…>…</div>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts:50:29",
+                    "location": {
+                      "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts",
+                      "column": 29,
+                      "line": 50
+                    },
+                    "snippet": "  48 |   for (let i = 0; i < 5; i++)\n  49 |     await page.getByRole('button', { name: 'Diminuir zoom', exact: true }).click();\n> 50 |   await expect(graph(page)).toHaveAttribute('data-collapsed-blocks', '3');\n     |                             ^\n  51 | });\n  52 |\n  53 | test('evidence exposes definitions and kills; Back restores the compact layout and its exact camera', async ({"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts",
+                        "column": 29,
+                        "line": 50
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('graph')\nExpected: \u001b[32m\"3\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('graph') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('graph')\u001b[22m\n\u001b[2m    14 × locator resolved to <div data-nodes=\"10\" data-edges=\"10\" data-motion=\"on\" aria-busy=\"false\" data-textures=\"13\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"3\" data-value-unknowns=\"0\" data-full-height=\"1216\" data-value-producers=\"0\" data-rendered-nodes=\"10\" data-collapsed-blocks=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" data-rendered-height=\"1216\" class=\"graph-surface graph3d\" aria-label=\"Grafo de con…>…</div>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  48 |   for (let i = 0; i < 5; i++)\n  49 |     await page.getByRole('button', { name: 'Diminuir zoom', exact: true }).click();\n> 50 |   await expect(graph(page)).toHaveAttribute('data-collapsed-blocks', '3');\n     |                             ^\n  51 | });\n  52 |\n  53 | test('evidence exposes definitions and kills; Back restores the compact layout and its exact camera', async ({\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts:50:29"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:10:48.162Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/linear-blocks-maximal-bloc-08bcc-pen-from-a-real-WebGL-click/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/linear-blocks-maximal-bloc-08bcc-pen-from-a-real-WebGL-click/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/linear-blocks-maximal-bloc-08bcc-pen-from-a-real-WebGL-click/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts",
+                    "column": 29,
+                    "line": 50
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "826d316eee1c6d2d21b3-bfb26e50908961c26139",
+          "file": "linear-blocks.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "evidence exposes definitions and kills; Back restores the compact layout and its exact camera",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2282,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:10:55.792Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "826d316eee1c6d2d21b3-b9405f430c6026d4975c",
+          "file": "linear-blocks.spec.ts",
+          "line": 53,
+          "column": 1
+        },
+        {
+          "title": "a complete sequential PERFORM program becomes one block and zoom restores all contexts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 957,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:10:58.151Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "826d316eee1c6d2d21b3-915a09d564c5ce8129e6",
+          "file": "linear-blocks.spec.ts",
+          "line": 74,
+          "column": 1
+        },
+        {
+          "title": "COACTUPC reduces actual layout height and cards while retaining every published node and edge",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5441,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('graph')\nExpected: \u001b[32m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('graph') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('graph')\u001b[22m\n\u001b[2m    - locator resolved to <div aria-busy=\"true\" data-motion=\"on\" data-nodes=\"5037\" data-edges=\"6293\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"0\" data-value-unknowns=\"0\" data-value-producers=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" class=\"graph-surface graph3d\" aria-label=\"Grafo de controle 3D\">…</div>\u001b[22m\n\u001b[2m    8 × unexpected value \"true\"\u001b[22m\n\u001b[2m      - locator resolved to <div aria-busy=\"true\" data-motion=\"on\" data-nodes=\"5037\" data-edges=\"6293\" data-textures=\"0\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-distance=\"1000\" data-full-height=\"0\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"0\" data-value-unknowns=\"0\" data-rendered-nodes=\"0\" data-value-producers=\"0\" data-rendered-height=\"0\" data-collapsed-blocks=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" class=\"graph-surface graph3d\" aria-lab…>…</div>\u001b[22m\n\u001b[2m    - unexpected value \"true\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('graph')\nExpected: \u001b[32m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('graph') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('graph')\u001b[22m\n\u001b[2m    - locator resolved to <div aria-busy=\"true\" data-motion=\"on\" data-nodes=\"5037\" data-edges=\"6293\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"0\" data-value-unknowns=\"0\" data-value-producers=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" class=\"graph-surface graph3d\" aria-label=\"Grafo de controle 3D\">…</div>\u001b[22m\n\u001b[2m    8 × unexpected value \"true\"\u001b[22m\n\u001b[2m      - locator resolved to <div aria-busy=\"true\" data-motion=\"on\" data-nodes=\"5037\" data-edges=\"6293\" data-textures=\"0\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-distance=\"1000\" data-full-height=\"0\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"0\" data-value-unknowns=\"0\" data-rendered-nodes=\"0\" data-value-producers=\"0\" data-rendered-height=\"0\" data-collapsed-blocks=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" class=\"graph-surface graph3d\" aria-lab…>…</div>\u001b[22m\n\u001b[2m    - unexpected value \"true\"\u001b[22m\n\n    at overview (/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts:7:26)\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts:91:3",
+                    "location": {
+                      "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts",
+                      "column": 26,
+                      "line": 7
+                    },
+                    "snippet": "   5 | async function overview(p: Page, example = 'goto') {\n   6 |   await p.goto('/?example=' + example);\n>  7 |   await expect(graph(p)).toHaveAttribute('aria-busy', 'false');\n     |                          ^\n   8 |   await p.getByRole('button', { name: 'Enquadrar recorte', exact: true }).click();\n   9 | }\n  10 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts",
+                        "column": 26,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('graph')\nExpected: \u001b[32m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" getByTestId('graph') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('graph')\u001b[22m\n\u001b[2m    - locator resolved to <div aria-busy=\"true\" data-motion=\"on\" data-nodes=\"5037\" data-edges=\"6293\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"0\" data-value-unknowns=\"0\" data-value-producers=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" class=\"graph-surface graph3d\" aria-label=\"Grafo de controle 3D\">…</div>\u001b[22m\n\u001b[2m    8 × unexpected value \"true\"\u001b[22m\n\u001b[2m      - locator resolved to <div aria-busy=\"true\" data-motion=\"on\" data-nodes=\"5037\" data-edges=\"6293\" data-textures=\"0\" data-testid=\"graph\" data-value-edges=\"0\" data-value-kills=\"0\" data-layout=\"planar\" data-distance=\"1000\" data-full-height=\"0\" data-auto-blocks=\"on\" data-witness-edges=\"0\" data-linear-blocks=\"0\" data-value-unknowns=\"0\" data-rendered-nodes=\"0\" data-value-producers=\"0\" data-rendered-height=\"0\" data-collapsed-blocks=\"0\" data-value-highlight=\"off\" data-value-killed-edges=\"0\" class=\"graph-surface graph3d\" aria-lab…>…</div>\u001b[22m\n\u001b[2m    - unexpected value \"true\"\u001b[22m\n\n\n   5 | async function overview(p: Page, example = 'goto') {\n   6 |   await p.goto('/?example=' + example);\n>  7 |   await expect(graph(p)).toHaveAttribute('aria-busy', 'false');\n     |                          ^\n   8 |   await p.getByRole('button', { name: 'Enquadrar recorte', exact: true }).click();\n   9 | }\n  10 |\n    at overview (/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts:7:26)\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts:91:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:10:59.116Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/linear-blocks-COACTUPC-red-94b48-ery-published-node-and-edge/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/linear-blocks-COACTUPC-red-94b48-ery-published-node-and-edge/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/linear-blocks-COACTUPC-red-94b48-ery-published-node-and-edge/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/linear-blocks.spec.ts",
+                    "column": 26,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "826d316eee1c6d2d21b3-80e89869d9c18ce31e9b",
+          "file": "linear-blocks.spec.ts",
+          "line": 87,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T20:10:47.744Z",
+    "duration": 17023.683,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -73,7 +73,7 @@ test('double click reads a distant card without pinning it or changing the graph
   await open(page);
   const selected = page.locator('.graph-node-target.is-selected');
   const id = await selected.getAttribute('data-node-id'),
-    position = await selected.getAttribute('data-position');
+    position = await selected.getAttribute('data-original-position');
   await page.getByRole('button', { name: 'Diminuir zoom', exact: true }).click();
   await page.getByRole('button', { name: 'Diminuir zoom', exact: true }).click();
   await expect.poll(async () => (await selected.boundingBox())?.width ?? 999).toBeLessThan(220);
@@ -81,7 +81,8 @@ test('double click reads a distant card without pinning it or changing the graph
   await page.mouse.dblclick(b.x + b.width / 2, b.y + b.height / 2);
   await expect.poll(async () => (await selected.boundingBox())!.width).toBeGreaterThan(250);
   await expect(selected).toHaveAttribute('data-node-id', id!);
-  await expect(selected).toHaveAttribute('data-position', position!);
+  // Semantic zoom can compact empty bands; the underlying layout and identity stay fixed.
+  await expect(selected).toHaveAttribute('data-original-position', position!);
   await expect(graph(page)).toHaveAttribute('data-nodes', '503');
   expect(Number(await graph(page).getAttribute('data-textures'))).toBeLessThanOrEqual(128);
 });

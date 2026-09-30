@@ -6,6 +6,13 @@
 
 Aplicação local para navegar pelo controle que o analisador publicou, com statements e paragraphs COBOL, chamadas, candidatos e suas evidências.
 
+## Prévia do analisador em revisão
+
+A branch `feat/cfg-v5-shared-routines` aceita a versão dos PRs AIR #23, lower #52 e CFG #57.
+Abra **http://127.0.0.1:5173/?example=carddemo-coactupc-shared** para ver o COACTUPC com corpos de rotina compartilhados: **3.132 nós no pacote**, em vez dos 5.037 do exemplo anterior. A visão principal exibe 3.065; os 67 restantes são saídas defensivas sem caminho conhecido. Para inspecioná-las, abra **Cobertura publicada → Mostrar saídas defensivas**.
+No seletor, os seis exemplos novos têm “PR compartilhado” no título. A URL acompanha o exemplo carregado: atualizar a página mantém essa escolha. Os pacotes incluem artefatos e fontes e funcionam sem executar a pipeline.
+Veja [pins, reprodução, validação e limites](docs/CFG-V5-ROTINAS-COMPARTILHADAS.md).
+
 ## Visualização 3D
 
 A visualização usa `3d-force-graph` + Three.js/WebGL e está integrada à `main`. Os centros dos nós e as conexões ficam num plano organizado por ELK. As caixas com conteúdo COBOL se voltam para a câmera, com órbita 3D livre pelos dois lados do plano. Partículas percorrem conexões ortogonais no sentido publicado. Veja [decisões, validação e limites do experimento](docs/EXPERIMENTO-3D.md).
@@ -21,7 +28,7 @@ npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:5173**. Dezenove pacotes reais da pipeline já estão incluídos. Não é necessário executar o analisador para usá-los.
+Abra **http://127.0.0.1:5173**. Nesta branch, 25 pacotes reais da pipeline estão incluídos (19 anteriores e seis da versão em revisão). Não é necessário executar o analisador para usá-los.
 
 Para servir o build estático:
 
@@ -46,14 +53,15 @@ Sem backend, conta, upload, telemetria, CDN ou persistência de fontes. Artefato
 - **Iluminar definições dos valores**, no inspetor de uma chamada, destaca os produtores publicados em amarelo, a chamada em roxo e os caminhos entre eles em azul claro. Escolha um valor ou todos, use **Enquadrar valores destacados** para localizar o conjunto e **Ver definições e limites do destaque** para abrir as origens no código. **Limpar destaque** remove o realce; **Voltar/Esc** restaura a visão anterior. Também funciona para valores FILE. Com evidência RD, os ramos terminam nas sobrescritas comprovadas, marcadas em vermelho; **Ver sobrescrita** abre o código e os fatos. Limites de evidência aparecem em laranja. Veja [contrato e limites](docs/CAMINHOS-DOS-VALORES.md).
 - **Caminhos até aqui** mostra o subgrafo alcançável da entrada selecionada que consegue chegar ao alvo. **Um caminho** destaca um caminho estrutural mínimo. O destino permanece identificado no banner enquanto você inspeciona outros trechos; clique nele para retornar. Saltos para produtores e vizinhos entram no histórico, preservando o recorte quando possível.
 - **Paragraphs** abre um recorte da região. **Vizinhança** mostra até dois passos ao redor da seleção. O contador mostra o tamanho do recorte; **Programa inteiro** restaura os nós da unit selecionada.
-- No **grafo 3D**, arraste com o botão esquerdo para deslocar e com o direito para girar livremente pelos dois lados do plano; os textos das caixas acompanham a câmera. Use a roda para aproximar. Clicar numa caixa seleciona o trecho e acompanha o código sem mover a câmera ou o centro de rotação. A navegação pela barra lateral localiza o trecho conservando o zoom. **Centralizar seleção** mantém a distância, **Ler seleção de perto** aproxima e **Enquadrar recorte** mostra o conjunto. **Vista frontal** volta à vista perpendicular ao plano. Textos aparecem conforme você se aproxima.
+- No **grafo 3D**, arraste com o botão esquerdo para deslocar e com o direito para girar livremente pelos dois lados do plano; os textos das caixas acompanham a câmera. Use a roda para aproximar. Clicar numa caixa individual seleciona o trecho e acompanha o código sem mover a câmera ou o centro de rotação. A navegação pela barra lateral localiza o trecho; quando ele está num bloco compactado, abre a sequência para leitura. **Centralizar seleção** mantém a distância, **Ler seleção de perto** aproxima e **Enquadrar recorte** mostra o conjunto. **Vista frontal** volta à vista perpendicular ao plano. Textos aparecem conforme você se aproxima.
+- **Blocos** reúne sequências até as divisões e junções do fluxo, incluindo chamadas, arquivos e mudanças de paragraph. Ao afastar, compacta o layout e destaca as decisões; aproximar revela os trechos. Clique no resumo para abrir de perto. Os destaques de valores e caminhos mantêm os trechos envolvidos expostos. Desative o botão para manter a visão detalhada. [Critérios e validação](docs/BLOCOS-POR-ZOOM.md).
 - **Pausar partículas** interrompe a animação; a câmera continua navegável. Elas mostram somente direção das transições, sem simular execução, frequência ou tempo. Verde indica ramo Sim, âmbar indica Não; passe o mouse numa aresta para inspecionar seu tipo e suas pontas. Preferência do sistema por movimento reduzido inicia as partículas pausadas e elimina os voos de câmera.
 - Com foco no canvas, use setas para girar, +/− para zoom, Home para enquadrar, F para centralizar e Espaço para alternar as partículas. As caixas próximas também são selecionáveis por teclado.
 - Nas abas, use as setas, Home e End. Esc fecha a ajuda e devolve o foco ao botão que a abriu; fora da ajuda e de campos de edição, Esc aciona **Voltar**.
 - **Fonte** mostra o trecho associado; **Internos** abre os fatos originais, links, catálogos e o documento de dependencies completo.
 - O botão de download exporta o recorte com os nós/transições originais, entrada, seleção e cobertura. É uma seleção para inspeção, não um novo artefato do analisador.
 
-O exemplo **CardDemo · COACTUPC** usa o programa real de atualização de contas, com 5.037 nós. Consulte [execução, pins e limites](docs/CARDDEMO-COACTUPC.md).
+O exemplo anterior **CardDemo · COACTUPC** usa o programa real de atualização de contas, com 5.037 nós. Consulte [execução, pins e limites](docs/CARDDEMO-COACTUPC.md).
 
 A interface é otimizada para desktop. Em telas abaixo de 900 px, o inspetor fica abaixo do grafo e pode ser alcançado rolando a página.
 
@@ -71,13 +79,15 @@ Use **Abrir artefatos**, arraste os arquivos ou abra um pacote `.json` / `.json.
 | Arquivo | Contrato | Papel |
 |---|---|---|
 | AIR, obrigatório | `analysis-ir-json` binding 1.0.0 / AIR 2.0.0 | Identidades, operações, provenance e incertezas |
-| CFG, obrigatório | `analysis-cfg-json` 1.0.0, 2.0.0, 3.0.0 ou 4.0.0 | Única autoridade das arestas de controle |
-| SP, opcional | `cobol-semantic-product` 2.0.0–2.50.0; exercitado em 2.50.0 | Statements, nomes e regiões |
+| CFG, obrigatório | `analysis-cfg-json` 1.0.0, 2.0.0, 3.0.0 4.0.0 ou 5.0.0 | Autoridade das transições e regras de controle local |
+| SP, opcional | `cobol-semantic-product` 2.0.0–2.62.0; exercitado em 2.50.0 e 2.62.0 | Statements, nomes e regiões |
 | SP de compilação, opcional | `cobol-semantic-compilation` 1.0.0 | Várias units no mesmo pacote |
 | Links, com SP | `cobol-explorer-links` 1.0.0 | `StatementLink` / `EntryLink` exportados da API do lower |
-| Dependencies, opcional | `analysis-dependency-result` 1.0–1.2 e 2.0–2.6; exercitado em 2.6.0 | Sites, candidatos, suportes, limites e inventário unificado |
+| Dependencies, opcional | `analysis-dependency-result` 1.0–1.2 e 2.0–2.7; exercitado em 2.6.0 e 2.7.0 | Sites, candidatos, suportes, limites e inventário unificado |
 | Value flow, opcional | `cobol-explorer-value-flow` 1.0.0, fatos nativos `regional-analysis-result` 1.0–1.4 | Definições antes/depois das operações, com hash da AIR; exercitado em 1.0 e 1.2 |
 | COBOL / copybooks, opcionais | UTF-8; nome lógico exato da provenance | Texto para apresentação |
+
+CFG v5 usa regras com pilha para preservar o chamador dos PERFORMs. A visão geral reúne contextos na mesma caixa; consultas e testemunhas respeitam esses contextos. As definições regionais atuais agregam chamadores: no v5, o destaque de valores é estrutural e não certifica kills por chamador.
 
 Versões legadas listadas têm admissão explícita; a qualificação com a pipeline corrente está descrita em [VALIDATION.md](docs/VALIDATION.md). Versões futuras são recusadas. A aplicação não substitui os validators dos produtores.
 
@@ -97,6 +107,7 @@ Os scripts opcionais pressupõem os repositórios irmãos, Java 21+, bibliotecas
 # Compila os fontes existentes numa cache exclusiva deste projeto.
 # Nenhuma escrita nos repositórios produtores ou instalação Maven.
 python3 scripts/prepare_runtime.py
+# Se a cache existir, use --out com uma pasta nova e passe --runtime ao analyze.py.
 
 # Nova pasta obrigatória; falhas preservam outputs e logs por etapa.
 python3 scripts/analyze.py fixtures/CICS-ROUTER.cbl \

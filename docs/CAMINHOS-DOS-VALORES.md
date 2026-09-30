@@ -156,3 +156,13 @@ a opção oficial e gerou os pacotes de demonstração. Nenhum output foi corrig
 Resultado: 84 testes de modelo/contrato passaram, build TypeScript/Vite aprovado
 e 19 testes de browser passaram (6 do destaque, 12 de navegação 3D e 1 do COACTUPC).
 O build conserva o aviso já existente sobre o tamanho do chunk JavaScript.
+
+## CFG v5: corpos compartilhados
+
+As consultas regionais v1 não publicam a pilha do chamador em cada observação RD.
+O analisador executa os transfers por contexto e depois reúne as observações. Essa união
+não comprova a preservação de uma definição num chamador específico. Por isso, no v5,
+o Osiris conserva candidatos/supports e calcula os percursos estruturais no grafo de
+estados com retornos correspondentes, mas não atribui kills com essas observações agregadas.
+O banner explica esse limite. A evidência RD bruta continua no pacote. As versões 1–4
+mantêm o comportamento de sobrescritas já validado. [Detalhes](CFG-V5-ROTINAS-COMPARTILHADAS.md).

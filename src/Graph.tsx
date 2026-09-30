@@ -23,6 +23,7 @@ import {
   Box,
   LoaderCircle,
   BookOpen,
+  Layers3,
 } from 'lucide-react';
 import type { GraphNode, GraphEdge, Model } from './model';
 import {
@@ -42,6 +43,8 @@ import { planarLayout, type PlanarLayout } from './planar-layout';
 import ELK from 'elkjs/lib/elk-api.js';
 import elkWorkerUrl from 'elkjs/lib/elk-worker.min.js?url';
 import { RoutedLink } from './routed-link';
+import { compactProjection } from './compact-layout';
+import { linearBlocks, blockExpanded, blockRoute, type LinearBlock } from './linear-blocks';
 import {
   diagramIntersection,
   zoomView,
@@ -74,6 +77,7 @@ type Props = {
   onReady?: () => void;
 };
 type Target = {
+  block?: LinearBlock;
   id: string;
   label: string;
   x: number;
@@ -82,6 +86,13 @@ type Target = {
   height: number;
   depth: number;
   position: Point3D;
+};
+type BlockScene = {
+  block: LinearBlock;
+  node: SceneNode;
+  card: Sprite;
+  routes: RoutedLink[];
+  expanded: boolean;
 };
 type Instance = ForceGraph3DInstance<SceneNode, SceneLink>;
 const point = (v: Vector3): Point3D => ({ x: v.x, y: v.y, z: v.z });
@@ -94,6 +105,19 @@ export function Graph(props: Props) {
   const graph = useRef<Instance | null>(null);
   const nodes = useRef<SceneNode[]>([]);
   const cards = useRef(new Map<string, Sprite>());
+  const blocks = useRef<BlockScene[]>([]);
+  const basePositions = useRef(new Map<string, Point3D>());
+  const baseRoutes = useRef(new Map<RoutedLink, Point3D[]>());
+  const compactKey = useRef('');
+  const collapsedIds = useRef<string[]>([]);
+  const framing = useRef(false);
+  const opening = useRef<string | undefined>(undefined);
+  const openingUntil = useRef(0);
+  const restoredBlocks = useRef<Set<string> | undefined>(undefined);
+  const [autoBlocks, setAutoBlocks] = useState(true);
+  const autoBlocksRef = useRef(autoBlocks);
+  autoBlocksRef.current = autoBlocks;
+  const [blockCount, setBlockCount] = useState({ collapsed: 0, hidden: 0, total: 0 });
   const routes = useRef(new Map<string, RoutedLink>());
   const textures = useRef(new Map<string, CanvasTexture>());
   const shared = useRef(new Map<string, CanvasTexture>());
@@ -117,7 +141,17 @@ export function Graph(props: Props) {
   const detailIds = useRef(new Set<string>());
   const [hover, setHover] = useState('');
 
+  function isSelected(n: { id: string; block?: LinearBlock }) {
+    return (
+      n.id === live.current.selected ||
+      !!n.block?.nodes.some((member) => member.id === live.current.selected)
+    );
+  }
   function selectInScene(node: SceneNode) {
+    if (node.block) {
+      focus(node.block.nodes[0].id, true, true);
+      return;
+    }
     // Selection should not move the camera, its pivot, or any card in the diagram.
     appliedSelection.current = node.id;
     live.current.onSelect(node.id);
@@ -131,9 +165,13 @@ export function Graph(props: Props) {
       position: point(camera.position),
       target: point(controls.target),
       up: point(camera.up),
+      collapsed: collapsedIds.current,
     };
     if (live.current.viewportRef) live.current.viewportRef.current = view;
-    surface.current?.setAttribute('data-camera', JSON.stringify(view));
+    surface.current?.setAttribute(
+      'data-camera',
+      JSON.stringify({ position: view.position, target: view.target, up: view.up }),
+    );
     surface.current?.setAttribute(
       'data-distance',
       String(camera.position.distanceTo(controls.target)),
@@ -152,34 +190,58 @@ export function Graph(props: Props) {
     const g = graph.current,
       node = nodes.current.find((n) => n.id === id);
     if (!g || !node) return;
+    if (animate || blocks.current.some((b) => !b.expanded)) {
+      // Restore geometry before calculating the destination, including singleton
+      // selections: otherwise an automatic expansion can interrupt the camera flight.
+      opening.current = node.id;
+      openingUntil.current = Infinity;
+      refresh.current();
+    }
     const controls = g.controls() as OrbitControls;
     const offset = g.camera().position.clone().sub(controls.target);
     const camera = g.camera() as PerspectiveCamera;
     const readableWidth = Math.min(300, g.width() * 0.7);
     const readingDistance =
       (CARD_WIDTH * g.height()) / (2 * Math.tan((camera.fov * Math.PI) / 360) * readableWidth);
-    const distance = first ? readingDistance : Math.max(150, offset.length());
+    const distance = first || opening.current ? readingDistance : Math.max(150, offset.length());
     if (!initialized.current || offset.lengthSq() < 1) offset.set(0.4, 0.25, 1);
     offset.normalize().multiplyScalar(distance);
     const position = point(offset.add(new Vector3(node.x, node.y, node.z)));
     if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      openingUntil.current = performance.now() + 600;
       g.cameraPosition(position, node, 550);
-    } else move(position, node);
+    } else {
+      openingUntil.current = 0;
+      move(position, node);
+    }
   }
   function fit(highlightOnly = false) {
     const g = graph.current;
     if (!g || !nodes.current.length) return;
-    const points: Point3D[] = nodes.current
+    opening.current = undefined;
+    framing.current = !highlightOnly;
+    refresh.current();
+    const display = [
+      ...nodes.current.filter((n) => cards.current.get(n.id)?.visible),
+      ...blocks.current.filter((b) => !b.expanded).map((b) => b.node),
+    ];
+    const points: Point3D[] = display
       .filter((n) => !highlightOnly || live.current.focusIds?.has(n.id))
       .flatMap((n) => [
         { x: n.x - CARD_WIDTH / 2, y: n.y - CARD_HEIGHT / 2, z: 0 },
         { x: n.x + CARD_WIDTH / 2, y: n.y + CARD_HEIGHT / 2, z: 0 },
       ]);
-    routes.current.forEach((route) => {
-      if (!highlightOnly || live.current.valueHighlight?.edges.has(route.link.id))
+    for (const route of [...routes.current.values(), ...blocks.current.flatMap((b) => b.routes)]) {
+      if (
+        route.visible &&
+        (!highlightOnly || live.current.valueHighlight?.edges.has(route.link.id))
+      )
         points.push(...route.link.points);
-    });
-    if (!points.length) return;
+    }
+    if (!points.length) {
+      framing.current = false;
+      return;
+    }
     const min = new Vector3(Infinity, Infinity, Infinity),
       max = min.clone().negate();
     points.forEach((p) => {
@@ -189,7 +251,11 @@ export function Graph(props: Props) {
     const target = min.add(max).multiplyScalar(0.5);
     const camera = g.camera() as PerspectiveCamera;
     const tan = Math.tan((camera.fov * Math.PI) / 360);
-    let distance = 150;
+    // Keep even a one-block program in overview until the user explicitly approaches it.
+    let distance =
+      autoBlocksRef.current && blocks.current.length && !highlightOnly
+        ? (CARD_WIDTH * g.height()) / (2 * tan * 130)
+        : 150;
     for (const p of points) {
       distance = Math.max(
         distance,
@@ -198,11 +264,13 @@ export function Graph(props: Props) {
       );
     }
     move(point(target.clone().add(new Vector3(0, 0, distance))), point(target));
+    framing.current = false;
   }
 
   function zoom(factor: number, pointer?: Vector2) {
     const g = graph.current;
     if (!g || layoutPending.current) return;
+    opening.current = undefined;
     const view = zoomView(
       g.camera() as PerspectiveCamera,
       (g.controls() as OrbitControls).target,
@@ -222,6 +290,21 @@ export function Graph(props: Props) {
     move(point(offset.add(target)), point(target));
   }
   function clearCards() {
+    for (const block of blocks.current) {
+      block.card.removeFromParent();
+      block.card.material.dispose();
+      block.routes.forEach((route) => {
+        route.removeFromParent();
+        route.dispose();
+      });
+    }
+    blocks.current = [];
+    nodes.current = [];
+    basePositions.current.clear();
+    baseRoutes.current.clear();
+    compactKey.current = '';
+    collapsedIds.current = [];
+    opening.current = undefined;
     cards.current.forEach((s) => {
       // Three.js shares geometry between sprites; only the material belongs to this card.
       s.material.dispose();
@@ -304,7 +387,14 @@ export function Graph(props: Props) {
           camera.updateProjectionMatrix();
         }
         const time = performance.now();
-        routes.current.forEach((route) => route.tick(time));
+        routes.current.forEach((route) => {
+          if (route.visible) route.tick(time);
+        });
+        blocks.current.forEach((block) => {
+          block.routes.forEach((route) => {
+            if (route.visible) route.tick(time);
+          });
+        });
       };
       const renderer = g.renderer();
       renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio));
@@ -335,8 +425,18 @@ export function Graph(props: Props) {
         );
         // Match the annotation layer: nearest card first, then exposed routes.
         const hit =
-          raycaster.intersectObjects([...cards.current.values()], false)[0] ??
-          raycaster.intersectObjects([...routes.current.values()], true)[0];
+          raycaster.intersectObjects(
+            [...cards.current.values(), ...blocks.current.map((b) => b.card)].filter(
+              (c) => c.visible,
+            ),
+            false,
+          )[0] ??
+          raycaster.intersectObjects(
+            [...routes.current.values(), ...blocks.current.flatMap((b) => b.routes)].filter(
+              (r) => r.visible,
+            ),
+            true,
+          )[0];
         let object: Object3D | undefined = hit?.object;
         while (object) {
           if (object.userData.sceneNode) {
@@ -361,7 +461,7 @@ export function Graph(props: Props) {
       const read = (event: MouseEvent) => {
         if (layoutPending.current) return;
         const hit = hitAt(event.clientX, event.clientY);
-        if (hit?.node && !hit.route) focus(hit.node.id, true, true);
+        if (hit?.node && !hit.route) focus(hit.node.block?.nodes[0].id ?? hit.node.id, true, true);
       };
       let hoverTimer: ReturnType<typeof setTimeout> | undefined;
       const clearHover = () => {
@@ -380,7 +480,9 @@ export function Graph(props: Props) {
           const hit = hitAt(event.clientX, event.clientY);
           const label = hit?.route
             ? `${edgeDescription(hit.route.link.edge)}: ${live.current.model.nodeById.get(hit.route.link.edge.source)?.title} → ${hit.node?.node.title}`
-            : (hit?.node?.node.title ?? '');
+            : hit?.node?.block
+              ? `Bloco sequencial · ${hit.node.block.nodes.length} trechos, incluindo chamadas e arquivos. Clique para aproximar e abrir.`
+              : (hit?.node?.node.title ?? '');
           canvas.title = label;
           setHover(label);
         }, 100);
@@ -445,6 +547,7 @@ export function Graph(props: Props) {
       };
       const interruptMotion = () => {
         clearHover();
+        opening.current = undefined;
         // Stop a reading transition at the current pose as soon as the user takes over.
         g.cameraPosition(point(g.camera().position), point(controls.target), 0);
       };
@@ -462,44 +565,176 @@ export function Graph(props: Props) {
         camera.updateMatrixWorld();
         const width = el.clientWidth,
           height = el.clientHeight;
-        const projected: Target[] = [];
-        for (const n of nodes.current) {
+        const projection = new Map<string, Target>();
+        const inViewport = new Set<string>();
+        const project = (n: SceneNode) => {
           const view = new Vector3(n.x, n.y, n.z).applyMatrix4(camera.matrixWorldInverse);
-          if (view.z >= -1) continue;
-          // Sprite dimensions are in camera space, not the fixed layout plane.
+          if (view.z >= -1) return;
           const center = g.graph2ScreenCoords(n.x, n.y, n.z);
           const scale = height / (2 * -view.z * Math.tan((camera.fov * Math.PI) / 360));
           const left = center.x - (CARD_WIDTH * scale) / 2,
-            right = center.x + (CARD_WIDTH * scale) / 2;
-          const top = center.y - (CARD_HEIGHT * scale) / 2,
-            bottom = center.y + (CARD_HEIGHT * scale) / 2;
-          if (right - left < 46 || right < 0 || left > width || bottom < 0 || top > height)
-            continue;
-          projected.push({
+            top = center.y - (CARD_HEIGHT * scale) / 2;
+          const target: Target = {
             id: n.id,
-            label: n.node.title,
+            block: n.block,
+            label: n.block
+              ? `Bloco sequencial: ${n.block.nodes.length} trechos. ${n.node.title} → ${n.block.nodes.at(-1)!.title}. Aproximar para abrir`
+              : n.node.title,
             x: left,
             y: top,
-            width: right - left,
-            height: bottom - top,
+            width: CARD_WIDTH * scale,
+            height: CARD_HEIGHT * scale,
             depth: -view.z,
             position: { x: n.x, y: n.y, z: n.z },
-          });
+          };
+          projection.set(n.id, target);
+          if (
+            left + target.width >= 0 &&
+            left <= width &&
+            top + target.height >= 0 &&
+            top <= height
+          )
+            inViewport.add(n.id);
+        };
+        nodes.current.forEach(project);
+        blocks.current.forEach((b) => project(b.node));
+        const hidden = new Set<string>();
+        let collapsed = 0;
+        for (const b of blocks.current) {
+          const { block } = b;
+          const forced =
+            !autoBlocksRef.current ||
+            !!opening.current ||
+            block.nodes.some(
+              (n) =>
+                live.current.focusIds?.has(n.id) ||
+                live.current.valueHighlight?.producers.has(n.id) ||
+                live.current.valueHighlight?.targets.has(n.id) ||
+                live.current.valueHighlight?.kills.has(n.id) ||
+                live.current.valueHighlight?.unknowns.has(n.id),
+            ) ||
+            block.edges.some(
+              (e) =>
+                live.current.witnessIds?.has(e.id) || live.current.valueHighlight?.edges.has(e.id),
+            );
+          // A nearby member expands the whole block, even when its summary is outside the viewport.
+          let pixels = 0;
+          for (const n of block.nodes) {
+            if (inViewport.has(n.id)) pixels = Math.max(pixels, projection.get(n.id)!.width);
+          }
+          pixels ||= projection.get(block.nodes[0].id)?.width ?? 0;
+          b.expanded = restoredBlocks.current
+            ? !restoredBlocks.current.has(block.id)
+            : blockExpanded(b.expanded, framing.current ? 0 : pixels, forced);
+          b.card.visible = !b.expanded;
+          for (const route of b.routes) {
+            route.visible = !b.expanded;
+            const original = routes.current.get(route.link.id);
+            if (original) original.visible = b.expanded;
+          }
+          for (const edge of block.edges) {
+            const route = routes.current.get(edge.id);
+            if (route) route.visible = b.expanded;
+          }
+          if (!b.expanded) {
+            collapsed++;
+            block.nodes.forEach((n) => hidden.add(n.id));
+          }
         }
-        projected.sort((a, b) =>
-          a.id === live.current.selected
-            ? -1
-            : b.id === live.current.selected
-              ? 1
-              : a.depth - b.depth,
+        cards.current.forEach((card, id) => {
+          card.visible = !hidden.has(id);
+        });
+        const displayNodes = [
+          ...nodes.current.filter((n) => !hidden.has(n.id)),
+          ...blocks.current.filter((b) => !b.expanded).map((b) => b.node),
+        ];
+        const displayCards = new Map(cards.current);
+        blocks.current.forEach((b) => displayCards.set(b.node.id, b.card));
+        const collapsedBlocks = blocks.current.filter((b) => !b.expanded).map((b) => b.block.id);
+        const key = collapsedBlocks.join('|');
+        collapsedIds.current = collapsedBlocks;
+        if (key !== compactKey.current) {
+          // Retain the nearest visible reference while the empty bands open/close.
+          // History restoration supplies an exact camera already expressed in the saved layout.
+          const controls = g.controls() as OrbitControls;
+          const anchor = displayNodes
+            .filter((n) => projection.has(n.id) && inViewport.has(n.id))
+            .sort((a, b) => {
+              const p = projection.get(a.id)!,
+                q = projection.get(b.id)!;
+              return (
+                Math.hypot(p.x + p.width / 2 - width / 2, p.y + p.height / 2 - height / 2) -
+                Math.hypot(q.x + q.width / 2 - width / 2, q.y + q.height / 2 - height / 2)
+              );
+            })[0];
+          const before = anchor ? new Vector3(anchor.x, anchor.y, anchor.z) : undefined;
+          const transform = collapsed
+            ? compactProjection(displayNodes.map((n) => basePositions.current.get(n.id)!))
+            : (p: Point3D) => p;
+          for (const n of [...nodes.current, ...blocks.current.map((b) => b.node)]) {
+            const p = transform(basePositions.current.get(n.id)!);
+            n.x = n.fx = p.x;
+            n.y = n.fy = p.y;
+            n.z = n.fz = p.z;
+            displayCards.get(n.id)?.position.set(p.x, p.y, p.z);
+          }
+          routes.current.forEach((route) => {
+            if (!baseRoutes.current.has(route)) baseRoutes.current.set(route, route.link.points);
+          });
+          baseRoutes.current.forEach((points, route) => route.setPoints(points.map(transform)));
+          compactKey.current = key;
+          if (anchor && before && !framing.current && !restoredBlocks.current) {
+            const delta = new Vector3(anchor.x, anchor.y, anchor.z).sub(before);
+            g.cameraPosition(
+              point(camera.position.clone().add(delta)),
+              point(controls.target.clone().add(delta)),
+              0,
+            );
+          }
+          camera.updateMatrixWorld();
+          projection.clear();
+          inViewport.clear();
+          nodes.current.forEach(project);
+          blocks.current.forEach((b) => project(b.node));
+        }
+        restoredBlocks.current = undefined;
+        if (
+          opening.current &&
+          performance.now() >= openingUntil.current &&
+          (projection.get(opening.current)?.width ?? 0) > 180
+        )
+          opening.current = undefined;
+        capture();
+        const projected = displayNodes
+          .filter((n) => inViewport.has(n.id) && projection.get(n.id)!.width >= 46)
+          .map((n) => projection.get(n.id)!);
+        setBlockCount((previous) =>
+          previous.collapsed === collapsed &&
+          previous.hidden === hidden.size &&
+          previous.total === blocks.current.length
+            ? previous
+            : { collapsed, hidden: hidden.size, total: blocks.current.length },
         );
+        surface.current?.setAttribute('data-collapsed-blocks', String(collapsed));
+        surface.current?.setAttribute('data-rendered-nodes', String(displayNodes.length));
+        const ys = displayNodes.map((n) => n.y);
+        const originalYs = nodes.current.map((n) => basePositions.current.get(n.id)!.y);
+        surface.current?.setAttribute(
+          'data-rendered-height',
+          String(ys.length ? Math.max(...ys) - Math.min(...ys) : 0),
+        );
+        surface.current?.setAttribute(
+          'data-full-height',
+          String(originalYs.length ? Math.max(...originalYs) - Math.min(...originalYs) : 0),
+        );
+        projected.sort((a, b) => (isSelected(a) ? -1 : isSelected(b) ? 1 : a.depth - b.depth));
         const visible = projected.slice(0, DETAIL_LIMIT),
           ids = new Set(visible.map((p) => p.id));
         const particleChanges =
           ids.size !== detailIds.current.size || [...ids].some((id) => !detailIds.current.has(id));
         detailIds.current = ids;
-        for (const n of nodes.current) {
-          const card = cards.current.get(n.id);
+        for (const n of displayNodes) {
+          const card = displayCards.get(n.id);
           if (!card) continue;
           const role = live.current.valueHighlight?.kills.has(n.id)
             ? 'kill'
@@ -510,10 +745,9 @@ export function Graph(props: Props) {
                 : live.current.valueHighlight?.targets.has(n.id)
                   ? 'destination'
                   : undefined;
-          const key = n.id + (n.id === live.current.selected ? '/selected' : '') + (role ?? '');
+          const key = n.id + (isSelected(n) ? '/selected' : '') + (role ?? '');
           if (ids.has(n.id)) {
-            const texture =
-              textures.current.get(key) ?? cardTexture(n, n.id === live.current.selected, role);
+            const texture = textures.current.get(key) ?? cardTexture(n, isSelected(n), role);
             textures.current.delete(key);
             textures.current.set(key, texture);
             card.material.map = texture;
@@ -524,9 +758,11 @@ export function Graph(props: Props) {
             card.material.map = shared.current.get(sharedKey)!;
           }
           card.material.opacity =
-            n.id !== live.current.selected &&
-            ((live.current.highlightCalls && !n.node.siteIds.length) ||
-              (live.current.highlightFiles && !n.node.fileSiteIds.length) ||
+            !isSelected(n) &&
+            ((live.current.highlightCalls &&
+              !(n.block?.nodes ?? [n.node]).some((m) => m.siteIds.length)) ||
+              (live.current.highlightFiles &&
+                !(n.block?.nodes ?? [n.node]).some((m) => m.fileSiteIds.length)) ||
               (live.current.focusIds && !live.current.focusIds.has(n.id)))
               ? 0.25
               : 1;
@@ -535,7 +771,7 @@ export function Graph(props: Props) {
           visible.map(
             (t) =>
               t.id +
-              (t.id === live.current.selected ? '/selected' : '') +
+              (isSelected(t) ? '/selected' : '') +
               (live.current.valueHighlight?.kills.has(t.id)
                 ? 'kill'
                 : live.current.valueHighlight?.unknowns.has(t.id)
@@ -554,6 +790,15 @@ export function Graph(props: Props) {
           }
         });
         if (particleChanges) updateParticles();
+        blocks.current.forEach((b) =>
+          b.routes.forEach((route) => {
+            route.animated =
+              motionRef.current &&
+              (nodes.current.length <= 500 ||
+                ids.has(b.node.id) ||
+                ids.has(route.link.edge.target));
+          }),
+        );
         setTargets(visible);
         surface.current?.setAttribute('data-textures', String(textures.current.size));
       };
@@ -629,7 +874,11 @@ export function Graph(props: Props) {
   }
   useEffect(() => {
     updateParticles();
+    refresh.current();
   }, [motion]);
+  useEffect(() => {
+    refresh.current();
+  }, [autoBlocks]);
   useEffect(() => {
     if (!instanceReady) return;
     let cancelled = false;
@@ -690,12 +939,67 @@ export function Graph(props: Props) {
       }));
 
       graph.current!.graphData({ nodes: nodes.current, links });
+      const sceneById = new Map(nodes.current.map((n) => [n.id, n]));
+      const outgoing = new Map<string, SceneLink[]>();
+      for (const link of links) {
+        const list = outgoing.get(link.edge.source) ?? [];
+        list.push(link);
+        outgoing.set(link.edge.source, list);
+      }
+      if (!shared.current.has('BLOCO')) shared.current.set('BLOCO', cardTexture('BLOCO'));
+      blocks.current = linearBlocks(props.visibleNodes, props.visibleEdges, props.model.edges).map(
+        (block) => {
+          const first = sceneById.get(block.nodes[0].id)!;
+          const node: SceneNode = {
+            ...first,
+            id: block.id,
+            category: block.nodes.at(-1)!.kind === 'BRANCH' ? 'DECISÃO' : 'BLOCO',
+            block,
+          };
+          const card = new Sprite(
+            new SpriteMaterial({
+              map: shared.current.get('BLOCO'),
+              depthTest: false,
+              depthWrite: false,
+              transparent: true,
+              alphaTest: 0.2,
+            }),
+          );
+          card.scale.set(CARD_WIDTH, CARD_HEIGHT, 1);
+          card.position.set(node.x, node.y, node.z);
+          card.renderOrder = 1;
+          card.userData.sceneNode = node;
+          card.visible = false;
+          graph.current!.scene().add(card);
+          const tails = outgoing.get(block.nodes.at(-1)!.id) ?? [];
+          const summaryRoutes = tails.map((tail) => {
+            const route = new RoutedLink({
+              ...tail,
+              points: blockRoute([...block.edges.map((e) => paths.get(e.id)!), tail.points]),
+            });
+            route.style(
+              live.current.witnessIds,
+              live.current.valueHighlight?.edges,
+              live.current.valueHighlight?.killedEdges,
+            );
+            route.visible = false;
+            graph.current!.scene().add(route);
+            return route;
+          });
+          return { block, node, card, routes: summaryRoutes, expanded: true };
+        },
+      );
+      for (const n of [...nodes.current, ...blocks.current.map((b) => b.node)])
+        basePositions.current.set(n.id, { x: n.x, y: n.y, z: n.z });
+      for (const route of [...routes.current.values(), ...blocks.current.flatMap((b) => b.routes)])
+        baseRoutes.current.set(route, route.link.points);
       frame = requestAnimationFrame(() => {
         frame = requestAnimationFrame(() => {
           if (cancelled) return;
           const restore = live.current.restoreView;
           if (restore && restore.id !== restored.current) {
             restored.current = restore.id;
+            restoredBlocks.current = new Set(restore.viewport.collapsed ?? []);
             graph
               .current!.camera()
               .up.set(restore.viewport.up.x, restore.viewport.up.y, restore.viewport.up.z);
@@ -759,6 +1063,7 @@ export function Graph(props: Props) {
     if (layoutPending.current || busy || !instanceReady) return;
     if (props.restoreView && props.restoreView.id !== restored.current) {
       restored.current = props.restoreView.id;
+      restoredBlocks.current = new Set(props.restoreView.viewport.collapsed ?? []);
       graph
         .current!.camera()
         .up.set(
@@ -773,9 +1078,8 @@ export function Graph(props: Props) {
   }, [props.selected, props.restoreView, busy, instanceReady]);
   useEffect(() => {
     refresh.current();
-    routes.current.forEach((route) =>
-      route.style(props.witnessIds, props.valueHighlight?.edges, props.valueHighlight?.killedEdges),
-    );
+    for (const route of [...routes.current.values(), ...blocks.current.flatMap((b) => b.routes)])
+      route.style(props.witnessIds, props.valueHighlight?.edges, props.valueHighlight?.killedEdges);
   }, [
     props.highlightCalls,
     props.highlightFiles,
@@ -801,6 +1105,8 @@ export function Graph(props: Props) {
       data-value-killed-edges={props.valueHighlight?.killedEdges.size ?? 0}
       data-value-highlight={props.valueHighlight ? 'on' : 'off'}
       data-layout="planar"
+      data-linear-blocks={blockCount.total}
+      data-auto-blocks={autoBlocks ? 'on' : 'off'}
       data-motion={motion ? 'on' : 'off'}
       onKeyDown={(e) => {
         if (e.target !== host.current?.querySelector('canvas')) return;
@@ -843,13 +1149,23 @@ export function Graph(props: Props) {
         {targets.map((t) => (
           <button
             key={t.id}
-            className={`graph-node-target ${props.selected === t.id ? 'is-selected' : ''}`}
+            className={`${t.block ? 'graph-block-target' : 'graph-node-target'} ${isSelected(t) ? 'is-selected' : ''}`}
             aria-label={t.label}
-            aria-pressed={props.selected === t.id}
-            data-node-id={t.id}
+            aria-pressed={isSelected(t)}
+            data-node-id={t.block ? undefined : t.id}
+            data-block-id={t.block?.id}
+            data-member-ids={t.block ? JSON.stringify(t.block.nodes.map((n) => n.id)) : undefined}
+            data-internal-edge-ids={
+              t.block ? JSON.stringify(t.block.edges.map((e) => e.id)) : undefined
+            }
             data-position={JSON.stringify(t.position)}
+            data-original-position={JSON.stringify(basePositions.current.get(t.id))}
             style={{ left: t.x, top: t.y, width: t.width, height: t.height }}
             onClick={() => {
+              if (t.block) {
+                focus(t.block.nodes[0].id, true, true);
+                return;
+              }
               props.onSelect(t.id);
               appliedSelection.current = t.id;
             }}
@@ -859,10 +1175,23 @@ export function Graph(props: Props) {
         ))}
       </div>
       <div className="graph3d-controls" role="group" aria-label="Navegação do grafo 3D">
-        <span title="Experimento 3D">
+        <span title="Navegação 3D">
           <Box size={15} />
           <b>3D</b>
         </span>
+        <button
+          className="block-toggle"
+          aria-label="Agrupar trechos lineares pelo zoom"
+          aria-pressed={autoBlocks}
+          title={
+            autoBlocks
+              ? 'Compactar sequências até as decisões. Aproximar revela os trechos; desativar mostra todos.'
+              : 'Ativar blocos por zoom'
+          }
+          onClick={() => setAutoBlocks((value) => !value)}
+        >
+          <Layers3 size={16} /> Blocos
+        </button>
         <button aria-label="Aumentar zoom" title="Aproximar (+)" onClick={() => zoom(0.8)}>
           <Plus size={16} />
         </button>
@@ -953,10 +1282,15 @@ export function Graph(props: Props) {
       >
         <span>
           {hover ||
-            'Esquerdo desloca · direito gira · roda aproxima no cursor · duplo clique para ler'}
+            (blockCount.collapsed
+              ? 'Sequências compactadas · aproxime ou clique para abrir'
+              : 'Esquerdo desloca · direito gira · roda aproxima no cursor · duplo clique para ler')}
         </span>
         <span>
-          {props.visibleNodes.length} caixas · {props.visibleEdges.length} transições
+          {blockCount.collapsed > 0
+            ? `${blockCount.collapsed} ${blockCount.collapsed === 1 ? 'bloco' : 'blocos'} · ${props.visibleNodes.length - blockCount.hidden} trechos`
+            : `${props.visibleNodes.length} trechos`}{' '}
+          · {props.visibleEdges.length} transições
         </span>
       </div>
     </div>

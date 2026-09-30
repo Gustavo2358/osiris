@@ -1,13 +1,20 @@
 import { CanvasTexture, LinearFilter, SRGBColorSpace } from 'three';
 import type { NodeObject, LinkObject } from '3d-force-graph';
 import type { GraphNode, GraphEdge } from './model';
+import type { LinearBlock } from './linear-blocks';
 export { CARD_WIDTH, CARD_HEIGHT } from './graph-dimensions';
 
 export type Point3D = { x: number; y: number; z: number };
-export type GraphViewport = { position: Point3D; target: Point3D; up: Point3D };
+export type GraphViewport = {
+  position: Point3D;
+  target: Point3D;
+  up: Point3D;
+  collapsed?: string[];
+};
 export type SceneNode = NodeObject &
   Point3D & {
     id: string;
+    block?: LinearBlock;
     node: GraphNode;
     category: string;
     candidates: number;
@@ -16,6 +23,7 @@ export type SceneNode = NodeObject &
 export type SceneLink = LinkObject<SceneNode> & { id: string; edge: GraphEdge; points: Point3D[] };
 export const DETAIL_LIMIT = 128;
 export const colors: Record<string, string> = {
+  BLOCO: '#68b9d8',
   FLUXO: '#cbd6e5',
   CHAMADA: '#a7a1fa',
   ARQUIVO: '#6ddac3',
@@ -53,6 +61,10 @@ export function edgeDescription(edge: GraphEdge) {
     CONTROL_EXIT: 'Saída de controle',
     ENTRY: 'Entrada',
     JUMP: 'Continuação',
+    LOCAL_INVOKE: 'PERFORM · entrada na rotina',
+    LOCAL_BOUNDARY: 'Fim de paragraph · retorno ou continuação',
+    LOCAL_RESUME: 'Retorno ao PERFORM correspondente',
+    LOCAL_UNWIND: 'Saída de controle local',
   };
   return names[edge.kind] ?? edge.kind;
 }
@@ -84,7 +96,7 @@ export function cardTexture(
   const ctx = canvas.getContext('2d')!;
   ctx.scale(canvas.width / 540, canvas.height / 264);
   const kind = detailed ? item.category : item;
-  ctx.fillStyle = '#f8fafc';
+  ctx.fillStyle = kind === 'BLOCO' ? '#e3f2fa' : '#f8fafc';
   ctx.strokeStyle =
     role === 'kill'
       ? '#fb7185'
@@ -106,9 +118,14 @@ export function cardTexture(
   ctx.fill();
   if (detailed) {
     ctx.fillStyle = '#42526b';
-    ctx.font = '600 18px system-ui, sans-serif';
-    const meta =
-      role === 'kill'
+    ctx.font = item.block ? '700 26px system-ui, sans-serif' : '600 18px system-ui, sans-serif';
+    const meta = item.block
+      ? item.block.nodes.at(-1)!.open
+        ? 'BLOCO · CONTROLE ABERTO'
+        : item.block.nodes.at(-1)!.kind === 'BRANCH'
+          ? 'BLOCO · DECISÃO'
+          : 'BLOCO SEQUENCIAL'
+      : role === 'kill'
         ? 'DEFINIÇÃO SOBRESCRITA · FIM'
         : role === 'unknown'
           ? 'LIMITE DA EVIDÊNCIA'
@@ -131,25 +148,48 @@ export function cardTexture(
     ctx.stroke();
     ctx.fillStyle = '#17263e';
     ctx.font = '600 23px Consolas, monospace';
-    lines(ctx, item.node.title, 462, 4).forEach((line, i) =>
-      ctx.fillText(line, 42, 95 + i * 28, 462),
-    );
+    if (item.block) {
+      const last = item.block.nodes.at(-1)!;
+      if (last.kind === 'BRANCH') {
+        ctx.font = '600 32px Consolas, monospace';
+        lines(ctx, last.title, 462, 3).forEach((line, i) =>
+          ctx.fillText(line, 42, 104 + i * 36, 462),
+        );
+      } else {
+        ctx.font = '700 54px system-ui, sans-serif';
+        ctx.fillText(`${item.block.nodes.length} trechos`, 42, 121, 462);
+        ctx.font = '600 26px Consolas, monospace';
+        [item.block.nodes[0], last].forEach((n, i) => {
+          ctx.fillText(lines(ctx, n.title, 462, 1)[0], 42, 160 + i * 32, 462);
+        });
+      }
+    } else {
+      lines(ctx, item.node.title, 462, 4).forEach((line, i) =>
+        ctx.fillText(line, 42, 95 + i * 28, 462),
+      );
+    }
     ctx.font = '17px system-ui, sans-serif';
     ctx.fillStyle = '#536177';
     ctx.fillText(
-      item.node.contexts > 1 ? `Contexto ${item.node.contextIndex}/${item.node.contexts}` : 'COBOL',
+      item.block
+        ? `${item.block.nodes.length} trechos · ${item.block.nodes.reduce((count, n) => count + n.siteIds.length + n.fileSiteIds.length, 0)} referências`
+        : item.node.contexts > 1
+          ? `Contexto ${item.node.contextIndex}/${item.node.contexts}`
+          : 'COBOL',
       42,
       232,
     );
     ctx.textAlign = 'right';
     ctx.fillText(
-      item.node.open
-        ? 'controle aberto'
-        : item.node.fileSiteIds.length
-          ? `${item.candidates} valores`
-          : item.node.siteIds.length
-            ? `${item.candidates} candidatos`
-            : '',
+      item.block
+        ? 'Aproximar para abrir'
+        : item.node.open
+          ? 'controle aberto'
+          : item.node.fileSiteIds.length
+            ? `${item.candidates} valores`
+            : item.node.siteIds.length
+              ? `${item.candidates} candidatos`
+              : '',
       508,
       232,
     );

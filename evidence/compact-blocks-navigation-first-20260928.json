@@ -1,0 +1,863 @@
+{
+  "config": {
+    "argv": [
+      "/home/gustavo/.nvm/versions/node/v24.19.0/bin/node",
+      "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/node_modules/.bin/playwright",
+      "test",
+      "e2e/graph3d.spec.ts",
+      "e2e/value-paths.spec.ts",
+      "e2e/large-navigation.spec.ts"
+    ],
+    "configFile": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/playwright.config.ts",
+    "rootDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview -- --port 4173 --strictPort",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true,
+      "timeout": 15000
+    }
+  },
+  "suites": [
+    {
+      "title": "graph3d.spec.ts",
+      "file": "graph3d.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "WebGL draws bright boxes with COBOL content on a dark scene: files-values",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1240,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:02.391Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-f919ad23de9f9e3d99bf",
+          "file": "graph3d.spec.ts",
+          "line": 13,
+          "column": 3
+        },
+        {
+          "title": "WebGL draws bright boxes with COBOL content on a dark scene: order-router",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1036,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:03.830Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-31317375b485d312ca9f",
+          "file": "graph3d.spec.ts",
+          "line": 13,
+          "column": 3
+        },
+        {
+          "title": "orbit, pan, zoom, keyboard, framing and Back preserve an explored 3D camera",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2126,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:04.875Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-cc650b5e65cabf00b44f",
+          "file": "graph3d.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "raycast on a real WebGL box selects its COBOL statement and follows source",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1186,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:07.009Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-88e82dcf60c8336737e2",
+          "file": "graph3d.spec.ts",
+          "line": 93,
+          "column": 1
+        },
+        {
+          "title": "particles animate transitions and can be paused without locking the camera",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1666,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:08.205Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-837f19c7a78dc25b9952",
+          "file": "graph3d.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "reduced motion starts paused and repeated program switches release scenes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2303,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:09.881Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-293e4ea76a603b14c627",
+          "file": "graph3d.spec.ts",
+          "line": 144,
+          "column": 1
+        },
+        {
+          "title": "reading action approaches the selected box from an overview",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3493,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:12.192Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-0ccec3ccbc0d28b104ec",
+          "file": "graph3d.spec.ts",
+          "line": 162,
+          "column": 1
+        },
+        {
+          "title": "layout worker failure ends loading and exposes an actionable error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 541,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:15.693Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-0f35d95d704717877635",
+          "file": "graph3d.spec.ts",
+          "line": 177,
+          "column": 1
+        },
+        {
+          "title": "selecting a box keeps camera, pivot and diagram positions unchanged in all",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1878,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:16.240Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-741dbbefbe09e0eeabc1",
+          "file": "graph3d.spec.ts",
+          "line": 185,
+          "column": 3
+        },
+        {
+          "title": "selecting a box keeps camera, pivot and diagram positions unchanged in paths",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2239,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:18.127Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-ba2dcfc2fb9880a509b5",
+          "file": "graph3d.spec.ts",
+          "line": 185,
+          "column": 3
+        },
+        {
+          "title": "billboards stay readable and selectable through both sides of the layout plane: cics",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2604,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:20.374Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-fdf4435569f081039eca",
+          "file": "graph3d.spec.ts",
+          "line": 226,
+          "column": 3
+        },
+        {
+          "title": "billboards stay readable and selectable through both sides of the layout plane: order-router",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2558,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:22.986Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f97f7362c5e2cdbd0cf9-d762230c13bbf7c7e045",
+          "file": "graph3d.spec.ts",
+          "line": 226,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "large-navigation.spec.ts",
+      "file": "large-navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "long pan keeps zoom referenced to the diagram plane, including near the bottom",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4409,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:25.559Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b25754f294a0bca8a5c8-52dd38c7ee4ce45d53f3",
+          "file": "large-navigation.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "wheel zoom stays on an off-center card at the last service instead of pulling toward the old pivot",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4928,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:29.975Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b25754f294a0bca8a5c8-7a7f9e1d492900c2322c",
+          "file": "large-navigation.spec.ts",
+          "line": 40,
+          "column": 1
+        },
+        {
+          "title": "double click reads a distant card without pinning it or changing the graph",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8739,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.graph-node-target.is-selected')\nExpected: \u001b[32m\"{\\\"x\\\":50.5,\\\"y\\\":1\u001b[7m4136\u001b[27m,\\\"z\\\":0}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"x\\\":50.5,\\\"y\\\":1\u001b[7m3832\u001b[27m,\\\"z\\\":0}\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.graph-node-target.is-selected') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.graph-node-target.is-selected')\u001b[22m\n\u001b[2m    14 × locator resolved to <button aria-pressed=\"true\" aria-label=\"CALL WS-PGM\" class=\"graph-node-target is-selected\" data-position=\"{\"x\":50.5,\"y\":13832,\"z\":0}\" data-node-id=\"{\"domain\":\"cfg-node\",\"ordinal\":\"292\",\"publication\":\"3e91721277381a6c85f0c5cbced82cfa\"}\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"{\"x\":50.5,\"y\":13832,\"z\":0}\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.graph-node-target.is-selected')\nExpected: \u001b[32m\"{\\\"x\\\":50.5,\\\"y\\\":1\u001b[7m4136\u001b[27m,\\\"z\\\":0}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"x\\\":50.5,\\\"y\\\":1\u001b[7m3832\u001b[27m,\\\"z\\\":0}\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.graph-node-target.is-selected') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.graph-node-target.is-selected')\u001b[22m\n\u001b[2m    14 × locator resolved to <button aria-pressed=\"true\" aria-label=\"CALL WS-PGM\" class=\"graph-node-target is-selected\" data-position=\"{\"x\":50.5,\"y\":13832,\"z\":0}\" data-node-id=\"{\"domain\":\"cfg-node\",\"ordinal\":\"292\",\"publication\":\"3e91721277381a6c85f0c5cbced82cfa\"}\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"{\"x\":50.5,\"y\":13832,\"z\":0}\"\u001b[22m\n\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts:84:26",
+                    "location": {
+                      "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts",
+                      "column": 26,
+                      "line": 84
+                    },
+                    "snippet": "  82 |   await expect.poll(async () => (await selected.boundingBox())!.width).toBeGreaterThan(250);\n  83 |   await expect(selected).toHaveAttribute('data-node-id', id!);\n> 84 |   await expect(selected).toHaveAttribute('data-position', position!);\n     |                          ^\n  85 |   await expect(graph(page)).toHaveAttribute('data-nodes', '503');\n  86 |   expect(Number(await graph(page).getAttribute('data-textures'))).toBeLessThanOrEqual(128);\n  87 | });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts",
+                        "column": 26,
+                        "line": 84
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.graph-node-target.is-selected')\nExpected: \u001b[32m\"{\\\"x\\\":50.5,\\\"y\\\":1\u001b[7m4136\u001b[27m,\\\"z\\\":0}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"x\\\":50.5,\\\"y\\\":1\u001b[7m3832\u001b[27m,\\\"z\\\":0}\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.graph-node-target.is-selected') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.graph-node-target.is-selected')\u001b[22m\n\u001b[2m    14 × locator resolved to <button aria-pressed=\"true\" aria-label=\"CALL WS-PGM\" class=\"graph-node-target is-selected\" data-position=\"{\"x\":50.5,\"y\":13832,\"z\":0}\" data-node-id=\"{\"domain\":\"cfg-node\",\"ordinal\":\"292\",\"publication\":\"3e91721277381a6c85f0c5cbced82cfa\"}\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"{\"x\":50.5,\"y\":13832,\"z\":0}\"\u001b[22m\n\n\n  82 |   await expect.poll(async () => (await selected.boundingBox())!.width).toBeGreaterThan(250);\n  83 |   await expect(selected).toHaveAttribute('data-node-id', id!);\n> 84 |   await expect(selected).toHaveAttribute('data-position', position!);\n     |                          ^\n  85 |   await expect(graph(page)).toHaveAttribute('data-nodes', '503');\n  86 |   expect(Number(await graph(page).getAttribute('data-textures'))).toBeLessThanOrEqual(128);\n  87 | });\n    at /home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts:84:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:34.910Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/large-navigation-double-cl-58339-ng-it-or-changing-the-graph/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/large-navigation-double-cl-58339-ng-it-or-changing-the-graph/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/test-results/large-navigation-double-cl-58339-ng-it-or-changing-the-graph/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/gustavo/workspace/teste-e2e/cobol-graph-explorer/e2e/large-navigation.spec.ts",
+                    "column": 26,
+                    "line": 84
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b25754f294a0bca8a5c8-11c4ad20508a4a08de36",
+          "file": "large-navigation.spec.ts",
+          "line": 70,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "value-paths.spec.ts",
+      "file": "value-paths.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "illuminate candidate definitions, switch values, inspect source and clear without losing the graph",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1729,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:44.447Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "38454485159efb795860-2a541c7b65cf134d7c48",
+          "file": "value-paths.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "per-candidate action and Escape restore the previous scope; literals explain their origin",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2139,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:46.254Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "38454485159efb795860-b8f2c25492d7560eb0f0",
+          "file": "value-paths.spec.ts",
+          "line": 46,
+          "column": 1
+        },
+        {
+          "title": "FILE values highlight their definitions, follow source, and clear with the same controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1374,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:48.401Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "38454485159efb795860-c5dd5edb2a9dd4e8a183",
+          "file": "value-paths.spec.ts",
+          "line": 79,
+          "column": 1
+        },
+        {
+          "title": "literal FILE names explain that there is no dynamic assignment to trace",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:49.783Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "38454485159efb795860-5bfe6e1d9cf6ca776b18",
+          "file": "value-paths.spec.ts",
+          "line": 112,
+          "column": 1
+        },
+        {
+          "title": "PROGA ends at its kill and the surviving branch remains visible; clear and back restore focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1527,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:50.891Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "38454485159efb795860-a2a9a78ae4277c729d36",
+          "file": "value-paths.spec.ts",
+          "line": 131,
+          "column": 1
+        },
+        {
+          "title": "a FILE name uses the same kill controls and code navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1143,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T20:09:52.426Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "38454485159efb795860-a4d437518c4b3b812e6a",
+          "file": "value-paths.spec.ts",
+          "line": 164,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T20:09:02.035Z",
+    "duration": 51597.013,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

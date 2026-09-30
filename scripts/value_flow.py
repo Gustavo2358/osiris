@@ -8,7 +8,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 def key(value): return json.dumps(value, sort_keys=True, separators=(',', ':'))
 def sha(data): return hashlib.sha256(data).hexdigest()
 def write(path, value): path.write_text(json.dumps(value, ensure_ascii=False, separators=(',', ':'))+'\n')
-def generate(air_path, dependencies_path, out):
+def generate(air_path, dependencies_path, out, runtime=ROOT/'.cache/runtime'):
     out.mkdir(parents=True, exist_ok=False)
     air_bytes = air_path.read_bytes(); air = json.loads(air_bytes)
     dep = json.loads(dependencies_path.read_bytes())
@@ -40,7 +40,7 @@ def generate(air_path, dependencies_path, out):
                     for outcome in term['outcomes']['known']:
                         add('OUTCOME', term['header']['id'], {k:v for k,v in outcome.items() if k in ['kind','tag']})
     write(out/'queries.json', plan)
-    runtime = ROOT/'.cache/runtime'; cp = (runtime/'classpath.txt').read_text().strip()
+    runtime = pathlib.Path(runtime); cp = (runtime/'classpath.txt').read_text().strip()
     # Compile only this viewer-owned adapter against the pinned, existing runtime.
     classes = out/'adapter-classes'; classes.mkdir()
     source = ROOT/'bridge/ExportValueFlow.java'
